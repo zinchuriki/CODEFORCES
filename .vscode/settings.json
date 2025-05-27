@@ -31,7 +31,8 @@
       "text_encoding": "cpp",
       "typeinfo": "cpp",
       "variant": "cpp",
-      "iosfwd": "cpp"
+      "iosfwd": "cpp",
+      "chrono": "cpp"
     },
     "makefile.compileCommandsPath": ".vscode/compile_commands.json"
   }
