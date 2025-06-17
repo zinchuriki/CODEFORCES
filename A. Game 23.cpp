@@ -1,47 +1,50 @@
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
+
 using namespace std;
+
+
+int total_number(vector<vector<int>>& dp, vector<int>& chocolates, int n, int sum){
+  
+  
+  
+  if(n==1){
+    return chocolates[1];
+  }
+  
+  
+  if(n<=0)
+  return 0;
+  
+  if(dp[n][sum]!=-1)
+  return dp[n][sum];
+  
+  return dp[n][sum]=max(total_number(dp,chocolates,n,sum+chocolates[n]),total_number(dp,chocolates,n-1,sum));
+  
+  
+  
+  
+}
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
-   int n,m;
-   cin>>n>>m;
-
-        if(m==n){
-            cout<<0;
-            return 0;
-        }
-
-   if(m%n!=0 || (m%2!=0 && m%3!=0))
-   cout<<-1;
-   else{
-    int a=m/n;
-    int b=n;
-    int count=0;
-
-    while(a>0){
-        if(a%2==0){
- count++;
- a/=2;
- b*=2;
-        }
-        else{
-            if(a%3==0){
-count++;
-a/=3;
-b*=3;
-            }
-            else break;
-            
-        }
+    int tt;
+    cin >> tt;
+    while (tt--) {
+        
+        int n;
+        cin>>n;
+        
+        vector<int> chocolates(n+1);
+        vector<vector<int>> dp(n+1,vector<int>(100000000,-1));
+        
+        for(int i=1; i<=n; ++i) cin>>chocolates[i];
+       cout<<total_number(dp,chocolates,n,0)<<'\n';
+        
+        
+        
     }
-    if(b==m)
-    cout<<count;
-    else cout<<-1;
-   }
+return 0;
 
-
-    
-    return 0;
 }

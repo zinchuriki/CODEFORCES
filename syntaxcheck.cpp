@@ -3,35 +3,25 @@
 
 using namespace std;
 
-int possible(int temp_sum,vector<vector<int>>& dp,int idx,vector<int>& vec){
-  
-  if(temp_sum<0)
-  return 0;
-  
-  if(idx<0)
-  return 0;
+
+int build(vector<vector<int>>& dp,vector<int>& heights, int idx,int s){
   
   
-  if(dp[idx][temp_sum]!=-1)
-  return dp[idx][temp_sum];
-  
-  if(temp_sum==0)
-  {
-    dp[idx][temp_sum]=1;
-    return dp[idx][temp_sum];
-  }
-  
-  
-  dp[idx][temp_sum]=max(possible(temp_sum-vec[idx],dp,idx-1,vec),possible(temp_sum,dp,idx-1,vec));
-  
-  return  dp[idx][temp_sum];
-  
-  
-  
-  
-  
+    if(s==0)
+    return 0;
+    
+    if(idx<0 || s<0)
+    return INT_MAX;
+    
+    if(dp[idx][s]!=-1)
+    return dp[idx][s];
+    
+    return min(1+build(dp,heights,idx,s-heights[idx]),build(dp,heights,idx-1,s));
+    
+    
   
 }
+
 
 int main() {
     ios::sync_with_stdio(false);
@@ -39,22 +29,19 @@ int main() {
     int tt;
     cin >> tt;
     while (tt--) {
+        int n,s;
+        cin>>n>>s;
         
-        int n;
-        cin>>n;
-        vector<int> vec(n+1);
-        int sum=0;
-        for(int i=1; i<=n; ++i){
-          cin>>vec[i];
-          sum+=vec[i];
-        } 
-        vector<vectorint>> dp(n+1,vector<int>(200001,-1));
+        vector<int> heights(n);
         
-      if(possible(sum,dp,n,vec)>0)
-      cout<<"YES"<<'\n';
-      else cout<<"NO"<<'\n';
-      
-      
+        for(int i=0; i<n; ++i) cin>>heights[i];
+        
+        vector<vector<int>> dp(3000,vector<int>(5000,-1));
+        
+        cout<<build(dp,heights,n-1,s)<<'\n';
+          
+        
+        
         
         
     }
