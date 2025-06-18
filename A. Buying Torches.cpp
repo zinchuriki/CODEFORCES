@@ -8,7 +8,7 @@ int main() {
   int tt;
   cin>>tt;
   while(tt--){
-    float x,y,k;
+    long long int x,y,k;
     cin>>x>>y>>k;
 
     cout<<(long long int)ceil((double)(k+k*y-1)/(x-1))+ k<<'\n';
