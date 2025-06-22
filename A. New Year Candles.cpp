@@ -5,17 +5,17 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     
-    // your code here
  int a,b;
  cin>>a>>b;
 
- int x=a;
+ int left=0;
 int count=0;
-int remainder=0;
- while(x>0){
-    count+=x;
-    remainder=x%b;
-    x/=b;
+int remainder=a;
+ while(remainder>0){
+    count+=remainder;
+    long int d=(remainder+left)/b;
+    left=(remainder+left)%b;
+    remainder=d;
  }
  
  cout<<count;
