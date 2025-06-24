@@ -2,6 +2,9 @@
 
 using namespace std;
 
+// very easy approach not solved like that in this solution though but we could just iterate from 
+//back and count B's and b's to skip or not take the characters from the input array.
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
