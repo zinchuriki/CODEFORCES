@@ -3,48 +3,28 @@
 
 using namespace std;
 
-
-int build(vector<vector<int>>& dp,vector<int>& heights, int idx,int s){
-  
-  
-    if(s==0)
-    return 0;
-    
-    if(idx<0 || s<0)
-    return INT_MAX;
-    
-    if(dp[idx][s]!=-1)
-    return dp[idx][s];
-    
-    return min(1+build(dp,heights,idx,s-heights[idx]),build(dp,heights,idx-1,s));
-    
-    
-  
-}
-
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int tt;
-    cin >> tt;
-    while (tt--) {
-        int n,s;
-        cin>>n>>s;
-        
-        vector<int> heights(n);
-        
-        for(int i=0; i<n; ++i) cin>>heights[i];
-        
-        vector<vector<int>> dp(3000,vector<int>(5000,-1));
-        
-        cout<<build(dp,heights,n-1,s)<<'\n';
+    string s;
+    cin>>s;
+    string t=s;
+    reverse(s.begin(),s.end());
+    int n=s.size();
+    
+    vector<int> prev(n),cur(n);
+    
+    for(int i=1; i<=n; ++i){
+      for(int j=1; j<n; ++j){
           
-        
-        
-        
-        
+          if(s[i-1]==t[j-1])
+          cur[j]=1+prev[j-1];
+          else cur[j]=max(prev[j],cur[j-1]);
+      }
+      prev=cur;
     }
+    
+    cout<<prev[n];
 return 0;
 
 }
