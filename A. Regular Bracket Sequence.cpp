@@ -11,34 +11,31 @@ int main() {
 
         string s;
         cin>>s;
-
-        int l=0,r=0,ques=0;
-        bool canwe=true;
-
-        for(int i=0; i<s.size(); ++i){
-            if(s[i]==')')
-            r++;
-            if(s[i]=='()')
-            l++;
-            if(s[i]=='?')
-            ques++;
-
-            if(r>l){
-                ques--;
-                if(ques<0){
-                    cout<<"NO"<<'\n';
-                    canwe=false;
-                    break;
-
-                }
-            }
+        int n=s.size();
+        int count=0;
+        if(s[0]==')' || s[n-1]=='('){
+            cout<<"NO"<<'\n';
+            continue;
         }
 
-        if(l>r)
-        if(canwe)
-        cout<<"YES"<<'\n';
+        for(int i=0; i<n; ++i){
+            if(s[i]=='?')
+            count++;
+        }
+
+        if(count%2!=0){
+cout<<"NO"<<'\n';
+continue;
+        }
+        cout<<"YES"<<'\n'; 
+        
+
+        
+        }
+
+
+          return 0;
 
  }
     
-    return 0;
-}
+ 
