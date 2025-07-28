@@ -1,94 +1,48 @@
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
+
 using namespace std;
 
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
 
-void bfs(vector<vector<int>>& mapping,vector<vector<int>>& roads,vector<int>& parent,int source,int destination,vector<int>& distance){
-  
-    
-    std::queue<int> q;
-  
-  q.push(source);
-  
-  int count=1;
-  
-while(!q.empty()){
-   int now=q.front();
-      for(int j=0; j<mapping[now].size(); ++j){
-            if(distance[mapping[now][j]]==-1){
-              distance[mapping[now][j]]=count;
-              q.push(mapping[now][j]);
-              parent[mapping[now][j]]=now;
-            }    
-      }
-      count++;
-  
-}
-}
+  int n, k;
+  cin >> n >> k;
 
-int main() {
+  unordered_map<int, int> hash;
 
+  int a;
+  for (int i = 0; i < n; ++i)
+  {
+    cin >> a;
+    hash[a]++;
+  }
 
+  auto comp = [](pair<int, int> a, pair<int, int> b)
+  {
+    if (b.first > a.first)
+      return true;
 
-int n,m;
-cin>>n>>m;
+    if (b.second < a.second)
+      return true;
 
-vector<vector<int>> mapping(n+1),roads(m+1);
+    return false;
+  };
 
-string city1,city2,road,source,destination;
+  priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(comp)> pq(comp);
 
-map<string,int> hash;
-map<int,string> hash1;
-int j=1,k=1;
-for(int i=0; i<m; ++i){
-  
-    cin>>city1>>city2>>road;
-      
-      if(hash[city1]==0){
-         hash[city1]=j;
-      hash1[j++]=city1;
-      }
-     
-      
-      
-      if(hash[city2]==0){
-         hash[city2]=j;
-      hash1[j++]=city2;
-      }
-     
-      
-      
-      if(hash[road]==0){
-         hash[road]=k;
-      hash1[k++]=road;
-      }
-     
-    
-          mapping[hash[city1]].push_back(hash[city2]);
-          roads[hash[city1]].push_back(hash[road]);
-  
-}
+  for (auto it = hash.begin(); it != hash.end(); ++it)
+    pq.push({it->second, it->first});
+  pair<int, int> p;
+  for (int i = 0; i < k; ++i)
+  {
+    p = pq.top();
+    pq.pop();
+    cout << p.second << " ";
+  }
 
- cin>>source>>destination;
- 
- int source1=hash[source],destination1=hash[destination];
- 
- vector<int> distance(n+1,-1);
- vector<int> parent(n+1);
- 
- 
- parent[source1]=-1;
- vector<int> seq;
- int a=parent[destination1];
-  bfs( mapping, roads,parent,source1, destination1,distance);
- while(a!=-1){
-      seq.push_back(a);
-      a=parent[a];
-   
- }
- 
- for(int i=seq.size()-1; i>0; --i){
-   cout<<roads[seq[i]][seq[i-1]];
- }
   return 0;
-
 }
