@@ -3,44 +3,44 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    int n;
+    cin >> n;
+    vector<int> vec(n);
 
-   int n,w; 
-    cin>>n>> w;
-    int a;
-    unordered_map<int,vector<int>> hash;
-    
-    for(int i=0; i<n; ++i){
-      cin>>a;
-      hash[a].push_back(i+1);
+    for (int i = 0; i < n; ++i)
+        cin >> vec[i];
+
+    int sum = 0;
+
+    vector<int> forw(n), back(n);
+    forw[0] = vec[0];
+    back[n - 1] = vec[n - 1];
+    int sum1 = 0, sum2 = 0;
+    if (n == 1)
+    {
+        cout << max(0, vec[0]);
+        return 0;
     }
-    bool found=false;
-    for(auto it=hash.begin(); it!=hash.end(); ++it){
-      
-          vector<int> v=it->second;
-          
-          
-          if(v.size()>1){
-            cout<<v[0]<<" "<<v[1];
-            found=true;
-            break;
-          } else{
-                vector<int> v1=hash[w-v[0]];
-                if(v1.size()>0){
-                  cout<<v[0]<<" "<<v1[0];
-                  found =true;
-                  break;
-                }
-            
-          }
-      
+    int ansi = INT_MIN;
+    for (int i = 1; i < n; ++i)
+    {
+        forw[i] = max(forw[i - 1], forw[i - 1] + vec[i]);
+        ansi = max(ansi, forw[i]);
     }
-    if(!found) return -1;
- 
 
+    for (int i = n - 2; i >= 0; --i)
+        back[i] = max(back[i + 1], back[i + 1] + vec[i]);
+    int ans = 0;
+    for (int i = 1; i < n - 1; ++i)
+    {
+        ans = max(ans, forw[i - 1] + back[i + 1]);
+    }
 
-   return 0;
+    cout << max(ans, ansi);
 
+    return 0;
 }
