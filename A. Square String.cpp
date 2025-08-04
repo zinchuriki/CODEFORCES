@@ -13,7 +13,7 @@ int main() {
        string s;
        cin>>s;
        int l=s.size()/2-1;
-       int r=s.size()-1;
+       int r=s.size()-1; 
        if(s.size()%2!=0){
         cout<<"NO"<<'\n';
         continue;
