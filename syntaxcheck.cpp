@@ -7,40 +7,29 @@ int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    vector<long int> pref;
     int n;
     cin >> n;
-    vector<int> vec(n);
+    long int sum = 0;
+    int a, b;
 
     for (int i = 0; i < n; ++i)
-        cin >> vec[i];
-
-    int sum = 0;
-
-    vector<int> forw(n), back(n);
-    forw[0] = vec[0];
-    back[n - 1] = vec[n - 1];
-    int sum1 = 0, sum2 = 0;
-    if (n == 1)
     {
-        cout << max(0, vec[0]);
-        return 0;
-    }
-    int ansi = INT_MIN;
-    for (int i = 1; i < n; ++i)
-    {
-        forw[i] = max(forw[i - 1], forw[i - 1] + vec[i]);
-        ansi = max(ansi, forw[i]);
+        cin >> a;
+        sum += a;
+        pref.push_back(sum);
     }
 
-    for (int i = n - 2; i >= 0; --i)
-        back[i] = max(back[i + 1], back[i + 1] + vec[i]);
-    int ans = 0;
-    for (int i = 1; i < n - 1; ++i)
-    {
-        ans = max(ans, forw[i - 1] + back[i + 1]);
-    }
+    int q;
 
-    cout << max(ans, ansi);
+    for (int i = 0; i < q; ++i)
+    {
+        cin >> a >> b;
+        if (a == 1)
+            cout << pref[b - 1] << '\n';
+        else
+            cout << pref[b - 1] - pref[a - 1] << '\n';
+    }
 
     return 0;
 }
