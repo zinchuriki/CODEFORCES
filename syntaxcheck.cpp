@@ -1,37 +1,47 @@
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
+
 using namespace std;
-class Solution {
-  public:
-    bool areRotations(string &s1, string &s2) {
-        s2.append(s2);
-        int n=s1.size();
-      string temp="";
-      for(int i=0; i<n; ++i) temp+=s2[i];
-      int i=n;
-      while(i<2*n){
-                
-                if(temp==s1) return true;
-                
-                temp.erase(0,1);
-                temp+=s2[i];
-                i++;
-          
-      }
-                    
-                    
-                    return false;
-            
-        
-        
-    }
-};
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    // your code here
+    int n;
+    cin >> n;
 
-    return 0;
+    vector<int> vec(n);
+    int l = 0, r = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> vec[i];
+        if (vec[i] <= 0)
+            l = i;
+    }
+
+    r = l + 1;
+
+    while (l >= 0 && r < n)
+    {
+
+        if (abs(vec[l]) < abs(vec[r]))
+        {
+            cout << vec[r] * vec[r] << " ";
+            r++;
+        }
+
+        else
+        {
+            cout << vec[l] * vec[l] << " ";
+            l--;
+        }
+    }
+
+    while (l >= 0)
+        cout << vec[l] * vec[l] << " ";
+    while (r < n)
+        cout << vec[r] * vec[r] << " ";
+
+    return 0;cc
 }
