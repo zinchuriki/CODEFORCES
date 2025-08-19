@@ -3,6 +3,37 @@
 
 using namespace std;
 
+class Solution {
+  public:
+    double power(double b, int e) {
+        // code here
+        
+        if(b==0 || e==1)
+        return b;
+        
+        if(e==0){
+            if(b<0) return -1;
+             return 0;
+        }
+        double ans=b;
+        bool is=false;
+        if(e<0) is=true;
+        e=abs(e);
+        while(e>0){
+                    
+            if(e&1) ans*=b;
+            else ans*=ans;
+            
+            e/=2;
+            
+        }
+        
+        if(is) return 1.0/ans;
+        
+        return ans;
+    }
+};
+
 int main()
 {
     ios::sync_with_stdio(false);
@@ -43,5 +74,5 @@ int main()
     while (r < n)
         cout << vec[r] * vec[r] << " ";
 
-    return 0;cc
+    return 0;
 }
