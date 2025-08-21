@@ -2,35 +2,30 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
 class Solution {
-  public:
-    double power(double b, int e) {
-        // code here
-        
-        if(b==0 || e==1)
-        return b;
-        
-        if(e==0){
-            if(b<0) return -1;
-             return 0;
+public:
+    int countSquares(vector<vector<int>>& matrix) {
+
+        int n = matrix.size(), m = matrix[0].size();
+        int ans = 0;
+
+        vector<vector<int>> dp(n, vector<int>(m, 0));
+        for(int i=0; i<n; ++i) ans+=matrix[i][0];
+        for(int i=0; i<m; ++i) ans+=matrix[0][i];
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j < m; ++j) {
+                    if(matrix[i][j]==1) ans++;
+                if (matrix[i][j] == '1' && matrix[i - 1][j] == '1' &&
+                    matrix[i][j - 1] == '1' && matrix[i - 1][j - 1] == '1') {
+                    ans++;
+                    dp[i][j] =
+                        min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) +
+                        1;
+                    if (dp[i][j] > 1)
+                        ans += dp[i][j];
+                }
+            }
         }
-        double ans=b;
-        bool is=false;
-        if(e<0) is=true;
-        e=abs(e);
-        while(e>0){
-                    
-            if(e&1) ans*=b;
-            else ans*=ans;
-            
-            e/=2;
-            
-        }
-        
-        if(is) return 1.0/ans;
-        
-        return ans;
     }
 };
 
