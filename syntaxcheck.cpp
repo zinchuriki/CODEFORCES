@@ -67,7 +67,7 @@ int main()
     while (l >= 0)
         cout << vec[l] * vec[l] << " ";
     while (r < n)
-        cout << vec[r] * vec[r] << " ";
+        cout << vec[r] * vec[r] << " "; 
 
     return 0;
 }
