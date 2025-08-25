@@ -2,30 +2,49 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-class Solution {
+
+class Solution
+{
 public:
-    int countSquares(vector<vector<int>>& matrix) {
+    string longestPalindrome(string s)
+    {
+        string t = s;
+        reverse(s.begin(), s.end());
 
-        int n = matrix.size(), m = matrix[0].size();
-        int ans = 0;
+        int n = s.size();
+        vector<int> prev(n + 1), cur(n + 1);
+        int maxi = 1;
+        int id = 0;
 
-        vector<vector<int>> dp(n, vector<int>(m, 0));
-        for(int i=0; i<n; ++i) ans+=matrix[i][0];
-        for(int i=0; i<m; ++i) ans+=matrix[0][i];
-        for (int i = 1; i < n; ++i) {
-            for (int j = 1; j < m; ++j) {
-                    if(matrix[i][j]==1) ans++;
-                if (matrix[i][j] == '1' && matrix[i - 1][j] == '1' &&
-                    matrix[i][j - 1] == '1' && matrix[i - 1][j - 1] == '1') {
-                    ans++;
-                    dp[i][j] =
-                        min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) +
-                        1;
-                    if (dp[i][j] > 1)
-                        ans += dp[i][j];
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = 1; j <= n; ++j)
+            {
+
+                if (t[i - 1] == s[j - 1])
+                {
+                    cur[j] = 1 + prev[j - 1];
+                    if (cur[j] > maxi)
+                    {
+                        id = i;
+                        maxi = cur[j];
+                    }
                 }
+                else
+                    cur[j] = 0;
             }
+
+            prev = cur;
         }
+
+        string ans = "";
+
+        while (maxi--)
+        {
+            ans += s[id];
+            id--;
+        }
+        return ans;
     }
 };
 
@@ -33,41 +52,21 @@ int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
-    int n;
-    cin >> n;
-
-    vector<int> vec(n);
-    int l = 0, r = 0;
-    for (int i = 0; i < n; ++i)
-    {
-        cin >> vec[i];
-        if (vec[i] <= 0)
-            l = i;
-    }
-
-    r = l + 1;
-
-    while (l >= 0 && r < n)
+    int tt;
+    cin >> tt;
+    while (tt--)
     {
 
-        if (abs(vec[l]) < abs(vec[r]))
-        {
-            cout << vec[r] * vec[r] << " ";
-            r++;
-        }
-
+        int n;
+        cin >> n;
+        if (n == 1)
+            cout << 0 << '\n';
+        else if (n == 2)
+            cout << 4 << '\n';
         else
-        {
-            cout << vec[l] * vec[l] << " ";
-            l--;
-        }
+            cout << n * (n - 1) * (n - 1) * 2 + (n) * (n - 1) * (n - 2) + (n) * (n - 1) * (n - 2) * (n - 2) * 2;
+
+        // n* (n-1)*(n-1)*2 + (n)*(n-1)*(n-2) + (n n-1 n-2 n-2) + n n-1 n-2  n-2
     }
-
-    while (l >= 0)
-        cout << vec[l] * vec[l] << " ";
-    while (r < n)
-        cout << vec[r] * vec[r] << " "; 
-
     return 0;
 }
