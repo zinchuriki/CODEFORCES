@@ -3,50 +3,35 @@
 
 using namespace std;
 
-class Solution
+int alternate(string s)
 {
-public:
-    string longestPalindrome(string s)
+    int n = s.size(), ans = 0;
+    vector<bool> vec(26, false);
+    for (int i = 0; i < n - 1; ++i)
     {
-        string t = s;
-        reverse(s.begin(), s.end());
-
-        int n = s.size();
-        vector<int> prev(n + 1), cur(n + 1);
-        int maxi = 1;
-        int id = 0;
-
-        for (int i = 1; i <= n; ++i)
+        char b = s[i + 1];
+        if (vec[s[i] - 'a'] == true || vec[b - 'a'] == true)
+            continue;
+        char b = s[i + 1];
+        string temp = "";
+        temp += s[i];
+        vec[b - 'a'] = true;
+        vec[s[i] - 'a'] = true;
+        for (int j = i + 1; j < n; ++j)
         {
-            for (int j = 1; j <= n; ++j)
+            if (s[j] == s[i] || s[j] == b)
+                temp += s[j];
+            int si = temp.size();
+            if (s[si - 1] == s[si - 2])
             {
-
-                if (t[i - 1] == s[j - 1])
-                {
-                    cur[j] = 1 + prev[j - 1];
-                    if (cur[j] > maxi)
-                    {
-                        id = i;
-                        maxi = cur[j];
-                    }
-                }
-                else
-                    cur[j] = 0;
+                temp = "";
+                break;
             }
-
-            prev = cur;
         }
-
-        string ans = "";
-
-        while (maxi--)
-        {
-            ans += s[id];
-            id--;
-        }
-        return ans;
+        ans = max(ans, (int)temp.size());
     }
-};
+    return ans;
+}
 
 int main()
 {
