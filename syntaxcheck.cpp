@@ -3,36 +3,6 @@
 
 using namespace std;
 
-int alternate(string s)
-{
-    int n = s.size(), ans = 0;
-    vector<bool> vec(26, false);
-    for (int i = 0; i < n - 1; ++i)
-    {
-        char b = s[i + 1];
-        if (vec[s[i] - 'a'] == true || vec[b - 'a'] == true)
-            continue;
-        char b = s[i + 1];
-        string temp = "";
-        temp += s[i];
-        vec[b - 'a'] = true;
-        vec[s[i] - 'a'] = true;
-        for (int j = i + 1; j < n; ++j)
-        {
-            if (s[j] == s[i] || s[j] == b)
-                temp += s[j];
-            int si = temp.size();
-            if (s[si - 1] == s[si - 2])
-            {
-                temp = "";
-                break;
-            }
-        }
-        ans = max(ans, (int)temp.size());
-    }
-    return ans;
-}
-
 int main()
 {
     ios::sync_with_stdio(false);
@@ -44,14 +14,41 @@ int main()
 
         int n;
         cin >> n;
-        if (n == 1)
-            cout << 0 << '\n';
-        else if (n == 2)
-            cout << 4 << '\n';
-        else
-            cout << n * (n - 1) * (n - 1) * 2 + (n) * (n - 1) * (n - 2) + (n) * (n - 1) * (n - 2) * (n - 2) * 2;
+        int mod = 998244353;
 
-        // n* (n-1)*(n-1)*2 + (n)*(n-1)*(n-2) + (n n-1 n-2 n-2) + n n-1 n-2  n-2
+        int miss = 0, swaps = 0;
+
+        vector<int> vec(n + 1);
+        unordered_map<int, int> hash;
+        int count = 0;
+        for (int i = 1; i <= n; ++i)
+        {
+            cin >> vec[i];
+            if (vec[i] != i)
+            {
+                hash[abs(vec[i] - i)]++;
+                count++;
+            }
+        }
+
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            miss += (int)ceil((double)it->second / 2.0);
+            swaps += it->second / 2;
+        }
+
+        int ans = 0;
+
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = 1; j <= n; ++j)
+            {
+
+                ans = (ans + min(count * i, min(miss * j, (count - 2 * swaps) * i + swaps * j))) % mod;
+            }
+        }
+
+        cout << ans << '\n';
     }
     return 0;
 }
