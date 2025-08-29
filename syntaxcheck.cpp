@@ -3,6 +3,36 @@
 
 using namespace std;
 
+
+
+
+  struct TreeNode {
+      int val;
+      TreeNode *left;
+      TreeNode *right;
+      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+  };
+ 
+ 
+           void traverse(vector<int>& vec, TreeNode* root){
+               
+                            if(root==NULL) return;
+                            
+                            traverse(vec,root->left);
+                            traverse(vec,root->right);
+                            vec.push_back(root->val);
+                            
+               
+           }
+ 
+vector<int> Solution::postorderTraversal(TreeNode* A) {
+    
+                vector<int> ans;
+                traverse(vec,A);
+                return vec;
+            
+}
+
 int main()
 {
     ios::sync_with_stdio(false);
