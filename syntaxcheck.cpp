@@ -4,34 +4,40 @@
 using namespace std;
 
 
+   
+ 
+    string  st(unsigned int a){
+        string s="";
+        while(a>0){
+            s+= a%2+'0';
+            a/=2;
+        }
+       
+        
+        for(int i=0; i<32-s.size(); ++i) s= '0' +s;
+         reverse(s.begin(),s.end());
+        
+        return s;
+    }
 
-
-  struct TreeNode {
-      int val;
-      TreeNode *left;
-      TreeNode *right;
-      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-  };
- 
- 
-           void traverse(vector<int>& vec, TreeNode* root){
-               
-                            if(root==NULL) return;
-                            
-                            traverse(vec,root->left);
-                            traverse(vec,root->right);
-                            vec.push_back(root->val);
-                            
-               
-           }
- 
-vector<int> Solution::postorderTraversal(TreeNode* A) {
-    
-                vector<int> ans;
-                traverse(vec,A);
-                return vec;
-            
+unsigned int Solution::reverse(unsigned int A) {
+        if(A==0) return 0;
+        // string s=st(A);
+        bitset<32> binary(n);
+        unsigned int b=0;
+        int j=0;
+        string binary_str = binary.to_string();
+        for(int i=31; i>=0; --i){
+            b+=(binary_str[i]-'0')*(unsigned int)pow(2,j++);
+        }
+        
+        return b;
+        
+        
 }
+  
+
+
 
 int main()
 {
