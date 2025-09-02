@@ -4,87 +4,83 @@
 using namespace std;
 
 
-   
- 
-    string  st(unsigned int a){
-        string s="";
-        while(a>0){
-            s+= a%2+'0';
-            a/=2;
-        }
-       
-        
-        for(int i=0; i<32-s.size(); ++i) s= '0' +s;
-         reverse(s.begin(),s.end());
-        
-        return s;
+
+bool check(vector<vector<int>> &sudoku, int row, int col, int a)
+{
+
+    for (int i = 0; i < 9; ++i)
+        if (sudoku[row][i] == a || sudoku[i][col] == a)
+            return false;
+
+    int row1 = (row / 3) * 3;
+    int col1 = (col / 3) * 3;
+
+    for (int i = row1; i < row1 + 3; ++i)
+    {
+        for (int j = col1; j < col1 + 3; ++j)
+            if (sudoku[i][j] == a)
+                return false;
     }
 
-unsigned int Solution::reverse(unsigned int A) {
-        if(A==0) return 0;
-        // string s=st(A);
-        bitset<32> binary(n);
-        unsigned int b=0;
-        int j=0;
-        string binary_str = binary.to_string();
-        for(int i=31; i>=0; --i){
-            b+=(binary_str[i]-'0')*(unsigned int)pow(2,j++);
-        }
-        
-        return b;
-        
-        
+    return true;
 }
-  
 
+void solve(vector<vector<int>> &sudoku, vector<pair<int, int>> &vec, int idx, bool &found)
+{
 
+    if (idx >= vec.size())
+    {
+        found = true;
+        return;
+    }
+    int row = vec[idx].first, col = vec[idx].second;
+    for (int i = 1; i <= 9; ++i)
+    {
+
+        if (check(sudoku, row, col, i))
+        {
+            sudoku[row][col] = i;
+            solve(sudoku, vec, idx + 1, found);
+        }
+        if (found)
+            return;
+
+        sudoku[row][col] = 0;
+    }
+}
+
+void solveSudoku(vector<vector<int>> &sudoku)
+{
+    // Write your code here
+    // No need to print the final sudoku
+    // Just fill the values in the given matrix
+
+    vector<pair<int, int>> vec;
+
+    pair<int, int> p;
+    bool found = false;
+
+    for (int i = 0; i < 9; ++i)
+    {
+        for (int j = 0; j < 9; ++j)
+        {
+
+            if (sudoku[i][j] == 0)
+            {
+                p.first = i, p.second = j;
+                vec.push_back(p);
+            }
+        }
+    }
+    solve(sudoku, vec, 0, found);
+}
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int tt;
-    cin >> tt;
-    while (tt--)
-    {
 
-        int n;
-        cin >> n;
-        int mod = 998244353;
+    // your code here
 
-        int miss = 0, swaps = 0;
-
-        vector<int> vec(n + 1);
-        unordered_map<int, int> hash;
-        int count = 0;
-        for (int i = 1; i <= n; ++i)
-        {
-            cin >> vec[i];
-            if (vec[i] != i)
-            {
-                hash[abs(vec[i] - i)]++;
-                count++;
-            }
-        }
-
-        for (auto it = hash.begin(); it != hash.end(); ++it)
-        {
-            miss += (int)ceil((double)it->second / 2.0);
-            swaps += it->second / 2;
-        }
-
-        int ans = 0;
-
-        for (int i = 1; i <= n; ++i)
-        {
-            for (int j = 1; j <= n; ++j)
-            {
-
-                ans = (ans + min(count * i, min(miss * j, (count - 2 * swaps) * i + swaps * j))) % mod;
-            }
-        }
-
-        cout << ans << '\n';
-    }
     return 0;
 }
