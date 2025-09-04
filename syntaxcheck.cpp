@@ -3,84 +3,97 @@
 
 using namespace std;
 
-
-
-bool check(vector<vector<int>> &sudoku, int row, int col, int a)
+int longestSubarrayWithSumK(vector<int> a, long long k)
 {
-
-    for (int i = 0; i < 9; ++i)
-        if (sudoku[row][i] == a || sudoku[i][col] == a)
-            return false;
-
-    int row1 = (row / 3) * 3;
-    int col1 = (col / 3) * 3;
-
-    for (int i = row1; i < row1 + 3; ++i)
+    int ans = 0;
+    int l = 0, r = 1;
+    long long sum = a[0];
+    if (sum == k)
+        ans = 1;
+    int n = a.size();
+    while (l < n && r < n)
     {
-        for (int j = col1; j < col1 + 3; ++j)
-            if (sudoku[i][j] == a)
-                return false;
-    }
-
-    return true;
-}
-
-void solve(vector<vector<int>> &sudoku, vector<pair<int, int>> &vec, int idx, bool &found)
-{
-
-    if (idx >= vec.size())
-    {
-        found = true;
-        return;
-    }
-    int row = vec[idx].first, col = vec[idx].second;
-    for (int i = 1; i <= 9; ++i)
-    {
-
-        if (check(sudoku, row, col, i))
+        sum += a[r];
+        if (sum == k)
         {
-            sudoku[row][col] = i;
-            solve(sudoku, vec, idx + 1, found);
+
+            ans = max(ans, r - l + 1);
+            r++;
+            sum -= a[l];
+            l++;
         }
-        if (found)
-            return;
-
-        sudoku[row][col] = 0;
-    }
-}
-
-void solveSudoku(vector<vector<int>> &sudoku)
-{
-    // Write your code here
-    // No need to print the final sudoku
-    // Just fill the values in the given matrix
-
-    vector<pair<int, int>> vec;
-
-    pair<int, int> p;
-    bool found = false;
-
-    for (int i = 0; i < 9; ++i)
-    {
-        for (int j = 0; j < 9; ++j)
+        else
         {
-
-            if (sudoku[i][j] == 0)
+            if (sum > k)
             {
-                p.first = i, p.second = j;
-                vec.push_back(p);
+                sum -= a[l];
+                l++;
+            }
+            else
+            {
+                r++;
             }
         }
     }
-    solve(sudoku, vec, 0, found);
+
+    return ans;
+}
+
+int cal(vector<int> &vec)
+{
+
+    int n = vec.size();
+    int l = vec[0], r = vec[1];
+    for (int i = 2; i < n; ++i)
+    {
+
+        if (i % 2 == 0)
+        {
+
+            if (l < r)
+                l = vec[i];
+            else
+                r = vec[i];
+        }
+
+        else
+        {
+            if (l < r)
+                r = vec[i];
+            else
+                l = vec[i];
+        }
+    }
+    cout << min(l, r) << " ";
 }
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
 
-    // your code here
+        int n, q;
+        cin >> n >> q;
+        int a, b;
 
+        vector<int> vec(n);
+
+        for (int i = 0; i < n; ++i)
+            cin >> vec[i];
+        vector<pair<int, int>> arr(q);
+        for (int i = 0; i < q; ++i)
+            cin >> arr[i].first >> arr[i].second;
+
+        for (int i = 0; i < q; ++i)
+        {
+            vec[arr[i].first - 1] = arr[i].second;
+            cal(vec);
+        }
+        cout << '\n';
+    }
     return 0;
 }
