@@ -7,7 +7,7 @@ int longestSubarrayWithSumK(vector<int> a, long long k)
 {
     int ans = 0;
     int l = 0, r = 1;
-    long long sum = a[0];
+    long long sum = a[0];k
     if (sum == k)
         ans = 1;
     int n = a.size();
