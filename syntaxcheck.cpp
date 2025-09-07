@@ -3,41 +3,31 @@
 
 using namespace std;
 
-int longestSubarrayWithSumK(vector<int> a, long long k)
-{
-    int ans = 0;
-    int l = 0, r = 1;
-    long long sum = a[0];k
-    if (sum == k)
-        ans = 1;
-    int n = a.size();
-    while (l < n && r < n)
-    {
-        sum += a[r]; ,l
-        if (sum == k)
-        {
+class Solution {
+public:
+    vector<int> sumZero(int n) {
+        int x=1;
 
-            ans = max(ans, r - l + 1);
-            r++;
-            sum -= a[l];
-            l++;
-        }
-        else
+        vector<int> vec;
+        if(n%2!=0)
         {
-            if (sum > k)
-            {
-                sum -= a[l];
-                l++;
-            }
-            else
-            {
-                r++;
-            }
+            vec.push_back(0);
+            n--;
         }
+
+        n=n/=2;
+        while(n>0){
+vec.push_back(x);
+vec.push_back(-x);
+x++;
+        }
+
+                 
+
+        
+      return vec;
     }
-
-    return ans;
-}
+};
 
 int cal(vector<int> &vec)
 {
