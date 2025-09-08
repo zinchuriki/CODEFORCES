@@ -5,57 +5,24 @@ using namespace std;
 
 class Solution {
 public:
-    vector<int> sumZero(int n) {
-        int x=1;
-
-        vector<int> vec;
-        if(n%2!=0)
-        {
-            vec.push_back(0);
-            n--;
+    vector<int> getNoZeroIntegers(int n) {
+        vector<int> vec(2);
+        if(n==2){
+            vec[0]=1;
+            vec[1]=1;
+            return vec;
         }
+       if((n-1)%10==0){
+    vec[0]=2;
+    vec[1]=n-2;
 
-        n=n/=2;
-        while(n>0){
-vec.push_back(x);
-vec.push_back(-x);
-x++;
-        }
-
-                 
-
-        
-      return vec;
+       } else {
+        vec[0]=1;
+        vec[1]=n-1;
+       }
+        return vec;
     }
 };
-
-int cal(vector<int> &vec)
-{
-
-    int n = vec.size();
-    int l = vec[0], r = vec[1];
-    for (int i = 2; i < n; ++i)
-    {
-
-        if (i % 2 == 0)
-        {
-
-            if (l < r)
-                l = vec[i];
-            else
-                r = vec[i];
-        }
-
-        else
-        {
-            if (l < r)
-                r = vec[i];
-            else
-                l = vec[i];
-        }
-    }
-    cout << min(l, r) << " ";
-}
 
 int main()
 {
@@ -81,7 +48,7 @@ int main()
         for (int i = 0; i < q; ++i)
         {
             vec[arr[i].first - 1] = arr[i].second;
-            cal(vec);
+           
         }
         cout << '\n';
     }
