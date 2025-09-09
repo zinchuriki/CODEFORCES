@@ -3,27 +3,47 @@
 
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
-    vector<int> getNoZeroIntegers(int n) {
-        vector<int> vec(2);
-        if(n==2){
-            vec[0]=1;
-            vec[1]=1;
-            return vec;
-        }
-       if((n-1)%10==0){
-    vec[0]=2;
-    vec[1]=n-2;
+    vector<int> calculateSpan(vector<int> &arr)
+    {
+        vector<int> ans;
+        ans.push_back(1);
+        stack<int> s1, s2;
+        int n = arr.size();
+        s1.push(arr[0]);
+        for (int i = 1; i < n; ++i)
+        {
+            if (s1.top() > arr[i])
+            {
 
-       } else {
-        vec[0]=1;
-        vec[1]=n-1;
-       }
-        return vec;
+                ans.push_back(1);
+            }
+            else
+            {
+
+                int count = 0;
+
+                if (s1.top() <= arr[i])
+                    count = s1.size() + s2.size() + 1;
+                else
+                {
+                    while (!s1.empty() && s1.top() <= arr[i])
+                    {
+                        count++;
+                        s2.push(s1.top());
+                        s1.pop();
+                    }
+                }
+
+                ans.push_back(count);
+            }
+            s1.push(arr[i]);
+        }
+        return ans;
     }
 };
-
 int main()
 {
     ios::sync_with_stdio(false);
@@ -48,7 +68,6 @@ int main()
         for (int i = 0; i < q; ++i)
         {
             vec[arr[i].first - 1] = arr[i].second;
-           
         }
         cout << '\n';
     }
