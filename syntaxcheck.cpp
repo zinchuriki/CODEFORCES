@@ -1,75 +1,147 @@
-#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
-
 using namespace std;
 
 class Solution
 {
 public:
-    vector<int> calculateSpan(vector<int> &arr)
+    int countPairs(vector<int> &arr, int target)
     {
-        vector<int> ans;
-        ans.push_back(1);
-        stack<int> s1, s2;
-        int n = arr.size();
-        s1.push(arr[0]);
-        for (int i = 1; i < n; ++i)
-        {
-            if (s1.top() > arr[i])
-            {
+        int l = 0, r = arr.size() - 1, n = arr.size();
 
-                ans.push_back(1);
+        int ans = 0;
+        while (l < r)
+        {
+
+            int sum = arr[l] + arr[r];
+            if (sum == target)
+            {
+                ans++;
+                r--;
+            }
+
+            else if (sum < target)
+            {
+                l++;
             }
             else
             {
-
-                int count = 0;
-
-                if (s1.top() <= arr[i])
-                    count = s1.size() + s2.size() + 1;
-                else
-                {
-                    while (!s1.empty() && s1.top() <= arr[i])
-                    {
-                        count++;
-                        s2.push(s1.top());
-                        s1.pop();
-                    }
-                }
-
-                ans.push_back(count);
+                r--;
             }
-            s1.push(arr[i]);
         }
+
         return ans;
     }
 };
-int main()
+
+class Solution
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int tt;
-    cin >> tt;
-    while (tt--)
+public:
+    bool check(unordered_map<int, int> &hash1, unordered_map<int, int> &hash2)
     {
 
-        int n, q;
-        cin >> n >> q;
-        int a, b;
-
-        vector<int> vec(n);
-
-        for (int i = 0; i < n; ++i)
-            cin >> vec[i];
-        vector<pair<int, int>> arr(q);
-        for (int i = 0; i < q; ++i)
-            cin >> arr[i].first >> arr[i].second;
-
-        for (int i = 0; i < q; ++i)
+        for (auto it = hash1.begin(); it != hash1.end(); ++it)
         {
-            vec[arr[i].first - 1] = arr[i].second;
+            if (hash2.find(it->first) != hash2.end())
+                return false;
         }
-        cout << '\n';
+
+        return true;
     }
-    return 0;
+
+    int minimumTeachings(int n, vector<vector<int>> &languages,
+                         vector<vector<int>> &friendships)
+    {
+        int m = languages.size(), n1 = friendships.size();
+        unordered_map<int, unordered_map<int, int>> hash, hash1;
+
+        for (int i = 0; i < m; ++i)
+        {
+            unordered_map<int, int> hash1;
+            for (int j = 0; j < languages[i].size(); ++j)
+                hash1[languages[i][j]]++;
+            hash[i + 1] = hash1;
+        }
+
+        unordered_set<int> s;
+        for (int i = 0; i < n1; ++i)
+        {
+            if (!check(hash[friendships[i][0]], hash[friendships[i][1]]))
+            {
+                s.insert(friendships[i][0]);
+                s.insert(friendships[i][1]);
+            }
+        }
+        int maxi = 0;
+        unordered_map<int, int> hash3;
+        for (auto it = s.begin(); it != s.end(); ++it)
+        {
+
+            for (int i = 0; i < languages[*it - 1].size(); ++it)
+            {
+                hash3[languages[*it - 1][i]]++;
+                maxi = max(maxi, hash3[languages[*it - 1][i]]);
+            }
+        }
+
+        return (int)s.size() - maxi;
+    }
+};
+int cal(vector<vector<int>> &dp, int i, int j, string &a, string &b)
+{
+
+    if (i <= 0 || j <= 0)
+        return 0;
+
+    if (dp[i][j] != -1)
+        return dp[i][j];
+
+    if (a[i - 1] == b[j - 1])
+        return dp[i][j] = 1 + cal(dp, i - 1, j - 1, a, b);
+    return dp[i][j] = max(cal(dp, i - 1, j, a, b), cal(dp, i, j - 1, a, b));
+}
+
+string shortestSupersequence(string a, string b)
+{
+    int n = a.size(), m = b.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+    string ans = "";
+
+    cal(dp, n, m, a, b);
+    int i = n, j = m;
+    while (i > 0 && j > 0)
+    {
+        if (a[i - 1] == b[j - 1])
+        {
+            ans += a[i - 1];
+            i--;
+            j--;
+        }
+        else
+        {
+            if (dp[i - 1][j] > dp[i][j - 1])
+            {
+                ans += a[i - 1];
+                i--;
+            }
+            else
+            {
+                ans += b[j - 1];
+                j--;
+            }
+        }
+    }
+
+    while (i > 0)
+    {
+        ans += a[i - 1];
+        i--;
+    }
+    while (j > 0)
+    {
+        ans += b[j - 1];
+        j--;
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
 }
