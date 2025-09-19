@@ -789,3 +789,364 @@ public:
         return vec;
     }
 };
+
+class Solution
+{
+public:
+    bool pos(vector<int> &stalls, int x, int k)
+    {
+        int n = stalls.size();
+        k--;
+        int prev = stalls[0];
+        for (int i = 1; i < n; ++i)
+        {
+            if (stalls[i] - prev >= x)
+                k--;
+            if (k == 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    int aggressiveCows(vector<int> &stalls, int k)
+    {
+        // code here
+        sort(stalls.begin(), stalls.end());
+
+        int n = stalls.size();
+
+        int r = stalls[n - 1] - stalls[0];
+
+        int l = 1;
+
+        while (l <= r)
+        {
+
+            int mid = l + (r - l) / 2;
+
+            if (pos(stalls, mid, k))
+                l = mid;
+            else
+                r = mid;
+        }
+
+        return l;
+    }
+};
+
+struct MyCompare
+{
+    bool operator()(const std::pair<std::string, int> &a,
+                    const std::pair<std::string, int> &b) const
+    {
+
+        // 1. Primary Sort: Compare by the integer (.second) in DESCENDING order.
+        if (a.second != b.second)
+        {
+            return a.second > b.second;
+        }
+
+        // 2. Secondary Sort (Tie-Breaker): If integers are equal,
+        //    compare by the string (.first) in ASCENDING order.
+        return a.first < b.first;
+    }
+};
+
+class FoodRatings
+{
+public:
+    unordered_map<string, string> hash;
+    unordered_map<string, int> hash3;
+    map<string, set<pair<string, int>, MyCompare>> hash2;
+
+    vector<string> foods, cuisines;
+    vector<int> ratings;
+    // cuisine  i is the  type of cuisine the ith food is.
+
+    FoodRatings(vector<string> &foods, vector<string> &cuisines,
+                vector<int> &ratings)
+    {
+
+        int n = foods.size();
+        this->foods = foods;
+        this->cuisines = cuisines;
+        this->ratings = ratings;
+        for (int i = 0; i < n; ++i)
+        {
+            hash3[foods[i]] = ratings[i];
+            hash[foods[i]] = cuisines[i];
+            hash2[cuisines[i]].insert({foods[i], ratings[i]});
+        }
+    }
+
+    void changeRating(string food, int newRating)
+    {
+        string cuisine = hash[food];
+        hash2[cuisine].erase({food, hash3[food]});
+        hash3[food] = newRating;
+        hash2[cuisine].insert({food, hash3[food]});
+    }
+
+    string highestRated(string cuisine)
+    {
+        return hash2[cuisine].begin()->first;
+    }
+};
+
+/**
+ * Your FoodRatings object will be instantiated and called as such:
+ * FoodRatings* obj = new FoodRatings(foods, cuisines, ratings);
+ * obj->changeRating(food,newRating);
+ * string param_2 = obj->highestRated(cuisine);
+ */
+
+/*
+#include<iostream>
+using namespace std;
+*/
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+        int n, k;
+        cin >> n >> k;
+        long long ans = 0;
+
+        int now = 0;
+        vector<long int> wealth(n), pref(n);
+        for (int i = 0; i < n; ++i)
+            cin >> wealth[i];
+        for (int i = 0; i < n; ++i)
+            cin >> pref[i];
+
+        int prefer = 0;
+        long long money = 0;
+
+        for (int i = 0; i < n - 1; ++i)
+        {
+            if (prefer != pref[i + 1])
+            {
+                if (wealth[i + 1] - k > -wealth[i])
+                {
+                    prefer = pref[i + 1];
+                    money += wealth[i + 1] - k;
+                }
+                else
+                    money -= wealth[i + 1];
+            }
+        }
+
+        cout << money << '\n';
+    }
+    return 0;
+}
+
+class TaskManager
+{
+public:
+    struct MyCompare
+    {
+        bool operator()(const vector<int> &a,
+                        const vector<int> &b) const
+        {
+            if (a[2] == b[2])
+                return a[1] > b[1];
+            return a[2] >
+                   b[2];
+        }
+    };
+    vector<vector<int>> tasks;
+    set<vector<int>, MyCompare> s;
+    map<int, pair<int, int>> hash;
+
+    TaskManager(vector<vector<int>> &tasks)
+    {
+        this->tasks = tasks;
+
+        int n = tasks.size();
+        for (int i = 0; i < n; ++i)
+        {
+            s.insert(tasks[i]);
+            hash[tasks[i][1]] = {tasks[i][0], tasks[i][1]};
+        }
+    }
+
+    void add(int userId, int taskId, int priority)
+    {
+        s.insert({userId, taskId, priority});
+    }
+
+    void edit(int taskId, int newPriority)
+    {
+
+        pair<int, int> p = hash[taskId];
+
+        s.erase({p.first, taskId, p.second});
+        s.insert({p.first, taskId, newPriority});
+        hash[taskId] = {p.first, newPriority};
+    }
+
+    void rmv(int taskId)
+    {
+        pair<int, int> p = hash[taskId];
+        s.erase({p.first, taskId, p.second});
+    }
+
+    int execTop()
+    {
+        if (s.empty())
+            return -1;
+        vector<int> vec = *s.begin();
+        s.erase(s.begin());
+        return vec[0];
+    }
+};
+
+/**
+ * Your TaskManager object will be instantiated and called as such:
+ * TaskManager* obj = new TaskManager(tasks);
+ * obj->add(userId,taskId,priority);
+ * obj->edit(taskId,newPriority);
+ * obj->rmv(taskId);
+ * int param_4 = obj->execTop();
+ */
+
+class Spreadsheet
+{
+public:
+    vector<vector<int>> vec;
+    Spreadsheet(int rows)
+    {
+        vec.resize(rows + 1);
+        for (int i = 0; i <= rows; ++i)
+            vec[i].resize(26, 0);
+    }
+
+    void setCell(string cell, int value)
+    {
+        int col = cell[0] - 'A', n = cell.size();
+
+        string s = cell.substr(1, n);
+        int row = stoi(s);
+
+        vec[row][col] = value;
+    }
+
+    void resetCell(string cell)
+    {
+        int col = cell[0] - 'A', n = cell.size();
+
+        string s = cell.substr(1, n);
+        int row = stoi(s);
+        vec[row][col] = 0;
+    }
+
+    int getValue(string formula)
+    {
+        string a = "", b = "";
+        int i = 1;
+        while (formula[i] != '+')
+        {
+            a += formula[i];
+        }
+        int n = formula.size();
+        while (i < n)
+            b += formula[i];
+        int first = 0, second = 0;
+        int n1 = a.size(), n2 = b.size();
+        if (isalpha(a[0]))
+        {
+            string c = a.substr(1, n1 - 1);
+            int row = stoi(c);
+            first = vec[row][a[0] - 'A'];
+        }
+        else
+            first = stoi(a);
+
+        if (isalpha(b[0]))
+        {
+            string c = b.substr(1, n2 - 1);
+            int row = stoi(c);
+            second = vec[row][b[0] - 'A'];
+        }
+        else
+            second = stoi(b);
+
+        return first + second;
+    }
+};
+
+/**
+ * Your Spreadsheet object will be instantiated and called as such:
+ * Spreadsheet* obj = new Spreadsheet(rows);
+ * obj->setCell(cell,value);
+ * obj->resetCell(cell);
+ * int param_3 = obj->getValue(formula);
+ */
+
+class Solution
+{
+public:
+    void setMatrixZeroes(vector<vector<int>> &mat)
+    {
+        int idx = 1;
+
+        int n = mat.size(), m = mat[0].size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (mat[i][0] == 0)
+            {
+                idx = 0;
+                break;
+            }
+        }
+
+        for (int i = 0; i < m; ++i)
+        {
+            if (mat[0][i] == 0)
+            {
+                mat[0][0] = 0;
+                break;
+            }
+        }
+
+        for (int i = 1; i < n; ++i)
+        {
+            for (int j = 1; j < m; ++j)
+            {
+
+                if (mat[i][j] == 0)
+                {
+                    mat[i][0] = 0;
+                    mat[0][j] = 0;
+                }
+            }
+        }
+        for (int i = 1; i < n; ++i)
+        {
+            for (int j = 1; j < m; ++j)
+            {
+
+                if (mat[i][0] == 0 || mat[0][j] == 0)
+                    mat[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < m; ++i)
+        {
+            if (mat[0][0] == 0)
+                mat[0][i] = 0;
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (idx == 0)
+                mat[i][0] = 0;
+        }
+    }
+};
