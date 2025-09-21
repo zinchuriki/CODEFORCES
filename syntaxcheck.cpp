@@ -1150,3 +1150,273 @@ public:
         }
     }
 };
+
+class Router
+{
+public:
+    deque<vector<int>> dq;
+    unordered_map<int, deque<int>> hash;
+    map<tuple<int, int, int>, bool> hash2;
+    int sz = 0;
+
+    Router(int memoryLimit) { sz = memoryLimit; }
+
+    bool addPacket(int source, int destination, int timestamp)
+    {
+
+        vector<int> vec;
+        tuple<int, int, int> tp{source, destination, timestamp};
+        vec.push_back(source);
+        vec.push_back(destination);
+        vec.push_back(timestamp);
+
+        if (dq.size() == sz)
+        {
+            vector<int> v = dq.front();
+            if (v == vec)
+                return false;
+            tuple<int, int, int> tp1{v[0], v[1], v[2]};
+            hash[v[1]].pop_front();
+            hash2[tp1] = false;
+            dq.pop_front();
+        }
+
+        if (hash2[tp] == false)
+        {
+            dq.push_back(vec);
+            hash2[tp] = true;
+            hash[destination].push_back(timestamp);
+            return true;
+        }
+
+        return false;
+    }
+
+    vector<int> forwardPacket()
+    {
+        vector<int> vec;
+        if (!dq.empty())
+        {
+            vec = dq.front();
+            tuple<int, int, int> tp{vec[0], vec[1], vec[2]};
+            dq.pop_front();
+            hash2[tp] = false;
+            hash[vec[1]].pop_front();
+        }
+        return vec;
+    }
+
+    int getCount(int destination, int startTime, int endTime)
+    {
+
+        auto it1 = lower_bound(hash[destination].begin(),
+                               hash[destination].end(), startTime);
+        auto it2 = upper_bound(hash[destination].begin(),
+                               hash[destination].end(), endTime);
+        return (int)distance(it1, it2);
+    }
+};
+
+/**
+ * Your Router object will be instantiated and called as such:
+ * Router* obj = new Router(memoryLimit);
+ * bool param_1 = obj->addPacket(source,destination,timestamp);
+ * vector<int> param_2 = obj->forwardPacket();
+ * int param_3 = obj->getCount(destination,startTime,endTime);
+ */
+
+class Solution
+{
+public:
+    void check(vector<int> &vec, vector<int> &nums, int &mini, int count,
+               int &n)
+    {
+        if (count > mini)
+            return;
+        if (vec == nums)
+        {
+            mini = min(mini, count);
+            return;
+        }
+
+        // window size 1
+        for (int i = 0; i < n; ++i)
+        {
+            int a = vec[i];
+            vec.erase(vec.begin() + i);
+            for (int j = 0; j < n; ++j)
+            {
+                if (j != i)
+                {
+                    vec.insert(vec.begin() + j, a);
+                    check(vec, nums, mini, count + 1, n);
+                    vec.erase(vec.begin() + j);
+                }
+            }
+            vec.insert(nums.begin() + i, a);
+        }
+        // window size 2
+        if (n >= 2)
+            return;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            auto start = vec.begin() + i;
+            auto end = vec.begin() + i + 2;
+            vector<int> temp(start, end);
+            vec.erase(start, end);
+            for (int j = 0; j < n - 1; ++j)
+            {
+                if (j != i)
+                {
+                    vec.insert(vec.begin() + j, temp.begin(), temp.end());
+                    check(vec, nums, mini, count + 1, n);
+                    vec.erase(vec.begin() + j, vec.begin() + j + 2);
+                }
+            }
+            vec.insert(vec.begin() + i, temp.begin(), temp.end());
+        }
+        // window size 3
+        if (n >= 3)
+            return;
+        for (int i = 0; i < n - 2; ++i)
+        {
+            auto start = vec.begin() + i;
+            auto end = vec.begin() + i + 3;
+            vector<int> temp(start, end);
+            vec.erase(start, end);
+            for (int j = 0; j < n - 2; ++j)
+            {
+                if (j != i)
+                {
+                    vec.insert(vec.begin() + j, temp.begin(), temp.end());
+                    check(vec, nums, mini, count + 1, n);
+                    vec.erase(vec.begin() + j, vec.begin() + j + 3);
+                }
+            }
+            vec.insert(vec.begin() + i, temp.begin(), temp.end());
+        }
+        // window size 4
+        if (n >= 4)
+            return;
+        for (int i = 0; i < n - 3; ++i)
+        {
+            auto start = vec.begin() + i;
+            auto end = vec.begin() + i + 3;
+            vector<int> temp(start, end);
+            vec.erase(start, end);
+            for (int j = 0; j < n - 3; ++j)
+            {
+                if (j != i)
+                {
+                    vec.insert(vec.begin() + j, temp.begin(), temp.end());
+                    check(vec, nums, mini, count + 1, n);
+                    vec.erase(vec.begin() + j, vec.begin() + j + 3);
+                }
+            }
+            vec.insert(vec.begin() + i, temp.begin(), temp.end());
+        }
+        // window size 5
+        if (n >= 5)
+            return;
+        for (int i = 0; i < n - 4; ++i)
+        {
+            auto start = vec.begin() + i;
+            auto end = vec.begin() + i + 4;
+            vector<int> temp(start, end);
+            vec.erase(start, end);
+            for (int j = 0; j < n - 4; ++j)
+            {
+                if (j != i)
+                {
+                    vec.insert(vec.begin() + j, temp.begin(), temp.end());
+                    check(vec, nums, mini, count + 1, n);
+                    vec.erase(vec.begin() + j, vec.begin() + j + 4);
+                }
+            }
+            vec.insert(vec.begin() + i, temp.begin(), temp.end());
+        }
+    }
+
+    int minSplitMerge(vector<int> &nums1, vector<int> &nums2)
+    {
+        int mini = INT_MAX;
+        int count = 0;
+        int n = nums1.size();
+        check(nums1, nums2, mini, count, n);
+
+        return mini;
+    }
+};
+
+class MovieRentingSystem
+{
+public:
+    map<int, set<pair<int, int>>> hash;
+    map<pair<int, int>, int> hash1;
+    set<tuple<int, int, int>> rented;
+
+    MovieRentingSystem(int n, vector<vector<int>> &entries)
+    {
+
+        for (int i = 0; i < n; ++i)
+        {
+            hash[entries[i][1]].insert({entries[i][2], entries[i][0]});
+            hash1[{entries[i][0], entries[i][1]}] = entries[i][2];
+        }
+    }
+
+    vector<int> search(int movie)
+    {
+        vector<int> vec;
+        set<pair<int, int>> s = hash[movie];
+        int count = 0;
+        for (auto it = s.begin(); it != s.end() && count < 5; ++it, ++count)
+        {
+            vec.push_back(it->second);
+        }
+
+        return vec;
+    }
+
+    void rent(int shop, int movie)
+    {
+
+        int price = hash1[{shop, movie}];
+        hash[movie].erase({price, shop});
+        rented.insert({price, shop, movie});
+    }
+
+    void drop(int shop, int movie)
+    {
+        int price = hash1[{shop, movie}];
+        rented.erase({price, shop, movie});
+
+        hash[movie].insert({price, shop});
+    }
+
+    vector<vector<int>> report()
+    {
+        vector<vector<int>> ans;
+        auto it = rented.begin();
+        int count = 0;
+        while (count < 5 && it != rented.end())
+        {
+            auto [price, shop, movie] = *it;
+            vector<int> temp(2);
+            temp[0] = shop;
+            temp[1] = movie;
+            ans.push_back(temp);
+            ++it;
+        }
+        return ans;
+    };
+};
+
+/**
+ * Your MovieRentingSystem object will be instantiated and called as such:
+ * MovieRentingSystem* obj = new MovieRentingSystem(n, entries);
+ * vector<int> param_1 = obj->search(movie);
+ * obj->rent(shop,movie);
+ * obj->drop(shop,movie);
+ * vector<vector<int>> param_4 = obj->report();
+ */
