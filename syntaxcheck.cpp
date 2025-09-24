@@ -1420,3 +1420,101 @@ public:
  * obj->drop(shop,movie);
  * vector<vector<int>> param_4 = obj->report();
  */
+
+class Solution
+{
+public:
+    bool dfs(vector<int> &vis, vector<vector<int>> &adj, int node, int parent)
+    {
+
+        int n = adj[node].size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (vis[adj[node][i]] != -1 && vis[adj[node][i]] != parent)
+                return true;
+            else
+            {
+                if (vis[adj[node][i]] == -1)
+                {
+                    vis[adj[node][i]] = node;
+                    return dfs(vis, adj, adj[node][i], node);
+                }
+            }
+        }
+        return false;
+    }
+
+    bool isCycle(int V, vector<vector<int>> &edges)
+    {
+        // Code here
+        vector<vector<int>> adj(V);
+        vector<int> vis(V, -1);
+
+        int n = edges.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            adj[edges[i][0]].push_back(adj[i][1]);
+            adj[edges[i][1]].push_back(adj[i][0]);
+        }
+        for (int i = 0; i < V; ++i)
+        {
+            if (dfs(vis, adj, i, -1))
+                return true;
+        }
+        return false;
+    }
+};
+
+class Solution
+{
+public:
+    string fractionToDecimal(int numerator, int denominator)
+    {
+        string ans = "";
+
+        bool point = false;
+        int num = numerator;
+        int den = denominator;
+        ans += to_string(num / den);
+        num = num % den;
+        if (num == 0)
+            return ans;
+        else
+            ans += '.';
+        num *= 10;
+        map<int, int> hash;
+        int repeating = INT_MAX;
+        while (num > 0)
+        {
+            if (hash.find(int((int)num % (int)den)) != hash.end())
+            {
+                repeating = num % den;
+                break;
+            }
+            ans += to_string(num / den);
+            hash[num % den]++;
+            num = num % den;
+            num *= 10;
+        }
+
+        if (repeating != INT_MAX)
+        {
+            int l = 0;
+            while (ans[l] != '.')
+                l++;
+
+            l++;
+            while (true)
+            {
+                if (ans[l] == repeating + '0')
+                    break;
+                l++;
+            }
+            ans.insert(l - 1, 1, '(');
+            ans += ')';
+        }
+        return ans;
+    }
+};
