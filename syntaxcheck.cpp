@@ -1484,17 +1484,17 @@ public:
         else
             ans += '.';
         num *= 10;
-        map<int, int> hash;
+        map<pair<int, int>, bool> hash;
         int repeating = INT_MAX;
         while (num > 0)
         {
-            if (hash.find(int((int)num % (int)den)) != hash.end())
+            if (hash.find({num / den, num % den}) != hash.end())
             {
-                repeating = num % den;
+                repeating = num / den;
                 break;
             }
             ans += to_string(num / den);
-            hash[num % den]++;
+            hash[{num / den, num % den}] = true;
             num = num % den;
             num *= 10;
         }
@@ -1506,14 +1506,74 @@ public:
                 l++;
 
             l++;
-            while (true)
+            while (l < ans.size())
             {
                 if (ans[l] == repeating + '0')
                     break;
                 l++;
             }
-            ans.insert(l - 1, 1, '(');
+            ans.insert(l, 1, '(');
             ans += ')';
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int sum(vector<vector<int>> &dp, vector<vector<int>> &triangles, int row, int col)
+    {
+        int n = triangles.size();
+        if (row >= triangles.size())
+            return 0;
+        if (dp[row][col] != -1)
+            return dp[row][col];
+
+        return dp[row][col] = triangles[row][col] +
+                              min(sum(dp, triangles, row + 1, col + 1),
+                                  sum(dp, triangles, row + 1, col));
+    }
+    int minimumTotal(vector<vector<int>> &triangle)
+    {
+        int n = triangle.size();
+        int m = triangle[n - 1].size();
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+
+        return sum(dp, triangle, 0, 0);
+    }
+};
+
+class Solution
+{
+public:
+    int triangleNumber(vector<int> &nums)
+    {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        if (n <= 2)
+            return 0;
+        int l = 0, r = 1;
+        // we'll use upperbound
+        int ans = 0;
+        while (l < n && r < n)
+        {
+
+            int find = nums[l] + nums[r] - 1;
+            auto it = upper_bound(nums.begin(), nums.end(),find);
+            if (it == nums.end())
+            {
+
+                if (nums[n - 1] <= find)
+                    ans += max(0, n - 1 - r);
+                l++;
+                r = l + 1;
+            }
+            else
+            {
+                ans += it - nums.begin() - r - 1;
+                r++;
+            }
         }
         return ans;
     }
