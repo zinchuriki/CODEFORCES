@@ -1560,7 +1560,7 @@ public:
         {
 
             int find = nums[l] + nums[r] - 1;
-            auto it = upper_bound(nums.begin(), nums.end(),find);
+            auto it = upper_bound(nums.begin(), nums.end(), find);
             if (it == nums.end())
             {
 
@@ -1576,5 +1576,168 @@ public:
             }
         }
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<vector<int>> insertInterval(vector<vector<int>> &intervals,
+                                       vector<int> &newInterval)
+    {
+        // code here
+        vector<vector<int>> vec;
+
+        int lower = INT_MAX;
+        int upper = INT_MIN;
+        bool wait = false;
+
+        int n = intervals.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            if (intervals[i][0] <= newInterval[0] && intervals[i][1] >= newInterval[0])
+            {
+                lower = intervals[i][0];
+                wait = true;
+            }
+            if (wait)
+            {
+                if (intervals[i][0] <= newInterval[1] && intervals[i][1] >= newInterval[1])
+                {
+                    upper = intervals[i][1];
+                    wait = false;
+                    vector<int> temp(2);
+                    temp[0] = lower;
+                    temp[1] = upper;
+                    vec.push_back(temp);
+                }
+            }
+            else
+                vec.push_back(intervals[i]);
+        }
+        vector<int> temp(2);
+        temp[0] = lower;
+        temp[1] = upper;
+        if (wait)
+        {
+            vec.push_back(temp);
+        }
+        else
+        {
+            if (lower >= intervals[n - 1][1])
+            {
+                vec.push_back(newInterval);
+            }
+        }
+
+        return vec;
+    }
+};
+
+class Solution
+{
+public:
+    double largestTriangleArea(vector<vector<int>> &points)
+    {
+        double ans = 0;
+
+        int n = points.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            double x1 = points[i][0];
+            double y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j)
+            {
+                double x2 = points[j][0];
+                double y2 = points[j][1];
+                double side1 = sqrt(pow(2, x1 - x2) + pow(2, y1 - y2));
+
+                for (int k = j + 1; k < n; k++)
+                {
+                    double x3 = points[k][0];
+                    double y3 = points[k][1];
+                    double side2 = sqrt(pow(2, x1 - x3) + pow(2, y1 - y3));
+                    double side3 = sqrt(pow(2, x2 - x3) + pow(2, y2 - y3));
+
+                    double s = 0.5 * (side1 + side2 + side3);
+                    double area = s * (s - side1) * (s - side2) * (s - side3);
+                    ans = max(ans, area);
+                }
+            }
+        }
+        return sqrt(ans);
+    }
+};
+
+class Solution
+{
+public:
+    int total(vector<vector<int>> &dp, vector<int> &values, int start, int end)
+    {
+        int front_vertex = start + 1;
+        if (end - start < 3)
+            return dp[start][end] = 0;
+        int mini = INT_MAX;
+        for (int i = start + 1; i < end; ++i)
+        {
+            int temp = values[start] * values[front_vertex] * values[i] + total(dp, values, start, i) + total(dp, values, i, end);
+
+            mini = min(mini, temp);
+        }
+        return dp[start][end] = mini;
+    }
+
+    int minScoreTriangulation(vector<int> &values)
+    {
+        int n = values.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+
+        return total(dp, values, 0, n - 1);
+    }
+};
+
+class Solution
+{
+public:
+    int triangularSum(vector<int> &nums)
+    {
+        int n = nums.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            for (int j = n - 1; j > i; --j)
+            {
+                nums[j] = (nums[j] + nums[j - 1]) % 10;
+            }
+        }
+
+        return nums[n - 1];
+    }
+};
+
+class Solution
+{
+public:
+    int makeTheIntegerZero(int num1, int num2)
+    {
+        int i = 1;
+        int k = 0;
+        while (true)
+        {
+
+            long long temp = num1 - i * num2;
+            if (temp <= 0)
+                return -1;
+            if (pow(2, k) >= temp)
+                return k;
+
+            k++;
+        }
+
+        return -1;
     }
 };
