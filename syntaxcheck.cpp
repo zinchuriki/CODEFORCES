@@ -1741,3 +1741,40 @@ public:
         return -1;
     }
 };
+
+
+
+class Solution {
+public:
+    int peopleAwareOfSecret(int n, int delay, int forget) {
+        deque<pair<int,int>> know,share;
+        share.emplace_back(1,1);
+            pair<int,int> p;
+            long long know_cnt=1,share_cnt=0;
+            long long mod=1e9+7;
+        for(int i=2; i<=n; ++i){
+            
+            if(!know.empty() && know.front().first==i-delay){
+                    know_cnt-=know.front().second;
+                    share_cnt= (share_cnt+know.front().second)%mod;
+                    know_cnt= (know_cnt+share_cnt)%mod;
+                    know.pop_front();
+                     share.emplace_back(i,share_cnt);
+                     know.emplace_back(i,know_cnt);
+            }
+
+            if(!share.empty() && share.front().first==i-forget){
+
+                        share_cnt-=share.front().second;
+                        share.pop_front();
+
+            }
+
+
+
+           
+
+        }
+        return (know_cnt+share_cnt)%mod;
+    }
+};
