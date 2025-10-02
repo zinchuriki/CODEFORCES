@@ -1742,39 +1742,54 @@ public:
     }
 };
 
-
-
-class Solution {
+class Solution
+{
 public:
-    int peopleAwareOfSecret(int n, int delay, int forget) {
-        deque<pair<int,int>> know,share;
-        share.emplace_back(1,1);
-            pair<int,int> p;
-            long long know_cnt=1,share_cnt=0;
-            long long mod=1e9+7;
-        for(int i=2; i<=n; ++i){
-            
-            if(!know.empty() && know.front().first==i-delay){
-                    know_cnt-=know.front().second;
-                    share_cnt= (share_cnt+know.front().second)%mod;
-                    know_cnt= (know_cnt+share_cnt)%mod;
-                    know.pop_front();
-                     share.emplace_back(i,share_cnt);
-                     know.emplace_back(i,know_cnt);
+    int peopleAwareOfSecret(int n, int delay, int forget)
+    {
+        deque<pair<int, int>> know, share;
+        share.emplace_back(1, 1);
+        pair<int, int> p;
+        long long know_cnt = 1, share_cnt = 0;
+        long long mod = 1e9 + 7;
+        for (int i = 2; i <= n; ++i)
+        {
+
+            if (!know.empty() && know.front().first == i - delay)
+            {
+                know_cnt -= know.front().second;
+                share_cnt = (share_cnt + know.front().second) % mod;
+                know_cnt = (know_cnt + share_cnt) % mod;
+                know.pop_front();
+                share.emplace_back(i, share_cnt);
+                know.emplace_back(i, know_cnt);
             }
 
-            if(!share.empty() && share.front().first==i-forget){
+            if (!share.empty() && share.front().first == i - forget)
+            {
 
-                        share_cnt-=share.front().second;
-                        share.pop_front();
-
+                share_cnt -= share.front().second;
+                share.pop_front();
             }
-
-
-
-           
-
         }
-        return (know_cnt+share_cnt)%mod;
+        return (know_cnt + share_cnt) % mod;
     }
 };
+
+int sum(vector<vector<int>> &dp, vector<vector<int>> &triangle, int row, int col)
+{
+    int n = triangle.size();
+    int m = triangle[col].size();
+    if (row >= n - 1)
+        return 0;
+    if (dp[row][col] != INT_MIN)
+        return dp[row][col];
+    return dp[row][col] = triangle[row][col] + min(sum(dp, triangle, row + 1, col), sum(dp, triangle, row + 1, col + 1));
+}
+
+int minimumPathSum(vector<vector<int>> &triangle, int n)
+{
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INT_MIN));
+
+    return sum(dp, triangle, 0, 0);
+}
