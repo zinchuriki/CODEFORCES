@@ -1793,3 +1793,84 @@ int minimumPathSum(vector<vector<int>> &triangle, int n)
 
     return sum(dp, triangle, 0, 0);
 }
+
+class Solution
+{
+public:
+    bool check(vector<vector<int>> &visited, vector<vector<char>> &mat, int idx, string &word, int row, int col)
+    {
+        int n = mat.size(), m = mat[0].size();
+        if (idx >= word.size())
+            return true;
+
+        if (row >= n || col >= m || visited[row][col] == true)
+            return false;
+
+        visited[row][col] = true;
+        if (mat[row][col] == word[idx])
+        {
+
+            bool one = check(visited, mat, idx + 1, word, row + 1, col);
+            bool two = check(visited, mat, idx + 1, word, row - 1, col);
+            bool three = check(visited, mat, idx + 1, word, row, col + 1);
+            bool four = check(visited, mat, idx + 1, word, row, col - 1);
+
+            if (one || two || three || four)
+                return true;
+        }
+
+        visited[row][col] = false;
+        return false;
+    }
+
+    bool isWordExist(vector<vector<char>> &mat, string &word)
+    {
+        // Code here
+        int n = mat.size(), m = mat[0].size();
+        vector<vector<int>> visited(n, vector<int>(m, false));
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if (word[0] == mat[i][j])
+                {
+                    bool found = false;
+                    found = check(visited, mat, 0, word, i, j);
+                    if (found)
+                        return true;
+                }
+            }
+            return false;
+        }
+    }
+};
+
+class Solution
+{
+public:
+    int trap(vector<int> &height)
+    {
+        int n = height.size();
+        vector<int> lmax(n, 0), rmax(n, 0);
+        int lm = height[0];
+        for (int i = 1; i < n; ++i)
+        {
+            lmax[i] = lm;
+            lm = max(lm, height[i]);
+        }
+        int rm = height[n - 1];
+        for (int i = n - 2; i >= 0; --i)
+        {
+            rmax[i] = rm;
+            rm = max(rm, height[i]);
+        }
+        int ans = 0;
+
+        for (int i = 1; i < n - 1; ++i)
+        {
+            if(height[i]<=lmax[i] && height[i]<=rmax[i]) ans+=max(0,min(lmax[i],rmax[i])-height[i]);
+        }
+
+        return ans;
+    }
+};
