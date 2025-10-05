@@ -1868,7 +1868,147 @@ public:
 
         for (int i = 1; i < n - 1; ++i)
         {
-            if(height[i]<=lmax[i] && height[i]<=rmax[i]) ans+=max(0,min(lmax[i],rmax[i])-height[i]);
+            if (height[i] <= lmax[i] && height[i] <= rmax[i])
+                ans += max(0, min(lmax[i], rmax[i]) - height[i]);
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string removeSubstring(string s, int k)
+    {
+        stack<char> st;
+
+        int temp1 = 0, temp2 = 0;
+
+        int n = s.size();
+        bool build = false;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (build)
+                temp1 = 0;
+
+            build = false;
+            if (s[i] == '(')
+            {
+                temp1++;
+                st.push('(');
+            }
+            else
+            {
+                build = true;
+                temp2++;
+            }
+            if (temp2 > temp1)
+            {
+                st.push(')');
+                temp2--;
+            }
+
+            if (temp1 >= k && temp2 >= k)
+            {
+                int t = k;
+                while (t > 0)
+                {
+                    st.pop();
+                    t--;
+                    temp1--;
+                    temp2--;
+                }
+            }
+        }
+
+        string ans = "";
+        if (temp1 >= k && temp2 >= k)
+        {
+            int t = k;
+            while (t > 0)
+            {
+                st.pop();
+                t--;
+                temp1--;
+            }
+        }
+        while (!st.empty())
+        {
+
+            ans += st.top();
+            st.pop();
+        }
+
+        int l = 0, r = ans.size() - 1;
+        while (l < r)
+        {
+            swap(ans[l], ans[r]);
+            l++;
+            r--;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    void dfs(vector<vector<int>> &heights, vector<vector<bool>> &visited, int row, int col )
+    {
+        int n = heights.size(), m = heights[0].size();
+        if (row < 0 || col < 0 || row >= n || col >= m || visited[row][col] == true)
+            return;
+
+        visited[row][col] = true;
+
+        int h = heights[row][col];
+
+        if (row >= 1 && heights[row - 1][col] >= h)
+            dfs(heights, visited, row - 1, col);
+        if (col = 1 && heights[row][col - 1] >= h)
+            dfs(heights, visited, row, col - 1);
+        if (row + 1 < n && heights[row + 1][col] >= h)
+            dfs(heights, visited, row + 1, col);
+        if (col + 1 < m && heights[row][col + 1] >= h)
+            dfs(heights, visited, row, col + 1);
+    }
+
+    vector<vector<int>> pacificAtlantic(vector<vector<int>> &heights)
+    {
+        int n = heights.size();
+
+        int m = heights[0].size();
+
+        vector<vector<bool>> visited(n, vector<bool>(m, false)), visited2(n, vector<bool>(m, false));
+
+        for (int i = 0; i < n; ++i)
+        {
+            dfs(heights, visited, i, 0);
+            dfs(heights, visited2, i, m - 1);
+        }
+        for (int i = 0; i < m; ++i)
+        {
+            dfs(heights, visited, 0, i);
+            dfs(heights, visited2, n - 1, i);
+        }
+
+        vector<vector<int>> ans;
+        vector<int> temp(2);
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (visited[i][j] && visited2[i][j])
+                {
+                    temp[0] = i;
+                    temp[1] = j;
+                    ans.push_back(temp);
+                }
+            }
         }
 
         return ans;
