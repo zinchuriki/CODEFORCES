@@ -1956,7 +1956,7 @@ public:
 class Solution
 {
 public:
-    void dfs(vector<vector<int>> &heights, vector<vector<bool>> &visited, int row, int col )
+    void dfs(vector<vector<int>> &heights, vector<vector<bool>> &visited, int row, int col)
     {
         int n = heights.size(), m = heights[0].size();
         if (row < 0 || col < 0 || row >= n || col >= m || visited[row][col] == true)
@@ -2009,6 +2009,119 @@ public:
                     ans.push_back(temp);
                 }
             }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int swimInWater(vector<vector<int>> &grid)
+    {
+        int time = grid[0][0];
+        int n = grid.size();
+
+        std::priority_queue<
+            std::tuple<int, int, int>,
+            std::vector<std::tuple<int, int, int>>,
+            std::greater<std::tuple<int, int, int>>>
+            pq;
+
+        vector<vector<int>> vec(50, vector<int>(50, INT_MAX));
+        vec[0][0] = time;
+        pq.push({time, 0, 0});
+        tuple<int, int, int> t;
+        while (!pq.empty())
+        {
+            auto [ct, row, col] = pq.top();
+            pq.pop();
+            if (row + 1 < n)
+            {
+                int nt;
+                if (ct < grid[row + 1][col])
+                    nt = grid[row + 1][col];
+                else
+                    nt = ct;
+                if (vec[row + 1][col] > ct)
+                {
+                    vec[row + 1][col] = nt;
+                    pq.push({ct, row + 1, col});
+                }
+            }
+            if (col - 1 >= 0)
+            {
+                int nt;
+                if (ct < grid[row][col - 1])
+                    nt = grid[row][col - 1];
+                else
+                    nt = ct;
+                if (vec[row][col - 1] > ct)
+                {
+                    vec[row][col - 1] = nt;
+                    pq.push({ct, row, col - 1});
+                }
+            }
+            if (col + 1 < n)
+            {
+                int nt;
+                if (ct < grid[row][col + 1])
+                    nt = grid[row][col + 1];
+                else
+                    nt = ct;
+                if (vec[row][col + 1] > ct)
+                {
+                    vec[row][col + 1] = nt;
+                    pq.push({ct, row, col + 1});
+                }
+            }
+        }
+
+        return vec[n - 1][n - 1];
+
+        // {grid value, time};
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> avoidFlood(vector<int> &rains)
+    {
+        set<int> s;
+        int n = rains.size();
+        unordered_map<int, int> hash;
+
+        vector<int> ans(n, -1);
+        int count = 0;
+        for (int i = 0; i < n; ++i)
+        {
+
+            if (rains[i] == 0)
+                s.insert(i);
+            else
+            {
+                if (hash.find(rains[i]) != hash.end())
+                {
+                    auto it = s.lower_bound(hash[i]);
+                    if (it == s.end())
+                        return {};
+                    else
+                    {
+                        ans[*it] = hash[i];
+                        s.erase(it);
+                    }
+                }
+            }
+
+            hash[rains[i]] = i;
+        }
+
+        while (!s.empty())
+        {
+            ans[*s.begin()] = rains[0];
+            s.erase(s.begin());
         }
 
         return ans;
