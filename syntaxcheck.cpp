@@ -2127,3 +2127,221 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> successfulPairs(vector<int> &spells, vector<int> &potions, long long success)
+    {
+        int n = spells.size(), m = potions.size();
+        vector<int> ans(n, 0);
+        sort(potions.begin(), potions.end());
+        for (int i = 0; i < n; ++i)
+        {
+
+            long long temp1 = spells[i];
+
+            for (int j = 0; j < m; ++j)
+            {
+                auto it = lower_bound(potions.begin(), potions.end(), success / temp1);
+                ans[i] = it - potions.end();
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    long long minTime(vector<int> &skill, vector<int> &mana)
+    {
+        int n = skill.size(), m = mana.size();
+        vector<long long> f(n + 1, 0);
+        long long now = f[0];
+
+        for (int j = 0; j < m; ++j)
+        {
+            long long x = mana[j];
+            for (int i = 1; i < n; ++i)
+            {
+                now = max(now, skill[i - 1] * x, f[i]);
+            }
+            f[n - 1] = now + skill[n - 1] * x;
+
+            for (int i = n - 2; i >= 0; --i)
+            {
+                f[i] = f[i + 1] - skill[i + 1] * x;
+            }
+        }
+
+        return f[n - 1];
+    }
+};
+
+class Solution
+{
+public:
+    int maximumEnergy(vector<int> &energy, int k)
+    {
+
+        vector<int> pref(k, 0), ans(k, INT_MIN);
+        int n = energy.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            pref[i % k] += energy[i];
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            ans[i % k] = max(ans[i % k], pref[i % k]);
+            pref[i % k] -= energy[i];
+            ans[i % k] = max(ans[i % k], pref[i % k]);
+        }
+
+        int ansr = INT_MIN;
+
+        for (int i = 0; i < k; ++i)
+            ansr = max(ansr, ans[i]);
+
+        return ansr;
+    }
+};
+
+// User Function Template
+class Solution
+{
+public:
+    vector<int> dijkstra(int V, vector<vector<int>> &edges, int src)
+    {
+        // Code here
+        vector<vector<pair<int, int>>> adj(V);
+        int n = edges.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int node1 = edges[i][0];
+            int node2 = edges[i][1];
+            int wt = edges[i][2];
+
+            adj[node1].push_back({wt, node2});
+            adj[node2].push_back({wt, node1});
+        }
+
+        priority_queue<pair<int, int>> pq;
+        vector<int> dist(V, 1e9);
+        dist[src] = 0;
+        pq.push({src, 0});
+
+        while (!pq.empty())
+        {
+
+            int weight = pq.top().first;
+            int node = pq.top().second;
+            int sz = adj[node].size();
+            for (int i = 0; i < sz; ++i)
+            {
+                int d = adj[node][i].first;
+                int node3 = adj[node][i].second;
+
+                if (weight + d < dist[node3])
+                {
+                    dist[node3] = weight + d;
+                    pq.push({dist[node3], node3});
+                }
+            }
+        }
+
+        return dist;
+    }
+};
+
+class Solution
+{
+
+public:
+    long long dam(vector<vector<long long>> &dp, vector<int> &power, int idx, int skip, unordered_map<int, int> &hash)
+    {
+        if (idx < 0)
+            return 0;
+        if (dp[idx][skip] != -1)
+            return dp[idx][skip];
+        int temp = 0;
+        int id = idx;
+        while (id >= 1 && (power[id - 1] == power[id] - 1 || power[id - 1] == power[id] - 2))
+        {
+
+            temp++;
+            id--;
+        }
+        long long take = power[idx] * hash[power[idx]] + dam(dp, power, idx - temp - 1, temp, hash);
+        long long dtake = dam(dp, power, idx - 1, 0, hash);
+
+        return dp[idx][skip] = max(take, dtake);
+    }
+
+    long long maximumTotalDamage(vector<int> &power)
+    {
+        vector<int> vec;
+        sort(power.begin(), power.end());
+        int n = power.size();
+        vec.push_back(power[0]);
+        unordered_map<int, int> hash;
+
+        for (int i = 0; i < n; ++i)
+            hash[power[i]]++;
+
+        for (int i = 1; i < n; ++i)
+            if (power[i] != power[i - 1])
+                vec.push_back(power[i]);
+
+        int m = vec.size() - 1;
+
+        vector<vector<long long>> dp(n + 1, vector<long long>(4, -1));
+
+        return dam(dp, vec, n - 1, 0, hash);
+    }
+};
+
+class Solution
+{
+public:
+    vector<string> removeAnagrams(vector<string> &words)
+    {
+        vector<string> ans;
+
+        int n = words.size();
+        unordered_map<string, vector<int>> hash;
+        for (int i = 0; i < n; ++i)
+        {
+            vector<int> vec;
+            int m = words[i].size();
+
+            for (int j = 0; j < m; ++j)
+                vec[words[i][j] - 'a']++;
+
+            hash[words[i]] = vec;
+        }
+
+        stack<int> st;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (!st.empty())
+            {
+                if (hash[words[st.top()]] != hash[words[i]])
+                {
+                    ans.push_back(words[i]);
+                    st.push(i);
+                }
+            }
+            else
+            {
+                ans.push_back(words[i]);
+                st.push(i);
+            }
+        }
+        return ans;
+    }
+};
