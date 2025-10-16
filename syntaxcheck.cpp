@@ -2345,3 +2345,117 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    bool hasIncreasingSubarrays(vector<int> &nums, int k)
+    {
+        int n = nums.size();
+
+        int l = 0, r = 1;
+        int temp = 1;
+        bool nomid = true;
+        while (l < n && r < n)
+        {
+
+            if (nums[l] < nums[r])
+            {
+                temp++;
+                temp = k + 1;
+                nomid = true;
+            }
+            else
+            {
+                if (temp == k)
+                {
+                    temp++;
+                    nomid = false;
+                }
+                else
+                {
+                    if (nomid)
+                        l = l - k + 1;
+                    temp = 1;
+                }
+            }
+            l++;
+            r++;
+            if (temp == 2 * k)
+                return true;
+        }
+
+        return false;
+    }
+};
+
+class Solution
+{
+public:
+    int maxIncreasingSubarrays(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> pref(n, 1), suf(n, 1);
+
+        int temp = 1, temp2 = 1;
+        for (int i = 1; i < n; ++i)
+        {
+
+            if (nums[i - 1] < nums[i])
+                temp++;
+            else
+                temp = 1;
+
+            if (nums[n - i] > nums[n - i - 1])
+                temp2++;
+            else
+                temp2 = 1;
+            suf[n - i] = temp2;
+
+            pref[i] = temp;
+        }
+        int ans = 1;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            ans = max(ans, min(suf[i + 1], pref[i]));
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int findSmallestInteger(vector<int> &nums, int value)
+    {
+        int n = nums.size();
+
+        vector<int> hash(value, 0);
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (nums[i] < 0)
+            {
+                int temp = nums[i] % value;
+                temp += value;
+                hash[temp % value]++;
+            }
+            else
+                hash[abs(nums[i]) % value]++;
+        }
+
+        int count = INT_MAX;
+        int num = 0;
+
+        for (int i = 0; i < value; ++i)
+        {
+            if (hash[i] < count)
+            {
+                count = hash[i];
+                num = i;
+            }
+        }
+        return value * count + num;
+    }
+};
