@@ -2459,3 +2459,56 @@ public:
         return value * count + num;
     }
 };
+
+class Solution
+{
+public:
+    bool dfs(vector<bool> &vis, vector<vector<int>> &adj, int p)
+    {
+
+        int sz = adj[p].size();
+
+        for (int i = 0; i < sz; ++i)
+        {
+            if (vis[adj[p][i]])
+            {
+                if (adj[p][i] != p)
+                    return true;
+            }
+            vis[adj[p][i]] = true;
+
+            if (dfs(vis, adj, adj[p][i]))
+                return true;
+        }
+
+        return false;
+    }
+    bool isCycle(int V, vector<vector<int>> &edges)
+    {
+        vector<bool> vis(V, false);
+
+        vector<vector<int>> adj(V);
+
+        int n = edges.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            int n1 = edges[i][0], n2 = edges[i][1];
+
+            adj[n1].push_back(n2);
+            adj[n2].push_back(n1);
+        }
+
+        for (int i = 0; i < V; ++i)
+        {
+            if (vis[i] == false)
+            {
+                if (dfs(vis, adj, -1))  
+                    return true;
+            }
+        }
+
+        return false;
+    }
+};
