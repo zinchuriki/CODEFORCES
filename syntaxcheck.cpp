@@ -2504,11 +2504,69 @@ public:
         {
             if (vis[i] == false)
             {
-                if (dfs(vis, adj, -1))  
+                if (dfs(vis, adj, -1))
                     return true;
             }
         }
 
         return false;
+    }
+};
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+using namespace std;
+
+int main()
+{
+    // YOUR CODE GOES HERE
+    // Please take input and print output to standard input/output (stdin/stdout)
+    // E.g. 'cin' for input & 'cout' for output
+    int n;
+    cin >> n;
+    vector<int> vec(n);
+    for (int i = 0; i < n; ++i)
+        cin >> vec[i];
+
+    int q;
+    cin >> q;
+    for (int i = 0; i < q; ++i)
+    {
+        int x;
+        cin >> x;
+        auto it = lower_bound(vec.begin(), vec.end(), x);
+        if (it == vec.end() || *it != x)
+        {
+            cout << distance(upper_bound(vec.begin(), vec.end(), x), vec.begin()) << '\n';
+        }
+        else
+            cout << distance(it, vec.begin()) << '\n';
+    }
+
+    return 0;
+}
+
+class Solution
+{
+public:
+    int maxDistinctElements(vector<int> &nums, int k)
+    {
+        int sm = nums[0] - k;
+        sort(nums.begin(), nums.end());
+
+        int n = nums.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (abs(nums[i] - sm) <= k || nums[i] - k >= sm)
+            {
+                ans++;
+                sm = nums[i] - min((nums[i] - sm), nums[i] - k);
+                sm++;
+            }
+        }
+        return ans;
     }
 };
