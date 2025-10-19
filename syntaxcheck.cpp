@@ -2570,3 +2570,87 @@ public:
         return ans;
     }
 };
+
+void sortTuples(vector<vector<int>> &arr)
+{
+    // Write your code here
+
+    sort(arr.begin(), arr.end(), [](vector<int> &a, vector<int> &b)
+         {
+             int n = a.size();
+             if (a[n - 1] <= b[n - 1])
+                 return true;
+
+             return false; });
+}
+
+class Solution
+{
+public:
+    string rt(string &s, int b)
+    {
+
+        string t = "";
+        int n = s.size();
+        for (int i = b; i < n; ++i)
+            t += s[i];
+        for (int i = 0; i < b; ++i)
+            t += s[i];
+        return t;
+    }
+
+    void add(string &s, int a)
+    {
+
+        int n = s.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (i & 1)
+            {
+                int b = s[i] - '0';
+                b = (a + b) % 10;
+                s[i] = b + '0';
+            }
+        }
+    }
+
+    string bfs(string &s, int a, int b)
+    {
+
+        std::priority_queue<
+            std::string,
+            std::vector<std::string>,
+            std::greater<std::string>>
+            pq;
+
+        pq.push(s);
+        string ans = s;
+        unordered_map<string, bool> hash;
+        while (!pq.empty())
+        {
+            int n = pq.size();
+
+            for (int i = 0; i < n; ++i)
+            {
+                string t = pq.top();
+                pq.pop();
+                if (hash[t] == true)
+                    continue;
+                hash[t] = true;
+                if (t < ans)
+                    ans = t;
+
+                pq.push(rt(t, b));
+                add(t, a);
+                pq.push(t);
+            }
+        }
+        return ans;
+    }
+
+    string findLexSmallestString(string s, int a, int b)
+    {
+        return bfs(s, a, b);
+    }
+};
