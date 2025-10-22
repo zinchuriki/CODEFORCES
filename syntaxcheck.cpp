@@ -2654,3 +2654,88 @@ public:
         return bfs(s, a, b);
     }
 };
+
+int Solution::solve(vector<int> &A, int B)
+{
+    int n = A.size();
+    priority_queue<int> pq;
+    for (int i = 0; i < n; ++i)
+    {
+        pq.push(A[i]);
+    }
+    int ans = 0;
+    while (!pq.empty())
+    {
+        if (B == 0)
+            break;
+
+        int a = pq.top();
+        pq.pop();
+        ans += a;
+        a--;
+        pq.push(a);
+    }
+
+    return ans;
+}
+
+int Solution::solve(vector<int> &A)
+{
+    priority_queue<int, vector<int>, greater<int>> pq;
+
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        pq.push(A[i]);
+    }
+
+    while (!pq.empty())
+    {
+        int a = pq.top();
+        pq.pop();
+        if (pq.empty())
+            return a;
+
+        int b = pq.top();
+        pq.pop();
+        pq.push(a + b);
+    }
+
+    return -1;
+}
+
+class Solution
+{
+public:
+    int maxFrequency(vector<int> &nums, int k, int numOperations)
+    {
+        long int maxi = *max_element(nums.begin(), nums.end());
+
+        int n = nums.size();
+        vector<long int> vec(maxi + 1, 0);
+
+        for (int i = 0; i < n; ++i)
+            vec[nums[i]]++;
+
+        for (int i = 1; i < n; ++i)
+            vec[i] += vec[i - 1];
+
+        int m = vec.size();
+        long int ans = 1;
+        for (int i = 1; i < m; ++i)
+        {
+
+            int left = max(0, i - k - 1);
+            int right = min((long int)(i + k + 1),maxi);
+
+            int target = vec[i] - vec[i - 1];
+
+            long int temp = target + min((long int)numOperations, vec[right] - vec[left] - target);
+
+            ans = max(ans, temp);
+        }
+
+        return ans;
+    }
+};
