@@ -2679,32 +2679,6 @@ int Solution::solve(vector<int> &A, int B)
     return ans;
 }
 
-int Solution::solve(vector<int> &A)
-{
-    priority_queue<int, vector<int>, greater<int>> pq;
-
-    int n = A.size();
-
-    for (int i = 0; i < n; ++i)
-    {
-        pq.push(A[i]);
-    }
-
-    while (!pq.empty())
-    {
-        int a = pq.top();
-        pq.pop();
-        if (pq.empty())
-            return a;
-
-        int b = pq.top();
-        pq.pop();
-        pq.push(a + b);
-    }
-
-    return -1;
-}
-
 class Solution
 {
 public:
@@ -2727,7 +2701,7 @@ public:
         {
 
             int left = max(0, i - k - 1);
-            int right = min((long int)(i + k + 1),maxi);
+            int right = min((long int)(i + k + 1), maxi);
 
             int target = vec[i] - vec[i - 1];
 
@@ -2737,5 +2711,86 @@ public:
         }
 
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool hasSameDigits(string s)
+    {
+        string temp = s;
+
+        while (true)
+        {
+
+            string temp1 = "";
+
+            int n = temp.size();
+
+            for (int i = 1; i < n; ++i)
+            {
+                temp1 += (temp[i - 1] - '0' + temp[i] - '0') % 10 + '0';
+            }
+            temp = temp1;
+            if (temp.size() == 2)
+                break;
+        }
+
+        if (temp[0] == temp[1])
+            return true;
+
+        return false;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> com, v;
+
+    bool good(vector<int> v)
+    {
+
+        for (int i = 1; i <= 5; ++i)
+        {
+            if (v[i] != i && v[i] != 0)
+                return false;
+        }
+        return true;
+    }
+
+    bool p = false;
+    void comp(vector<int> &ct, int num)
+    {
+
+        for (int i = 1; i <= 5; ++i)
+        {
+            if (ct[i] > i)
+                return;
+        }
+        if (num > 0 && good(ct))
+            com.push_back(num);
+
+        for (int i = 1; i <= 5; ++i)
+        {
+            int temp = num * 10 + i;
+            ct[i]++;
+            comp(ct, temp);
+            ct[i]--;
+        }
+    }
+
+    Solution() : v(6, 0)
+    {                                     // Initialize member v here
+        vector<int> initial_counts(6, 0); // Temporary count vector for the initial call
+        comp(initial_counts, 0);          // Start the recursive generation
+    }
+
+    int nextBeautifulNumber(int n)
+    {
+        auto it = lower_bound(com.begin(), com.end(), n + 1);
+
+        return *it;
     }
 };
