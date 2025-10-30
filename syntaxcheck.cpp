@@ -2794,3 +2794,407 @@ public:
         return *it;
     }
 };
+
+string Solution::solve(string A)
+{
+
+    unordered_map<char, int> hash, hash2;
+
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i)
+        hash[A[i]]++;
+    string ans = "";
+    for (int i = 0; i < n; ++i)
+    {
+        if (hash2.find(A[i]) == hash.end())
+        {
+            ans += A[i];
+            ans += hash[A[i]] + '0';
+        }
+
+        hash2[A[i]]++;
+    }
+}
+
+#include <bits/stdc++.h>
+vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source)
+{
+    // Write your code here.
+    vector<int> dist(vertices, 1e9);
+    dist[source] = 0;
+
+    vector<vector<pair<int, int>>> adj(vertices);
+
+    int n = vec.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        adj[vec[i][0]].push_back({vec[i][1], vec[i][2]});
+        adj[vec[i][1]].push_back({vec[i][0], vec[i][2]});
+    }
+
+    std::priority_queue<
+        std::pair<int, int>,
+        std::vector<std::pair<int, int>>,
+        std::greater<std::pair<int, int>>>
+        pq;
+
+    n = adj[source].size();
+
+    for (int i = 0; i < n; ++i)
+        pq.push({adj[source][i].second, adj[source][i].first});
+
+    while (!pq.empty())
+    {
+
+        auto [dis, desti] = pq.top();
+        pq.pop();
+
+        int m = adj[desti].size();
+
+        for (int i = 0; i < m; ++i)
+        {
+            auto [dista, node] = adj[desti][i];
+            if (dis + dista < dist[node])
+            {
+                dist[node] = dis + dista;
+                pq.push({dist[node], node});
+            }
+        }
+    }
+
+    return dist;
+}
+
+class Solution
+{
+public:
+    string maxSumOfSquares(int num, int sum)
+    {
+        string ans = "";
+        for (int i = 1; i < num; ++i)
+        {
+            ans += min(sum, 9) + '0';
+            sum -= min(sum, 9);
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    long long minOperations(vector<int> &nums1, vector<int> &nums2)
+    {
+        long long ans = 0;
+        int temp = nums1[0];
+
+        int n = nums1.size();
+        int d = nums2[n];
+        for (int i = 0; i < n; ++i)
+        {
+            ans += abs(nums2[i] - nums1[i]);
+            if (abs(nums1[i] - d) < abs(temp - d))
+                temp = nums1[i];
+        }
+
+        return ans + temp + 1;
+    }
+};
+
+class Bank
+{
+public:
+    vector<long long> balance;
+    int n;
+    Bank(vector<long long> &balance)
+    {
+        this->balance = balance;
+        n = balance.size() + 1;
+    }
+
+    bool transfer(int account1, int account2, long long money)
+    {
+        if (account1 > n || account1 < 1 || account2 > n || account2 < 1)
+            return false;
+        if (balance[account1 - 1] >= money)
+        {
+            balance[account1 - 1] -= money;
+            balance[account2 - 1] += money;
+            return true;
+        }
+        return false;
+    }
+
+    bool deposit(int account, long long money)
+    {
+        if (account > n || account < 1)
+            return false;
+        balance[account - 1] += money;
+        return true;
+    }
+
+    bool withdraw(int account, long long money)
+    {
+        if (account < 1 || account > n)
+            return false;
+
+        balance[account - 1] -= money;
+        return true;
+    }
+};
+
+/**
+ * Your Bank object will be instantiated and called as such:
+ * Bank* obj = new Bank(balance);
+ * bool param_1 = obj->transfer(account1,account2,money);
+ * bool param_2 = obj->deposit(account,money);
+ * bool param_3 = obj->withdraw(account,money);
+ */
+
+class Solution
+{
+public:
+    int countValidSelections(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> pref(n), suf(n);
+        int prefi = 0, suff = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            pref[i] = prefi;
+            suf[n - i - 1] = suff;
+            suff += nums[n - i - 1];
+            prefi += nums[i];
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (nums[i] == 0)
+            {
+                if (pref[i] == suf[i])
+                    ans++;
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int smallestNumber(int n)
+    {
+        if (n >= 1 && n <= 3)
+            return 3;
+        // if(n>=4 && n<=7) return 7;
+        // if(n>=8 && n<=15) return 15;
+        // if(n>=16 && n<=31) return 31;
+        // if(n>=32 && n<=63) return 63;
+
+        // if(n>=64 && n<=127) return 127;
+        int l = 2, r = 3;
+
+        for (int i = 0; i < 12; ++i)
+        {
+            int rr = pow(2, r + i) - 1;
+            if (n >= (int)pow(2, l + i) && n <= rr)
+                return rr;
+        }
+
+        return 3;
+    }
+};
+
+bool place(vector<int> &stalls, int k, int dist)
+{
+
+    int n = stalls.size();
+    int last = stalls[0];
+    for (int i = 1; i < n; ++i)
+    {
+        if (stalls[i] - last >= dist)
+        {
+            k--;
+            last = stalls[i];
+        }
+        if (k == 0)
+            return true;
+    }
+
+    return false;
+}
+
+int aggressiveCows(vector<int> &stalls, int k)
+{
+
+    sort(stalls.begin(), stalls.end());
+    int n = stalls.size();
+    int high = stalls[n - 1];
+    int low = 1;
+
+    while (low <= high)
+    {
+
+        int mid = low / 2 + (high - low) / 2;
+
+        if (stalls, k, mid)
+            low = mid;
+        else
+            high = mid - 1;
+    }
+
+    return low;
+}
+
+int knap(vector<vector<int>> &dp, vector<int> &profit, vector<int> &weight, int idx, int wt, int n)
+{
+
+    if (idx >= n)
+        return 0;
+
+    if (dp[idx][wt] != -1)
+        return dp[idx][wt];
+
+    int take = 0, dtake = 0;
+
+    if (wt >= weight[idx])
+        take = profit[idx] + knap(dp, profit, weight, idx, wt - weight[idx], n);
+
+    dtake = knap(dp, profit, weight, idx + 1, wt, n);
+
+    return dp[idx][wt] = dtake + take;
+}
+
+int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight)
+{
+
+    vector<vector<int>> dp(n + 1, vector<int>(w + 1, -1));
+
+    return knap(dp, profit, weight, 0, w, n);
+}
+
+vector<string> Solution::deserialize(string A)
+{
+
+    vector<string> vec;
+
+    string temp = "", emp = "";
+
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (!(isdigit(A[i])) && A[i] != '~')
+        {
+            temp += A[i];
+        }
+        if (A[i] == '~')
+        {
+            vec.push_back(temp);
+            temp = emp;
+        }
+    }
+
+    return vec;
+}
+
+class Solution
+{
+public:
+    int rob(vector<int> &dp, vector<int> &arr, int idx)
+    {
+        int n = arr.size();
+        if (idx >= n)
+            return 0;
+
+        if (dp[idx] != -1)
+            return dp[idx];
+
+        int take, dtake = 0;
+
+        take = arr[idx] + rob(dp, arr, idx + 2);
+        dtake = rob(dp, arr, idx + 1);
+
+        return dp[idx] = max(dp[idx], max(take, dtake));
+    }
+
+    int findMaxSum(vector<int> &arr)
+    {
+        // code here
+        int n = arr.size();
+        vector<int> dp(n + 1, -1);
+
+        return rob(dp, arr, 0);
+    }
+};
+
+class Solution
+{
+public:
+    int minNumberOperations(vector<int> &target)
+    {
+        stack<int> st;
+
+        int n = target.size();
+        int ans = target[0];
+        for (int i = 0; i < n; ++i)
+        {
+            if (!st.empty() && st.top() < target[i])
+            {
+                ans += target[i] - st.top();
+            }
+            st.push(target[i]);
+        }
+
+        return ans;
+    }
+};
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+long long maxRankDistance(const vector<vector<int>>& arrays) {
+    // Write your code here
+
+    vector<tuple<int,int,int>> vec;
+
+    int n=arrays.size();
+
+    for(int i=0; i<n; ++i){
+        for(int j=1; j<=arrays[i][0];++j){
+            vec.push_back({arrays[i][j],j,i});
+        }
+    }
+
+    sort(vec.begin(),vec.end());
+
+int r=vec.size()-1,l=0,m=vec.size();
+long long maxi1=INT_MIN,maxi2=INT_MIN;
+auto[last_ele,last_rank,last_belong]=vec[r];
+while(l<m){
+    auto[ele,rank,belong]=vec[l];
+
+    if(last_belong!=belong){
+        maxi1=r-l;
+        break;
+    }
+    l++;
+}
+auto[first_ele,first_rank,first_belong]=vec[0];
+while(r>=0){
+    auto[ele,rank,belong]=vec[r];
+    if(first_belong!=belong){
+        maxi2=r;
+        break;
+    }
+    r--;
+}
+
+return max(maxi1,maxi2);
+
+
+}
