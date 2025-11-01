@@ -3153,48 +3153,169 @@ public:
     }
 };
 
-
 #include <bits/stdc++.h>
 using namespace std;
 
-long long maxRankDistance(const vector<vector<int>>& arrays) {
+long long maxRankDistance(const vector<vector<int>> &arrays)
+{
     // Write your code here
 
-    vector<tuple<int,int,int>> vec;
+    vector<tuple<int, int, int>> vec;
 
-    int n=arrays.size();
+    int n = arrays.size();
 
-    for(int i=0; i<n; ++i){
-        for(int j=1; j<=arrays[i][0];++j){
-            vec.push_back({arrays[i][j],j,i});
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 1; j <= arrays[i][0]; ++j)
+        {
+            vec.push_back({arrays[i][j], j, i});
         }
     }
 
-    sort(vec.begin(),vec.end());
+    sort(vec.begin(), vec.end());
 
-int r=vec.size()-1,l=0,m=vec.size();
-long long maxi1=INT_MIN,maxi2=INT_MIN;
-auto[last_ele,last_rank,last_belong]=vec[r];
-while(l<m){
-    auto[ele,rank,belong]=vec[l];
+    int r = vec.size() - 1, l = 0, m = vec.size();
+    long long maxi1 = INT_MIN, maxi2 = INT_MIN;
+    auto [last_ele, last_rank, last_belong] = vec[r];
+    while (l < m)
+    {
+        auto [ele, rank, belong] = vec[l];
 
-    if(last_belong!=belong){
-        maxi1=r-l;
-        break;
+        if (last_belong != belong)
+        {
+            maxi1 = r - l;
+            break;
+        }
+        l++;
     }
-    l++;
-}
-auto[first_ele,first_rank,first_belong]=vec[0];
-while(r>=0){
-    auto[ele,rank,belong]=vec[r];
-    if(first_belong!=belong){
-        maxi2=r;
-        break;
+    auto [first_ele, first_rank, first_belong] = vec[0];
+    while (r >= 0)
+    {
+        auto [ele, rank, belong] = vec[r];
+        if (first_belong != belong)
+        {
+            maxi2 = r;
+            break;
+        }
+        r--;
     }
-    r--;
+
+    return max(maxi1, maxi2);
 }
 
-return max(maxi1,maxi2);
+class Solution
+{
+public:
+    int maxWater(vector<int> &arr)
+    {
+        int l = 0, n = arr.size(), r = n - 1;
+
+        int ans = 0;
+
+        while (l < r)
+        {
+            ans = max(ans, min(arr[l], arr[r]) * (r - l));
+            if (arr[l] <= arr[r])
+                l++;
+            else
+                r--;
+        }
+
+        return ans;
+    }
+};
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution
+{
+public:
+    ListNode *modifiedList(vector<int> &nums, ListNode *head)
+    {
+        int n = nums.size();
+
+        vector<int> vec(1e5 + 1, 0);
+
+        for (int i = 0; i < n; ++i)
+            vec[nums[i]]++;
+
+        ListNode *temp = head;
+        ListNode *prev = head;
+        ListNode *head1;
+        int i = 0;
+        while (temp != NULL)
+        {
+            i++;
+            while (temp != NULL && vec[temp->val] > 0)
+            {
+                temp = temp->next;
+            }
+            if (i != 1)
+                prev->next = temp;
+            prev = temp;
+            if (i == 1)
+                head1 = prev;
+
+            temp = temp->next;
+        }
+
+        return head1;
+    }
+};
+
+class Solution
+{
+public:
+    int ways(vector<int> &dp, int n)
+    {
+
+        if (n == 1)
+            return 1;
+        if (n == 0)
+            return 0;
+        if (dp[n] != 0)
+            return dp[n];
+
+        int way1 = 1 + ways(dp, n - 1);
+        int way2 = 1 + ways(dp, n - 2);
+
+        return dp[n] += way1 + way2;
+    }
+
+    int countWays(int n)
+    {
+        vector<int> dp(n + 1);
+        return ways(dp, n);
+    }
+};
 
 
-}
+class Solution {
+public:
+    bool canSortArray(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> temp,temp1;
+        for(int i=0; i<n; ++i){
+           if(temp1.size()==0 || __builtin_popcount(nums[i])==__builtin_popcount(temp1.back())){
+            temp1.push_back(nums[i]);
+           } else{
+            sort(temp1.begin(),temp1.end());
+            int n=temp1.size();
+
+            for(int i=0; i<n; ++i) temp.push_back(temp1[i]);
+            temp1.clear();
+           }
+        }
+
+        sort(nums.begin(),nums.end());
+        return nums==temp;
+
+    }
+};
