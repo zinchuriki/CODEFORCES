@@ -3296,26 +3296,529 @@ public:
     }
 };
 
-
-class Solution {
+class Solution
+{
 public:
-    bool canSortArray(vector<int>& nums) {
-        int n=nums.size();
-        vector<int> temp,temp1;
-        for(int i=0; i<n; ++i){
-           if(temp1.size()==0 || __builtin_popcount(nums[i])==__builtin_popcount(temp1.back())){
-            temp1.push_back(nums[i]);
-           } else{
-            sort(temp1.begin(),temp1.end());
-            int n=temp1.size();
+    bool canSortArray(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> temp, temp1;
+        for (int i = 0; i < n; ++i)
+        {
+            if (temp1.size() == 0 || __builtin_popcount(nums[i]) == __builtin_popcount(temp1.back()))
+            {
+                temp1.push_back(nums[i]);
+            }
+            else
+            {
+                sort(temp1.begin(), temp1.end());
+                int n = temp1.size();
 
-            for(int i=0; i<n; ++i) temp.push_back(temp1[i]);
-            temp1.clear();
-           }
+                for (int i = 0; i < n; ++i)
+                    temp.push_back(temp1[i]);
+                temp1.clear();
+            }
         }
 
-        sort(nums.begin(),nums.end());
-        return nums==temp;
+        sort(nums.begin(), nums.end());
+        return nums == temp;
+    }
+};
 
+class Solution
+{
+public:
+    string lexPalindromicPermutation(string s, string target)
+    {
+        map<char, int> hash;
+        int n = s.size();
+        for (int i = 0; i < n; ++i)
+        {
+            hash[s[i]]++;
+        }
+        string ans = "";
+        int odd = 0;
+        char odd_char;
+        int l = 0;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+
+            string temp;
+            if (it->second % 2 != 0)
+            {
+                odd++;
+                odd_char = it->first;
+                if (odd > 1)
+                    return "";
+                temp.append(it->second / 2, it->first);
+                ans.insert(0, temp);
+                ans.insert((int)ans.size(), temp);
+            }
+            else
+            {
+                temp.append(it->second, it->first);
+                ans.insert(l, temp);
+            }
+
+            l = ans.size() / 2;
+        }
+
+        if (odd == 1)
+        {
+            ans.insert(ans.begin() + (int)ans.size() / 2, odd_char);
+        }
+
+        if (ans > target)
+            return ans;
+        return "";
+    }
+};
+
+class Solution
+{
+public:
+    int countUnguarded(int m, int n, vector<vector<int>> &guards, vector<vector<int>> &walls)
+    {
+
+        vector<vector<int>> g(n, vector<int>(m, 0)), w(n, vector<int>(m, 0)), hash(n, vector<int>(m, 0));
+        long long ans = n * m;
+        int n1 = guards.size(), m1 = walls.size();
+        ans -= n1 - m1;
+        for (int i = 0; i < n1; ++i)
+        {
+            g[guards[i][0]][guards[i][1]] = 1;
+        }
+        for (int i = 0; i < m1; ++i)
+        {
+            w[walls[i][0]][walls[i][1]] = 1;
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+
+                if (g[i][j])
+                {
+
+                    // up
+                    for (int k = i; k >= 0; --k)
+                    {
+                        if (g[k][j])
+                            break;
+                        if (hash[k][j])
+                            continue;
+                        hash[k][j] = true;
+                        ans--;
+                    }
+                    // down
+                    for (int k = i; k < n; ++k)
+                    {
+                        if (g[k][j])
+                            break;
+                        if (hash[k][j])
+                            continue;
+                        hash[k][j] = true;
+                        ans--;
+                    }
+                    // left
+                    for (int k = j; k >= 0; --k)
+                    {
+                        if (g[i][k])
+                            break;
+                        if (hash[i][k])
+                            continue;
+                        hash[i][k] = true;
+                        ans--;
+                    }
+
+                    // right
+                    for (int k = j; k < m; ++k)
+                    {
+                        if (g[i][k])
+                            break;
+                        if (hash[i][k])
+                            continue;
+                        hash[i][k] = true;
+                        ans--;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+bool dfs(vector<vector<int>> &adj, vector<bool> &vis, int parent, int current)
+{
+
+    int n = adj[current].size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (vis[adj[current][i]])
+        {
+            if (adj[current][i] != parent)
+                return true;
+        }
+
+        if (dfs(adj, vis, current, adj[current][i]))
+            return true;
+    }
+
+    return false;
+}
+
+string cycleDetection(vector<vector<int>> &edges, int n, int m)
+
+{
+
+    vector<vector<int>> adj(n + 1);
+
+    int n1 = edges.size();
+
+    for (int i = 0; i < n1; ++i)
+    {
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+
+    vector<bool> vis(n + 1, false);
+
+    for (int i = 1; i <= n; ++i)
+    {
+        if (!vis[i])
+        {
+            if (dfs(adj, vis, -1, i))
+                return "Yes";
+        }
+    }
+    return "No";
+}
+
+class Solution
+{
+public:
+    vector<int> queryResults(int limit, vector<vector<int>> &queries)
+    {
+        unordered_map<int, int> hash1, hash2;
+        vector<int> ans;
+        int n = queries.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int ball = queries[i][0];
+            int new_color = queries[i][1];
+
+            if (hash1.find(ball) != hash1.end())
+            {
+                int old_color = hash1[ball];
+
+                hash2[old_color]--;
+                if (hash2[old_color] <= 0)
+                    hash2.erase(old_color);
+            }
+            hash1[ball] = new_color;
+            hash2[new_color]++;
+            ans.push_back((int)hash2.size());
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minCost(string colors, vector<int> &neededTime)
+    {
+        int n = colors.size();
+        pair<char, int> prev = {colors[0], 0};
+        int ans = 0;
+
+        for (int i = 1; i < n; ++i)
+        {
+            if (prev.first == colors[i])
+            {
+                ans += min(prev.second, neededTime[i]);
+                if (prev.second < neededTime[i])
+                    prev.second = neededTime[i];
+            }
+            else
+            {
+                prev.first = colors[i];
+                prev.second = neededTime[i];
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<long long> findXSum(vector<int> &nums, int k, int x)
+    {
+        // one set for top k elements one set for other elements
+        long long sum = 0;
+        int n = nums.size();
+        set<pair<int, int>, greater<pair<int, int>>> s1, s2;
+        unordered_map<int, int> hash;
+        vector<long long> ans;
+
+        for (int i = 0; i < k; ++i)
+        {
+
+            if (!s2.empty())
+            {
+                if (hash.find(nums[i]) != hash.end())
+                {
+
+                    s2.erase({hash[nums[i]], nums[i]});
+                    hash[nums[i]]++;
+                    s2.insert({hash[nums[i]], nums[i]});
+                }
+                else
+                    s2.insert({1, nums[i]});
+            }
+            else
+            {
+                s2.insert({1, nums[i]});
+            }
+            hash[nums[i]]++;
+        }
+        int i = 0;
+        for (auto [num, count] : s2)
+        {
+            i++;
+            sum += (long long)num * (long long)count;
+            s1.insert({count, num});
+            s2.erase({count, num});
+
+            if (i == x)
+                break;
+        }
+        ans.push_back(sum);
+
+        int l = 0, r = k;
+
+        while (l < n && r < n)
+        {
+            int take_out = nums[l], put_in = nums[r];
+            int freq_take_out = hash[nums[l]];
+            int freq_put_in = 0;
+            if (hash.find(nums[r]) != hash.end())
+            {
+                freq_put_in = hash[nums[r]];
+                if (s1.find({freq_put_in, put_in}) != s1.end())
+                {
+                    s1.erase({freq_put_in, put_in});
+                    s1.insert({freq_put_in + 1, put_in});
+                    sum -= nums[l];
+                }
+                else
+                {
+
+                    s2.erase({freq_put_in, put_in});
+                    s2.insert({freq_put_in + 1, put_in});
+                }
+            }
+            else
+            {
+                s2.insert({nums[r], 1});
+            }
+            if (s1.find({take_out, freq_take_out}) != s1.end())
+            {
+                s1.erase({freq_take_out, take_out});
+                s1.insert({freq_take_out - 1, take_out});
+                sum -= nums[l];
+            }
+            else
+            {
+
+                s2.erase({freq_take_out, take_out});
+                s2.insert({freq_take_out - 1, take_out});
+            }
+
+            while (((int)s1.size() < x && (int)s2.size() > 0))
+            {
+                auto [n2, c2] = *s2.begin();
+                s1.insert({n2, c2});
+                sum += n2 * c2;
+            }
+            while (*s1.rbegin() < *s2.begin() && (int)s1.size() < x)
+            {
+                auto [n1, c1] = *s1.rbegin();
+                auto [n2, c2] = *s2.begin();
+
+                sum -= n1 * c1;
+                sum += n2 * c2;
+            }
+
+            ans.push_back(sum);
+
+            l++;
+            r++;
+        }
+
+        return ans;
+    }
+};
+
+/// @brief
+/// @param image
+/// @param n
+/// @param m
+/// @param x
+/// @param y
+/// @param p
+/// @return
+vector<vector<int>> floodFill(vector<vector<int>> &image, int n, int m, int x, int y, int p)
+{
+    vector<vector<int>> ans = image;
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    vector<vector<bool>> vis(n, vector<bool>(m, false));
+    int c = image[x][y];
+    while (!q.empty())
+    {
+        int sz = q.size();
+        for (int i = 0; i < sz; ++i)
+        {
+            auto [x1, y1] = q.front();
+            ans[x1][y1] = p;
+
+            if (vis[x1][y1])
+                continue;
+            if (x1 >= 1 && image[x1 - 1][y1] == c)
+            {
+                q.push({x1 - 1, y1});
+            }
+            if (y1 >= 1 && image[x1][y1 - 1] == c)
+            {
+                q.push({x1, y1 - 1});
+            }
+            if (x1 < n - 1 && image[x1 + 1][y1] == c)
+            {
+                q.push({x1 + 1, y1});
+            }
+            if (y1 < m - 1 && image[x1][y1 + 1] == c)
+            {
+                q.push({x1, y1 + 1});
+            }
+        }
+    }
+
+    return ans;
+}
+
+vector<vector<int>> floodFill(vector<vector<int>> &image, int x, int y, int newColor)
+{
+    vector<vector<int>> ans = image;
+    int oldcolor = image[x][y];
+    int n = image.size(), m = image[0].size();
+    queue<pair<int, int>> q;
+
+    q.push({x, y});
+    ans[x][y] = newColor;
+
+    while (!q.empty())
+    {
+
+        auto [x1, y1] = q.front();
+        q.pop();
+
+        if (x1 >= 1 && ans[x1 - 1][y1] != newColor && image[x1 - 1][y1] == oldcolor)
+        {
+            ans[x1 - 1][y1] = newColor;
+            q.push({x1 - 1, y1});
+        }
+        if (y1 >= 1 && ans[x1][y1 - 1] != newColor && image[x1][y1 - 1] == oldcolor)
+        {
+            ans[x1][y1 - 1] = newColor;
+            q.push({x1, y1 - 1});
+        }
+
+        if (x1 < n - 1 && ans[x1][y1] != newColor && image[x1 + 1][y1] == oldcolor)
+        {
+            ans[x1 + 1][y1] = newColor;
+            q.push({x1 + 1, y1});
+        }
+
+        if (y1 < m - 1 && ans[x1][y1 + 1] != newColor && image[x1][y1 + 1] == oldcolor)
+        {
+            ans[x1][y1 + 1] = newColor;
+            q.push({x1, y1 + 1});
+        }
+    }
+
+    return ans;
+}
+
+int shortestPathBinaryMatrix(vector<vector<int>> &matrix, pair<int, int> src, pair<int, int> dest)
+{
+    int x_s, y_s, x_d, y_d;
+    x_s = src.first;
+    y_s = src.second;
+    x_d = dest.first;
+    y_d = dest.second;
+    int n = matrix.size(), m = matrix[0].size();
+    vector<int> d1 = {1, 0, -1, 0};
+    vector<int> d2 = {0, 1, 0, -1};
+
+    queue<tuple<int, int, int>> q;
+    q.push({x_s, y_s, 1});
+
+    while (!q.empty())
+    {
+
+        int sz = q.size();
+        for (int i = 0; i < sz; ++i)
+        {
+            auto [x, y, dist] = q.front();
+            q.pop();
+            if (x == x_d && y == y_d)
+                return dist + 1;
+            matrix[x][y] = 0;
+            for (int i = 0; i < 4; ++i)
+            {
+                if (x + d1[i] >= 0 && x + d1[i] < n && y + d2[i] >= 0 && y + d2[i] < m && (matrix[x + d1[i]][y + d2[i]] == 1))
+                {
+                    q.push({x + d1[i], y + d2[i], dist + 1});
+                }
+            }
+        }
+    }
+
+    return -1;
+}
+
+class Solution
+{
+public:
+    long int mini(vector<vector<int>> &dp, vector<vector<int>> &grid, int x, int y)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        if (x == n - 1 && y == m - 1)
+            return dp[x][y] = grid[x][y];
+
+        if (dp[x][y] != -1)
+            return dp[x][y];
+        long int right = INT_MAX;
+        if (x < n - 1)
+            right = mini(dp, grid, x + 1, y);
+        long int down = INT_MAX ;
+         if (y < m - 1) down = mini(dp, grid, x, y + 1);
+        return dp[x][y] = grid[x][y] + min(down, right);
+    }
+
+    int minPathSum(vector<vector<int>> &grid)
+    {
+        int n = grid.size(), m = grid[0].size();
+
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+
+        return mini(dp, grid, 0, 0);
     }
 };
