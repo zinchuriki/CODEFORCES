@@ -3808,8 +3808,9 @@ public:
         long int right = INT_MAX;
         if (x < n - 1)
             right = mini(dp, grid, x + 1, y);
-        long int down = INT_MAX ;
-         if (y < m - 1) down = mini(dp, grid, x, y + 1);
+        long int down = INT_MAX;
+        if (y < m - 1)
+            down = mini(dp, grid, x, y + 1);
         return dp[x][y] = grid[x][y] + min(down, right);
     }
 
@@ -3822,3 +3823,213 @@ public:
         return mini(dp, grid, 0, 0);
     }
 };
+
+class Solution
+{
+public:
+    void dfs(vector<bool> &vis, vector<vector<int>> &adj, priority_queue<int, vector<int>, greater<int>> &pq, unordered_map<int, int> &hash, int node, int ct)
+    {
+        if (vis[node])
+            return;
+        hash[node] = ct;
+        vis[node] = true;
+        int sz = adj[node].size();
+        for (int i = 0; i < sz; ++i)
+        {
+            if (!vis[adj[node][i]])
+                dfs(vis, adj, pq, hash, adj[node][i], ct);
+        }
+    }
+
+    vector<int> processQueries(int c, vector<vector<int>> &connections, vector<vector<int>> &queries)
+    {
+        vector<int> ans;
+        unordered_map<int, int> hash;
+        vector<bool> vis(c + 1, false);
+        vector<vector<int>> adj(c + 1, vector<int>(c + 1));
+        int n = connections.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int n1 = connections[i][0];
+            int n2 = connections[i][1];
+            adj[n1].push_back(n2);
+            adj[n2].push_back(n1);
+        }
+
+        vector<priority_queue<int, vector<int>, greater<int>>> vec;
+        int ct = 0;
+        for (int i = 1; i <= c; ++i)
+        {
+            if (!vis[i])
+            {
+                priority_queue<int, vector<int>, greater<int>> pq;
+                dfs(vis, adj, pq, hash, i, ct);
+                ct++;
+            }
+        }
+
+        int m = queries.size();
+
+        for (int i = 0; i < m; ++i)
+        {
+            if (queries[i][0] == 1)
+            {
+
+                int grid_belong = hash[queries[i][1]];
+                if (grid_belong != -1)
+                    ans.push_back(grid_belong);
+                else
+                {
+                    while (!vec[grid_belong].empty() && hash[vec[grid_belong].top()] == -1)
+                        vec[grid_belong].pop();
+                    if (vec[grid_belong].empty())
+                        ans.push_back(-1);
+                    else
+                        ans.push_back(vec[grid_belong].top());
+                }
+            }
+            else
+            {
+                hash[queries[i][1]] = -1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+// stations[i] represents the number of power stations in the ith city.
+// power station at city i can provide power to all cities j such that
+// |i - j| <= r and 0 <= i, j <= n - 1. The power of a city is the total
+// number of power stations it is being provided power from. 3  7 11 9 5
+//  mini = minimum of the prefix sum array ,maxi is mini +k for binary
+//  search.
+// 1 2 4 5 0
+// 1 3 6 9 5
+// 3  7  11 9    5
+
+class Solution
+{
+public:
+    bool pos(vector<long long> &cur, long long k, int r, long long ans)
+    {
+
+        int n = cur.size();
+        long long left = k;
+        long long sum = 0;
+        queue<pair<int, long long>> q;
+        for (int i = 0; i < n; ++i)
+        {
+            if (cur[i] + sum < ans)
+            {
+                if (left < ans - (cur[i] + sum) || left == 0)
+                    return false;
+                left -= ans - (cur[i] + sum);
+                q.push({i + 2 * r, ans - (cur[i] + sum)});
+                sum += ans - (cur[i] + sum);
+            }
+
+            if (!q.empty() && q.front().first == i)
+            {
+                sum -= (ans - q.front().second);
+                q.pop();
+            }
+        }
+
+        return true;
+    }
+
+    long long maxPower(vector<int> &stations, int r, int k)
+    {
+
+        long long sum = 0;
+        int n = stations.size();
+        vector<long long> current(n, 0);
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            current[i] = stations[i] + sum;
+            if (i >= r)
+                sum -= stations[i - r];
+            sum += stations[i];
+        }
+        sum = 0;
+        long long mini = INT_MAX, maxi = INT_MIN;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            current[i] += sum;
+
+            mini = min(mini, current[i]);
+            maxi = max(maxi, current[i]);
+            if (i <= n - 1 - r)
+                sum -= stations[i + r];
+            sum += stations[i];
+        }
+
+        long long l = mini, rr = maxi + k;
+        long long ans = 0;
+        while (l <= rr)
+        {
+            long long mid = l + (rr - l) / 2;
+            if (pos(current, k, r, mid))
+            {
+                ans = max(ans, mid);
+                l = mid + 1;
+            }
+            else
+                rr = mid - 1;
+        }
+        for (int i = 0; i < (int)stations.size(); ++i)
+            cout << current[i] << " ";
+        return ans;
+    }
+};
+
+vector<int> shortestPath(vector<pair<int, int>> edges, int n, int m, int s, int t)
+{
+
+    vector<int> ans;
+    vector<int> parent(n + 1, -1);
+
+    queue<pair<int, int>> q;
+    q.push({s, 0});
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < m; ++i)
+    {
+        adj[edges[i].first].push_back(edges[i].second);
+        adj[edges[i].second].push_back(edges[i].first);
+    }
+
+    while (!q.empty())
+    {
+
+        int sz = q.size();
+
+        auto [node, distance] = q.front();
+        q.pop();
+        if (node == t)
+            break;
+
+        for (int i = 0; i < sz; ++i)
+        {
+            int nd = adj[node][i];
+            parent[nd] = node;
+            q.push({nd, distance + 1});
+        }
+    }
+    int p = t;
+    ans.push_back(t);
+    while (true)
+    {
+
+        if (p == -1)
+            break;
+
+        ans.push_back(parent[p]);
+        p = parent[p];
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
