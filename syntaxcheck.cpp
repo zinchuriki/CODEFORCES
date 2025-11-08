@@ -2655,29 +2655,29 @@ public:
     }
 };
 
-int Solution::solve(vector<int> &A, int B)
-{
-    int n = A.size();
-    priority_queue<int> pq;
-    for (int i = 0; i < n; ++i)
-    {
-        pq.push(A[i]);
-    }
-    int ans = 0;
-    while (!pq.empty())
-    {
-        if (B == 0)
-            break;
+// int Solution::solve(vector<int> &A, int B)
+// {
+//     int n = A.size();
+//     priority_queue<int> pq;
+//     for (int i = 0; i < n; ++i)
+//     {
+//         pq.push(A[i]);
+//     }
+//     int ans = 0;
+//     while (!pq.empty())
+//     {
+//         if (B == 0)
+//             break;
 
-        int a = pq.top();
-        pq.pop();
-        ans += a;
-        a--;
-        pq.push(a);
-    }
+//         int a = pq.top();
+//         pq.pop();
+//         ans += a;
+//         a--;
+//         pq.push(a);
+//     }
 
-    return ans;
-}
+//     return ans;
+// }
 
 class Solution
 {
@@ -2795,29 +2795,28 @@ public:
     }
 };
 
-string Solution::solve(string A)
-{
+// string Solution::solve(string A)
+// {
 
-    unordered_map<char, int> hash, hash2;
+//     unordered_map<char, int> hash, hash2;
 
-    int n = A.size();
+//     int n = A.size();
 
-    for (int i = 0; i < n; ++i)
-        hash[A[i]]++;
-    string ans = "";
-    for (int i = 0; i < n; ++i)
-    {
-        if (hash2.find(A[i]) == hash.end())
-        {
-            ans += A[i];
-            ans += hash[A[i]] + '0';
-        }
+//     for (int i = 0; i < n; ++i)
+//         hash[A[i]]++;
+//     string ans = "";
+//     for (int i = 0; i < n; ++i)
+//     {
+//         if (hash2.find(A[i]) == hash.end())
+//         {
+//             ans += A[i];
+//             ans += hash[A[i]] + '0';
+//         }
 
-        hash2[A[i]]++;
-    }
-}
+//         hash2[A[i]]++;
+//     }
+// }
 
-#include <bits/stdc++.h>
 vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source)
 {
     // Write your code here.
@@ -3076,30 +3075,30 @@ int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight)
     return knap(dp, profit, weight, 0, w, n);
 }
 
-vector<string> Solution::deserialize(string A)
-{
+// vector<string> Solution::deserialize(string A)
+// {
 
-    vector<string> vec;
+//     vector<string> vec;
 
-    string temp = "", emp = "";
+//     string temp = "", emp = "";
 
-    int n = A.size();
+//     int n = A.size();
 
-    for (int i = 0; i < n; ++i)
-    {
-        if (!(isdigit(A[i])) && A[i] != '~')
-        {
-            temp += A[i];
-        }
-        if (A[i] == '~')
-        {
-            vec.push_back(temp);
-            temp = emp;
-        }
-    }
+//     for (int i = 0; i < n; ++i)
+//     {
+//         if (!(isdigit(A[i])) && A[i] != '~')
+//         {
+//             temp += A[i];
+//         }
+//         if (A[i] == '~')
+//         {
+//             vec.push_back(temp);
+//             temp = emp;
+//         }
+//     }
 
-    return vec;
-}
+//     return vec;
+// }
 
 class Solution
 {
@@ -4033,3 +4032,152 @@ vector<int> shortestPath(vector<pair<int, int>> edges, int n, int m, int s, int 
     reverse(ans.begin(), ans.end());
     return ans;
 }
+
+//   struct TreeNode {
+//       int val;
+//       TreeNode *left;
+//       TreeNode *right;
+//       TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+//   };
+
+// vector<vector<int> > Solution::levelOrder(TreeNode* A) {
+
+//         queue<TreeNode*> q;
+//         q.push(A);
+//         vector<vector<int>> ans;
+//         while(!q.empty()){
+//             int sz=q.size();
+//             vector<int> vec;
+//             for(int i=0; i<sz; ++i){
+//                  TreeNode* temp=q.front();
+//                     q.pop();
+//                     vec.push_back(temp->val);
+//                     q.push(temp->left);
+//                     q.push(temp->right);
+
+//             }
+//                    ans.push_back(vec);
+
+//         }
+
+//         return ans;
+
+// }
+
+#include <bits/stdc++.h>
+int shortestPath(int v, int e, vector<vector<int>> &edges, int src, int dest)
+{
+    vector<bool> vis(v + 1, false);
+    vector<vector<int>> adj(v + 1);
+
+    for (int i = 0; i < e; ++i)
+    {
+        int node1 = edges[i][0];
+        int node2 = edges[i][1];
+
+        adj[node1].push_back(node2);
+        adj[node2].push_back(node1);
+    }
+
+    queue<pair<int, int>> q;
+    q.push({src, 0});
+
+    while (!q.empty())
+    {
+
+        auto [node, distance] = q.front();
+        q.pop();
+
+        int sz = adj[node].size();
+        if (node == dest)
+            return distance;
+        for (int i = 0; i < sz; ++i)
+        {
+            int nd = adj[node][i];
+            if (!vis[nd])
+            {
+                q.push({nd, distance + 1});
+            }
+            vis[nd] = true;
+        }
+    }
+
+    return -1;
+}
+
+class Solution
+{
+public:
+    int ans = 0;
+    bool check(vector<vector<int>> &grid, vector<vector<bool>> vis)
+    {
+
+        int n = grid.size();
+        int m = grid[0].size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if (grid[i][j] >= 0 && vis[i][j] == false)
+                    return false;
+                if (grid[i][j] == -1 && vis[i][j])
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    void backt(vector<vector<int>> &grid, vector<vector<bool>> &vis, int i, int j)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        if (i < 0 || j < 0 || i >= n || j >= m)
+            return;
+
+        if (grid[i][j] == 2)
+        {
+            if (check(grid, vis))
+                ans++;
+            return;
+        }
+        vis[i][j] = true;
+
+        if (i - 1 >= 0 && !vis[i - 1][j] && grid[i - 1][j] >= 0)
+            backt(grid, vis, i - 1, j);
+        if (j - 1 >= 0 && !vis[i][j - 1] && grid[i][j - 1] >= 0)
+            backt(grid, vis, i, j - 1);
+        if (i + 1 < n && !vis[i + 1][j] && grid[i + 1][j] >= 0)
+            backt(grid, vis, i + 1, j);
+        if (j + 1 < m && !vis[i][j + 1] && grid[i][j + 1] >= 0)
+            backt(grid, vis, i, j + 1);
+    }
+
+    int uniquePathsIII(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        pair<int, int> st;
+        bool found = false;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if (grid[i][j] == 1)
+                {
+                    st.first = i;
+                    st.second = j;
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+                break;
+        }
+        backt(grid, vis, st.first, st.second);
+
+        return ans;
+    }
+};
