@@ -4181,3 +4181,106 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    std::string decimal_to_binary(int n)
+    {
+        if (n == 0)
+            return "0";
+        std::string binary;
+        while (n > 0)
+        {
+            binary.push_back('0' + (n % 2));
+            n /= 2;
+        }
+        std::reverse(binary.begin(), binary.end());
+        return binary;
+    }
+    int minimumOneBitOperations(int n)
+    {
+        string s = decimal_to_binary(n);
+
+        int ans = 0;
+        int sz = s.size();
+        int sign = 1;
+
+        for (int i = 0; i < sz; ++i)
+        {
+
+            if (s[i] == '1')
+            {
+                ans += sign * (int)pow(2, n - i);
+                sign = -sign;
+            }
+        }
+
+        return ans;
+    }
+};
+
+#include <bits/stdc++.h>
+using namespace std;
+
+string reverseStringWordWise(string &input)
+{
+    vector<string> vec;
+    string temp = "";
+
+    int n = input.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (input[i] == ' ')
+        {
+            vec.push_back(temp);
+            temp = "";
+        }
+        else
+        {
+            temp += input[i];
+        }
+    }
+    string ans = "";
+    if (temp.size() > 0)
+        vec.push_back(temp);
+    int m = vec.size();
+    for (int i = m - 1; i >= 0; --i)
+    {
+        ans += vec[i];
+        if (i != 0)
+            ans += " ";
+    }
+    return ans;
+}
+
+int main()
+{
+    string s;
+    getline(cin, s);
+    string ans = reverseStringWordWise(s);
+    cout << ans << endl;
+}
+
+
+
+class Solution {
+  public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+       vector<vector<int>> ans;
+       
+       sort(points.begin(),points.end(),[](const vector<int>& a, const<int>& vector<int>b){
+           long int dist1= a[0]*a[0]+a[1]*a[1];
+            long int dist2= b[0]*b[0]+b[1]*b[1];
+            
+             return dist1<dist2;
+           
+       });
+       
+       for(int i=0; i<k; ++i){
+           ans.push_back(points[i]);
+       }
+        
+    }
+};
