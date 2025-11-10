@@ -4263,24 +4263,138 @@ int main()
     cout << ans << endl;
 }
 
+class Solution
+{
+public:
+    vector<vector<int>> kClosest(vector<vector<int>> &points, int k)
+    {
+        vector<vector<int>> ans;
 
+        sort(points.begin(), points.end(), [](const vector<int> &a, const vector<int> &b)
+             {
+                 long int dist1 = a[0] * a[0] + a[1] * a[1];
+                 long int dist2 = b[0] * b[0] + b[1] * b[1];
 
-class Solution {
-  public:
-    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-       vector<vector<int>> ans;
-       
-       sort(points.begin(),points.end(),[](const vector<int>& a, const<int>& vector<int>b){
-           long int dist1= a[0]*a[0]+a[1]*a[1];
-            long int dist2= b[0]*b[0]+b[1]*b[1];
-            
-             return dist1<dist2;
-           
-       });
-       
-       for(int i=0; i<k; ++i){
-           ans.push_back(points[i]);
-       }
-        
+                 return dist1 < dist2; });
+
+        for (int i = 0; i < k; ++i)
+        {
+            ans.push_back(points[i]);
+        }
     }
 };
+
+class Solution
+{
+public:
+    int minOperations(vector<int> &nums)
+    {
+        int n = nums.size();
+        stack<int> st;
+        vector<int> vec(n, -1);
+        for (int i = n - 1; i >= 0; --i)
+        {
+
+            while (st.empty() || (!st.empty() && st.top() > nums[i]))
+            {
+                st.pop();
+            }
+            if (!st.empty() && st.top() <= nums[i])
+                vec[i] = st.top();
+            st.push(nums[i]);
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (nums[i] > vec[i])
+                ans++;
+        }
+
+        return ans;
+    }
+};
+
+
+
+
+
+    void dfs(vector<vector<int>>& adj, int node,vector<bool>& vis,vector<int>& vec){
+
+                                int sz=adj[node].size();
+
+                                for(int i=0; i<sz; ++i){
+                                    int n1=adj[node][i];
+                                        if(!vis[n1]){
+                                            vis[n1]=true;
+                                            vec.push_back(n1);
+                                            dfs(adj,n1,vis,vec);
+                                        }
+
+                                }
+
+            }
+
+
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
+{
+    vector<vector<int>> adj(V);
+
+    for(int i=0; i<E; ++i){
+        int node1=edges[i][0];
+        int node2=edges[i][1];
+        adj[node1].push_back(node2);
+        adj[node2].push_back(node1);
+    }
+    vector<vector<int>> ans;
+
+
+    vector<bool> vis(V,false);
+
+    for(int i=0; i<V; ++i){
+            vector<int> vec;
+            if(!vis[i]){
+                    vec.push_back(i);
+                    vis[i]=true;
+                    dfs(adj,i,vis,vec);
+            }
+
+            sort(vec.begin(),vec.end());
+            ans.push_back(vec);
+
+    }
+
+    return ans;
+}
+
+
+
+long countSalutes(string A) {
+      
+    int n=A.size();
+    
+    // vector<pair<long long,long long>> pref(n);
+  
+    
+    long long left=0,right=0,ans=0;
+    
+    for(int i=n-1; i>=0; --i){
+                    
+                // pref[i].first=right;
+                // pref[i].second=left;
+               if(A[i]=='<'){
+                    left++;
+               }
+                  
+               else{
+                   right++; 
+                   ans+=left;
+                   
+               } 
+               
+        
+    }
+    
+    return ans;
+    
+    
+}
