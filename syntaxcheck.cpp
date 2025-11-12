@@ -4314,87 +4314,196 @@ public:
     }
 };
 
+void dfs(vector<vector<int>> &adj, int node, vector<bool> &vis, vector<int> &vec)
+{
 
+    int sz = adj[node].size();
 
-
-
-    void dfs(vector<vector<int>>& adj, int node,vector<bool>& vis,vector<int>& vec){
-
-                                int sz=adj[node].size();
-
-                                for(int i=0; i<sz; ++i){
-                                    int n1=adj[node][i];
-                                        if(!vis[n1]){
-                                            vis[n1]=true;
-                                            vec.push_back(n1);
-                                            dfs(adj,n1,vis,vec);
-                                        }
-
-                                }
-
-            }
-
+    for (int i = 0; i < sz; ++i)
+    {
+        int n1 = adj[node][i];
+        if (!vis[n1])
+        {
+            vis[n1] = true;
+            vec.push_back(n1);
+            dfs(adj, n1, vis, vec);
+        }
+    }
+}
 
 vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
 {
     vector<vector<int>> adj(V);
 
-    for(int i=0; i<E; ++i){
-        int node1=edges[i][0];
-        int node2=edges[i][1];
+    for (int i = 0; i < E; ++i)
+    {
+        int node1 = edges[i][0];
+        int node2 = edges[i][1];
         adj[node1].push_back(node2);
         adj[node2].push_back(node1);
     }
     vector<vector<int>> ans;
 
+    vector<bool> vis(V, false);
 
-    vector<bool> vis(V,false);
+    for (int i = 0; i < V; ++i)
+    {
+        vector<int> vec;
+        if (!vis[i])
+        {
+            vec.push_back(i);
+            vis[i] = true;
+            dfs(adj, i, vis, vec);
+        }
 
-    for(int i=0; i<V; ++i){
-            vector<int> vec;
-            if(!vis[i]){
-                    vec.push_back(i);
-                    vis[i]=true;
-                    dfs(adj,i,vis,vec);
-            }
-
-            sort(vec.begin(),vec.end());
-            ans.push_back(vec);
-
+        sort(vec.begin(), vec.end());
+        ans.push_back(vec);
     }
 
     return ans;
 }
 
+long countSalutes(string A)
+{
 
+    int n = A.size();
 
-long countSalutes(string A) {
-      
-    int n=A.size();
-    
     // vector<pair<long long,long long>> pref(n);
-  
-    
-    long long left=0,right=0,ans=0;
-    
-    for(int i=n-1; i>=0; --i){
-                    
-                // pref[i].first=right;
-                // pref[i].second=left;
-               if(A[i]=='<'){
-                    left++;
-               }
-                  
-               else{
-                   right++; 
-                   ans+=left;
-                   
-               } 
-               
-        
+
+    long long left = 0, right = 0, ans = 0;
+
+    for (int i = n - 1; i >= 0; --i)
+    {
+
+        // pref[i].first=right;
+        // pref[i].second=left;
+        if (A[i] == '<')
+        {
+            left++;
+        }
+
+        else
+        {
+            right++;
+            ans += left;
+        }
     }
-    
+
     return ans;
-    
-    
 }
+
+class Solution
+{
+public:
+    int knap(vector<pair<int, int>> &vec, vector<vector<vector<int>>> &dp,
+             int m, int n, int idx)
+    {
+        int sz = vec.size();
+        if (idx >= sz || m < 0 || n < 0)
+        {
+
+            return 0;
+        }
+        if (dp[idx][m][n] != -1)
+            return dp[idx][m][n];
+        int take = 0, dtake = 0;
+        int zeroes = vec[idx].first;
+        int first = vec[idx].second;
+
+        if (m >= zeroes && n >= first)
+            take = 1 + knap(vec, dp, m - zeroes, n - zeroes, idx + 1);
+
+        dtake = knap(vec, dp, m, n, idx + 1);
+
+        return dp[idx][m][n] = max(take, dtake);
+    }
+
+    int findMaxForm(vector<string> &strs, int m, int n)
+    {
+        int sz = strs.size();
+
+        vector<pair<int, int>> vec(sz, {0, 0});
+        for (int i = 0; i < sz; ++i)
+        {
+            int sz1 = strs[i].size();
+            for (int j = 0; j < sz1; ++j)
+            {
+                if (strs[i][j] == '0')
+                    vec[i].first++;
+                else
+                    vec[i].second++;
+            }
+        }
+        vector<vector<vector<int>>> dp(
+            sz, vector<vector<int>>(m + 1, vector<int>(n + 1, -1)));
+
+        return knap(vec, dp, m, n, 0);
+    }
+};
+
+bool check(vector<int> &nums, int k)
+{
+
+    int n = nums.size();
+    int temp;
+
+    for (int i = 0; i < n; ++i)
+    {
+
+        if (i + k > n)
+            break;
+        temp = nums[i];
+        for (int j = i; j < min(i + k,n); ++j)
+            temp = gcd(temp, nums[i]);
+
+        if (temp == 1)
+            return true;
+    }
+
+    return false;
+}
+
+class Solution
+{
+public:
+    int minOperations(vector<int> &nums)
+    {
+        int n = nums.size();
+        // int mini=INT_MAX;
+        // int n1s=0;
+        // int ans=0;
+        // for(int i=0; i<n; ++i){
+        //     if(nums[i]==1) n1s++;
+        //     for(int j=i;j<n; ++j){
+        //         if(gcd(nums[i],nums[j])==1) {
+        //             mini=min(mini,j-i);
+        //             break;
+        //         }
+        //     }
+        //     if(mini==INT_MAX){
+        //         if(i<n-1){
+        //             int a=gcd(nums[i],nums[i+1]);
+        //             if(nums[i+1]==a)
+        //             continue;
+        //             nums[i+1]=a;
+        //             ans++;
+        //         }
+        //     }
+        // }
+        // if(mini==INT_MAX) return -1;
+        // return ans+mini+n-max(1,n1s);
+        int ones = 0;
+        for (int i = 0; i < n; ++i)
+            if (nums[i] == 1)
+                ones++;
+
+        for (int i = 1; i < n; ++i)
+        {
+
+            if (check(nums,i))
+                return i - 1 + n - ones;
+        }
+
+        return -1;
+    }
+};
