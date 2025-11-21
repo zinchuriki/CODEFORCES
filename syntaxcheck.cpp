@@ -4453,7 +4453,7 @@ bool check(vector<int> &nums, int k)
         if (i + k > n)
             break;
         temp = nums[i];
-        for (int j = i; j < min(i + k,n); ++j)
+        for (int j = i; j < min(i + k, n); ++j)
             temp = gcd(temp, nums[i]);
 
         if (temp == 1)
@@ -4500,10 +4500,336 @@ public:
         for (int i = 1; i < n; ++i)
         {
 
-            if (check(nums,i))
+            if (check(nums, i))
                 return i - 1 + n - ones;
         }
 
         return -1;
     }
 };
+
+int sum(vector<int> &nums, vector<int> &dp, int idx)
+{
+    int n = nums.size();
+    if (idx >= n)
+        return 0;
+    if (dp[idx] != -1)
+        return dp[idx];
+    int take = 0, dtake = 0;
+    take = nums[idx] + sum(nums, dp, idx + 2);
+    dtake = sum(nums, dp, idx + 1);
+
+    return dp[idx] = max(dp[idx], max(take, dtake));
+}
+
+int maximumNonAdjacentSum(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n + 1, -1);
+
+    return sum(nums, dp, 0);
+}
+
+void maximumsumsubarray()
+{
+
+    int n;
+    cin >> n;
+    vector<int> vec(n);
+    for (int i = 0; i < n; ++i)
+        cin >> vec[i];
+
+    vector<int> maxi(n, INT_MIN);
+    maxi[0] = max(maxi[0], vec[0]);
+    int ans = INT_MIN;
+    int prev = vec[0];
+    for (int i = 1; i < n; ++i)
+    {
+        int next = max(vec[i], prev + vec[i]);
+        ans = max(ans, next);
+        prev = next;
+    }
+
+    cout << ans << '\n';
+}
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n, k;
+    cin >> n >> k;
+    vector<long int> vec(n);
+    long int maxi = INT_MIN;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> vec[i];
+        maxi = max(maxi, vec[i]);
+    }
+
+    while (k--)
+    {
+        long int nextmaxi = INT_MIN;
+        for (int i = 0; i < n; ++i)
+        {
+            vec[i] = maxi - vec[i];
+            nextmaxi = max(maxi, nextmaxi);
+        }
+        maxi = nextmaxi;
+    }
+
+    for (int i = 0; i < n; ++i)
+        cout << vec[i] << ' ';
+
+    return 0;
+}
+
+class Solution
+{
+public:
+    bool isOneBitCharacter(vector<int> &bits)
+    {
+        int n = bits.size();
+        if (n == 1)
+            return true;
+
+        int i = 0;
+        while (i < n)
+        {
+            if (bits[i] == 0 && i == n - 1)
+                return true;
+            if (bits[i] == 0)
+                i++;
+            else
+                i += 2;
+        }
+    }
+};
+
+class Solution
+{
+public:
+    long int jump(vector<long int> &dp, vector<int> &arr, int idx)
+    {
+        int n = arr.size();
+        if (idx == n - 1)
+            return 0;
+        if (idx >= n)
+            return INT_MAX;
+        if (dp[idx] != INT_MAX)
+            return dp[idx];
+        long int mini = INT_MAX;
+        for (int i = 1; i <= arr[idx]; ++i)
+        {
+            dp[idx] = min(mini, min(jump(dp, arr, idx + i), dp[idx]));
+        }
+
+        return dp[idx];
+    }
+
+    int minJumps(vector<int> &arr)
+    {
+        // code here
+        int n = arr.size();
+        vector<long int> dp(n + 1, INT_MAX);
+        long int a = jump(dp, arr, 0);
+        if (a >= INT_MAX)
+            return -1;
+        return a;
+    }
+};
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution
+{
+public:
+    ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
+    {
+        ListNode *temp1 = list1;
+        ListNode *temp2 = list2;
+        ListNode *head;
+        if (list1 == NULL)
+        {
+            head = list2;
+        }
+        else if (list2 == NULL)
+            head = list1;
+        else
+        {
+            if (list1->val <= list2->val)
+            {
+                head = list1;
+            }
+            else
+                head = list2;
+        }
+
+        while (temp1 != NULL && temp2 != NULL)
+        {
+
+            if (temp1->val <= temp2->val)
+            {
+                if (temp1->next != NULL)
+                {
+                    if (temp1->next->val >= temp2->val)
+                    {
+                        ListNode *temp = temp1;
+                        temp1 = temp1->next;
+                        temp->next = temp2;
+                    }
+                }
+                else
+                {
+                    temp1->next = temp2;
+                    temp1 = NULL;
+                }
+            }
+            else
+            {
+
+                if (temp2->next != NULL)
+                {
+                    if (temp2->next->val >= temp1->val)
+                    {
+                        ListNode *temp = temp2;
+                        temp2 = temp2->next;
+                        temp->next = temp1;
+                    }
+                }
+                else
+                {
+                    temp2->next = temp1;
+                    temp2 = NULL;
+                }
+            }
+        }
+        return head;
+    }
+};
+
+class Solution
+{
+public:
+    int findFinalValue(vector<int> &nums, int original)
+    {
+        unordered_set<int> s;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+        {
+            s.insert(nums[i]);
+        }
+        while (true)
+        {
+            if (s.find(original) != s.end())
+                original *= 2;
+            else
+                return original;
+        }
+
+        return -1;
+    }
+};
+
+class Solution
+{
+public:
+    int intersectionSizeTwo(vector<vector<int>> &intervals)
+    {
+
+        sort(intervals.begin(), intervals.end(), [](const vector<int> &a, const vector<int> &b)
+             {
+                 if (a[1] != b[1])
+                     return a[1] < b[1];
+
+                 return a[0] < b[0]; });
+        int ans = 2;
+        int lts = intervals[0][1] - 1;
+        int ltb = intervals[0][1];
+        int n = intervals.size();
+        for (int i = 1; i < n; ++i)
+        {
+            int nis = intervals[i][0];
+            int nib = intervals[i][1];
+
+            if (nis > ltb)
+            {
+                ans += 2;
+                lts = nib - 1;
+                ltb = nib;
+            }
+            else
+            {
+                if (lts < nis)
+                {
+                    ans++;
+                    lts = ltb;
+                    ltb = nib;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+bool pos(int n, int m, vector<int> &time, long long cap)
+{
+    int j = 0;
+    int sz = time.size();
+    for (int i = 1; i <= n; ++i)
+    {
+        long long left = cap;
+        while (m > 0)
+        {
+            if (j < sz && time[j] <= left)
+            {
+                m--;
+                left -= time[j];
+                j++;
+            }
+            else
+                break;
+        }
+        if (j >= m || m == 0)
+            break;
+    }
+    if (m == 0)
+        return true;
+
+    return false;
+}
+
+long long ayushGivesNinjatest(int n, int m, vector<int> time)
+{
+    long long sum = accumulate(time.begin(), time.end(), 0LL);
+    long long left = 0, right = sum;
+    long long ans = LLONG_MAX;
+    while (left <= right)
+    {
+        long long mid = left + (right - left) / 2;
+        bool happen = pos(n, m, time, mid);
+
+        if (happen)
+        {
+            right = mid - 1;
+            ans = mid;
+        }
+        else
+            left = mid + 1;
+    }
+
+    return ans;
+}

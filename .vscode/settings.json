@@ -95,6 +95,13 @@
       "typeindex": "cpp",
       "valarray": "cpp"
     },
-    "makefile.compileCommandsPath": ".vscode/compile_commands.json"
+    "makefile.compileCommandsPath": ".vscode/compile_commands.json",
+    "cSpell.words": [
+      "desti",
+      "dista",
+      "lmax",
+      "nomid",
+      "rmax"
+    ]
   }
   
