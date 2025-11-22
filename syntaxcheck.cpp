@@ -4833,3 +4833,209 @@ long long ayushGivesNinjatest(int n, int m, vector<int> time)
 
     return ans;
 }
+
+bool pos(vector<int> &A, int B, long long cap)
+{
+
+    int n = A.size();
+    int j = 0;
+    for (int i = 1; i <= B; ++i)
+    {
+        long long left = cap;
+
+        while (B > 0)
+        {
+
+            if (A[j] <= left)
+            {
+                left -= A[j];
+                B--;
+                j++;
+            }
+            else
+                break;
+        }
+
+        if (B == 0)
+            return true;
+        return false;
+    }
+}
+
+int books(vector<int> &A, int B)
+{
+
+    int ans = -1;
+
+    int right = accumulate(A.begin(), A.end(), 0);
+
+    int left = 1;
+    while (left <= right)
+    {
+        int mid = left + (right - left) / 2;
+
+        bool happen = pos(A, B, mid);
+        if (happen)
+        {
+            ans = mid;
+            right = mid - 1;
+        }
+        else
+            left = mid + 1;
+    }
+
+    return ans;
+}
+
+int count(string &s, int len)
+{
+
+    map<vector<int>, int> hash;
+    vector<int> vec(26, 0);
+
+    int n = s.size();
+    for (int i = 0; i < len; ++i)
+    {
+        vec[s[i] - 'a']++;
+    }
+    hash[vec]++;
+    for (int i = len; i < n; ++i)
+    {
+        char rem = s[i - len];
+        vec[rem - 'a']--;
+        vec[s[i] - 'a']++;
+        hash[vec]++;
+    }
+    int ans = 0;
+    for (auto it = hash.begin(); it != hash.end(); ++it)
+    {
+        int b = it->second;
+        ans += (b * (b + 1) / 2);
+    }
+
+    return ans;
+}
+
+int sherlockAndAnagrams(string s)
+{
+    int n = s.size();
+    int ans = 0;
+    for (int i = 1; i <= n; ++i)
+    {
+        ans += count(s, i);
+    }
+    return ans;
+}
+
+long maximumSum(vector<long> a, long m)
+{
+    long long prefix = 0;
+    long long ans = 0;
+    set<long long> s;
+    int n = a.size();
+    long long sum = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        prefix = (prefix + a[i] % m);
+        ans = max(ans, prefix);
+
+        auto it = s.upper_bound(prefix);
+        if (it != s.end())
+        {
+            ans = max(ans, prefix + m - *it);
+        }
+        s.insert(prefix);
+    }
+
+    return ans;
+}
+
+int dfs(vector<vector<bool>> &vis, vector<vector<int>> &matrix, int row, int col)
+{
+    int n = matrix.size(), m = matrix[0].size();
+    if (row < 0 || col < 0 || row >= n || col >= m)
+        return 0;
+    if (vis[row][col])
+        return 0;
+    if (matrix[row][col] == 0)
+        return 0;
+    vis[row][col] = true;
+    int up, down, left, right, dru, drd, dlu, dld;
+    up = dfs(vis, matrix, row - 1, col);
+    down = dfs(vis, matrix, row + 1, col);
+    left = dfs(vis, matrix, row, col - 1);
+    right = dfs(vis, matrix, row, col + 1);
+    dru = dfs(vis, matrix, row - 1, col + 1);
+    drd = dfs(vis, matrix, row + 1, col + 1);
+    dlu = dfs(vis, matrix, row - 1, col - 1);
+    dld = dfs(vis, matrix, row + 1, col - 1);
+
+    return 1 + up + down + left + right + dru + drd + dlu + dld;
+}
+
+int connectedCell(vector<vector<int>> matrix)
+{
+    int n = matrix.size(), m = matrix[0].size();
+    vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+    int maxi = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            if (!vis[i][j])
+            {
+                maxi = max(maxi, dfs(vis, matrix, i, j));
+            }
+        }
+    }
+    return maxi;
+}
+
+class Solution
+{
+public:
+    bool checkValidString(string s)
+    {
+        int n = s.size();
+        stack<int> st, st1;
+        int cnt = 0;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] == '(')
+                st.push(i);
+            else if (s[i] == ')')
+            {
+                if (st.size() > 0)
+                    st.pop();
+                else if (st1.size() > 0)
+                {
+                    st1.pop();
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                st1.push(i);
+            }
+        }
+        while (st.size() > 0)
+        {
+            if (st1.size() > 0)
+            {
+                int pindex = st.top();
+                int sindex = st1.top();
+                if (sindex < pindex)
+                    return false;
+                st.pop();
+                st1.pop();
+            }
+            else
+                return false;
+        }
+        return true;
+    }
+};
