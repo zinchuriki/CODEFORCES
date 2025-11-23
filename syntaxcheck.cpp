@@ -5039,3 +5039,169 @@ public:
         return true;
     }
 };
+
+class Solution
+{
+public:
+    int minimumFlips(int n)
+    {
+        bitset<32> a(n);
+        string s = a.to_string().substr(a.to_string().find('1'));
+        int cnt = 0;
+        int m = s.size();
+        int i = 0, j = m - 1;
+        while (i < j)
+        {
+            if (s[i] != s[j])
+                cnt += 2;
+            i++;
+            j--;
+        }
+        return cnt;
+    }
+};
+
+class Solution
+{
+public:
+    int totalWaviness(int num1, int num2)
+    {
+        int ans = 0;
+        for (int i = num1; i <= num2; ++i)
+        {
+            string s = to_string(i);
+            int sz = s.size();
+            int j = 1;
+            while (j < sz - 1)
+            {
+                if ((s[j] < s[j + 1] && s[j] < s[j - 1]) || (s[j] > s[j + 1] && s[j] > s[j - 1]))
+                    ans++;
+                j++;
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int MOD = 1e+9;
+    int dfs(vector<vector<vector<int>>> &dp, vector<vector<int>> &grid, int k, int row, int col, int sum)
+    {
+
+        int n = grid.size();
+        int m = grid[0].size();
+
+        if (row >= n || col >= m)
+            return 0;
+        sum += grid[row][col];
+        if (dp[row][col][sum % k] != -1)
+            return dp[row][col][sum % k];
+
+        if (row == n - 1 && col == m - 1)
+        {
+            if (sum % k == 0)
+                return dp[row][col][sum % k] = 1;
+            return dp[row][col][sum % k] = 0;
+        }
+
+        int down = dfs(dp, grid, k, row + 1, col, sum) % MOD;
+        int right = dfs(dp, grid, k, row, col + 1, sum) % MOD;
+        return dp[row][col][sum % k] = (down + right) % MOD;
+    }
+
+    int numberOfPaths(vector<vector<int>> &grid, int k)
+    {
+        int n = grid.size(), m = grid[0].size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(m, vector<int>(k, -1)));
+        return dfs(dp, grid, k, 0, 0, 0);
+    }
+};
+
+int sum(vector<vector<int>> &dp, vector<vector<int>> &A, int idx, int row)
+{
+    int n = A.size();
+    if (idx >= n || row < 0 || row > 1)
+        return 0;
+    if (dp[row][idx] != -1)
+        return dp[row][idx];
+    int take = 0, dtake = 0;
+
+    int next_row = (row + 1) % 2;
+    take = A[row][idx] + max(sum(dp, A, idx + 2, row), sum(dp, A, idx + 2, next_row));
+    dtake = max(sum(dp, A, idx + 1, row), sum(dp, A, idx + 1, next_row));
+
+    return dp[row][idx] = max(dp[row][idx], max(take, dtake));
+}
+
+int Solution::adjacent(vector<vector<int>> &A)
+{
+    int n = A.size();
+    vector<vector<int>> dp(2, vector<int>(n + 1, -1));
+    return max(sum(dp, A, 0, 0), sum(dp, A, 0, 1));
+}
+
+class Solution
+{
+public:
+    int lengthOfLongestSubstring(string s)
+    {
+        int n = s.size();
+        int l = 0, r = n - 1;
+        vector<int> vec(26, -1);
+        int ans = 1;
+        while (l < n && r < n)
+        {
+            if (vec[s[r]] < 0)
+            {
+                vec[s[r]] = r;
+            }
+            else
+            {
+                if (l < vec[s[r]])
+                {
+                    l = vec[s[r]] + 1;
+                }
+                vec[s[r]] = r;
+            }
+            ans = max(ans, r - l + 1);
+            r++;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int knap(vector<vector<int>> &dp, vector<int> &nums, int idx, int sum)
+    {
+        int n = nums.size();
+
+        if (idx >= n)
+        {
+            if (sum % 3 == 0)
+                return 0;
+            else
+                return INT_MIN;
+        }
+        int rem = (sum + nums[idx]) % 3;
+        if (dp[idx][rem] != -1)
+            return dp[idx][rem];
+
+        int take = 0, dtake = 0;
+        take = nums[idx] + knap(dp, nums, idx + 1, sum);
+        dtake = knap(dp, nums, idx + 1, sum);
+
+        return dp[idx][rem] = max(max(take, dtake), dp[idx][rem]);
+    }
+
+    int maxSumDivThree(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<vector<int>> dp(n + 1, vector<int>(3, -1));
+        int a = knap(dp, nums, 0, 0);
+        return max(a, 0);
+    }
+};
