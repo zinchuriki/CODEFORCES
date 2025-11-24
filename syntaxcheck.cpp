@@ -5205,3 +5205,70 @@ public:
         return max(a, 0);
     }
 };
+
+int move(vector<vector<int>> &dp, vector<vector<int>> &A, int row, int col)
+{
+
+    int n = A.size(), m = A[0].size();
+
+    if (col >= m || row >= n)
+        return 0;
+
+    if (dp[row][col] != -1)
+        return dp[row][col];
+
+    return dp[row][col] = A[row][col] + min(move(dp, A, row + 1, col), move(dp, A, row + 1, col + 1));
+}
+
+int Solution::solve(vector<vector<int>> &A)
+{
+    int n = A.size(), m = A[0].size();
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    return move(dp, A, 0, 0);
+}
+
+class Solution
+{
+public:
+    vector<bool> prefixesDivBy5(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<bool> ans(n, false);
+        int cnt = 0;
+
+        int base = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            cnt += nums[i] * base;
+            if (cnt % 5 == 0)
+                ans[i] = true;
+
+            base *= 2;
+        }
+        return ans;
+    }
+};
+
+int sum(vector<vector<int>> &dp, vector<vector<int>> &A, int row, int col)
+{
+
+    int n = A.size(), m = A[0].size();
+
+    if (row < 0 || row >= n || col < 0 || col >= m)
+        return 0;
+    if (row == n - 1 && col == m - 1)
+        return A[n - 1][m - 1];
+
+    return dp[row][col] = A[row][col] + min(sum(dp, A, row + 1, col), sum(dp, A, row, col + 1));
+}
+
+int Solution::minPathSum(vector<vector<int>> &A)
+{
+
+    int n = A.size();
+    int m = A[0].size();
+
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+
+    return sum(dp, A, 0, 0);
+}
