@@ -5272,3 +5272,417 @@ int Solution::minPathSum(vector<vector<int>> &A)
 
     return sum(dp, A, 0, 0);
 }
+
+class Solution
+{
+public:
+    vector<int> countDistinct(vector<int> &arr, int k)
+    {
+        // code here
+        unordered_map<int, int> hash;
+        vector<int> ans;
+        int n = arr.size();
+
+        for (int i = 0; i < k; ++i)
+        {
+            hash[arr[i]]++;
+        }
+
+        int l = 0, r = k;
+        while (l < n && r < n)
+        {
+            ans.push_back(hash.size());
+            hash[arr[l]]--;
+            if (hash[arr[l]] <= 0)
+                hash.erase(arr[l]);
+            hash[arr[r]]++;
+            l++;
+            r++;
+        }
+        ans.push_back(hash.size());
+        return ans;
+    }
+};
+
+class Node
+{
+public:
+    int data;
+    Node *next;
+    Node(int x)
+    {
+        data = x;
+        next = NULL;
+    }
+};
+
+class Solution
+{
+public:
+    Node *nn(char a)
+    {
+        Node *temp = new Node(a - '0');
+        return temp;
+    }
+
+    Node *addTwoLists(Node *head1, Node *head2)
+    {
+        long int num1 = 0, num2 = 0;
+        Node *temp1 = head1;
+        Node *temp2 = head2;
+
+        while (temp1 != NULL)
+        {
+            num1 *= 10;
+            num1 += temp1->data;
+            temp1 = temp1->next;
+        }
+        while (temp2 != NULL)
+        {
+            num2 *= 10;
+            num2 += temp2->data;
+            temp2 = temp2->next;
+        }
+
+        long int total = num1 + num2;
+        string s = to_string(total);
+
+        Node *head = nn(s[0]);
+        Node *temp = head;
+        int n = s.size();
+        for (int i = 1; i < n; ++i)
+        {
+            temp->next = nn(s[i]);
+            temp = temp->next;
+        }
+
+        return head;
+    }
+};
+
+class Solution
+{
+public:
+    int smallestRepunitDivByK(int k)
+    {
+
+        long long int n = 1;
+        int cnt = 1;
+        if (gcd(k, 10) != 1)
+            return -1;
+
+        while (true)
+        {
+            int rem = n % k;
+            if (rem == 0)
+                return cnt;
+
+            rem *= 10 + 1;
+            cnt++;
+        }
+
+        return -1;
+    }
+};
+
+class Solution
+{
+public:
+    long long get(long long l)
+    {
+
+        long long base = 1;
+        int i = 1;
+        long long cnt = 0;
+        while (cnt <= l)
+        {
+            int temp = (i + 1) / 2 * (min(2 * base - 1, l) - base + 1);
+            cnt += temp;
+            i++;
+            base *= 2;
+        }
+
+        return cnt;
+    }
+
+    long long minOperations(vector<vector<int>> &queries)
+    {
+
+        int n = queries.size();
+        long long ans = 0;
+
+        for (int i = 0; i < n; ++i)
+        {
+            ans += (get(queries[i][1]) - get(queries[i][0]) + 1) / 2;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool canJump(vector<int> &nums)
+    {
+        int n = nums.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            int next = nums[i];
+            if (next >= n - 1)
+                return true;
+            for (int j = next + i; j >= 1; --j)
+            {
+                if (nums[j] + j >= n - 1)
+                    return true;
+            }
+        }
+        return false;
+    }
+};
+
+int Solution::checkPath(vector<vector<int>> &A)
+{
+
+    pair<int, int> src, dest;
+    bool one = false, two = false;
+    int n = A.size();
+    int m = A[0].size();
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            if (A[i][j] == 1)
+            {
+                src.first = i;
+                src.second = j;
+                one = true;
+            }
+
+            if (A[i][j] == 2)
+            {
+                dest.first = i;
+                dest.second = j;
+                two = true;
+            }
+        }
+        if (one && two)
+            break;
+    }
+
+    vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+    queue<pair<int, int>> q;
+    q.push(src);
+    vis[src.first][src.second] = true;
+
+    while (!q.empty())
+    {
+
+        int k = q.size();
+        for (int i = 0; i < k; ++i)
+        {
+
+            auto a = q.front();
+            q.pop();
+
+            if (a == dest)
+                return 1;
+
+            vis[a.first][a.second] = true;
+            int x = a.first;
+            int y = a.second;
+            if (x + 1 < n && !vis[x + 1][y] && A[x + 1][y] != 0)
+            {
+                q.push({x + 1, y});
+                vis[x + 1][y] = true;
+            }
+
+            if (x - 1 >= 0 && !vis[x - 1][y] && A[x - 1][y] != 0)
+            {
+                vis[x - 1][y] = true;
+                q.push({x - 1, y});
+            }
+
+            if (y - 1 >= 0 && !vis[x][y - 1] && A[x][y - 1] != 0)
+            {
+                q.push({x, y - 1});
+                vis[x][y - 1] = true;
+            }
+
+            if (y + 1 < m && !vis[x][y + 1] && A[x][y + 1] != 0)
+            {
+                q.push({x, y + 1});
+                vis[x][y + 1] = true;
+            }
+        }
+    }
+
+    return 0;
+}
+
+class Solution
+{
+public:
+    bool check(vector<int> &piles, int h, int hr)
+    {
+
+        int sum = 0;
+        int n = piles.size();
+        for (int i = 0; i < n; ++i)
+        {
+            sum += ceil(double(piles[i]) / hr);
+        }
+
+        return sum <= hr;
+    }
+
+    int minEatingSpeed(vector<int> &piles, int h)
+    {
+        int maxi = *max_element(piles.begin(), piles.end());
+
+        int l = maxi, r = maxi;
+        int ans = maxi;
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+            if (check(piles, h, mid))
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+            else
+                l = mid + 1;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool check(vector<int> &arr, int sum, int k)
+    {
+
+        int n = arr.size();
+        int cnt = 0;
+        int temp = sum;
+        for (int i = 0; i < n; ++i)
+        {
+            if (arr[i] > temp)
+            {
+                cnt++;
+                temp = sum;
+            }
+            temp -= arr[i];
+        }
+
+        if (cnt > k)
+            return false;
+
+        return true;
+    }
+
+    int findPages(vector<int> &arr, int k)
+    {
+        int maxi = INT_MIN;
+        int sum = 0;
+        int n = arr.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            maxi = max(maxi, arr[i]);
+            sum += arr[i];
+        }
+
+        int l = maxi, r = sum;
+        int ans = maxi;
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+            if (check(arr, mid, k))
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+            else
+                l = mid + 1;
+        }
+
+        return ans;
+    }
+};
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+
+        int n;
+        cin >> n;
+        if (n & 1)
+        {
+            if (n > 3)
+            {
+                int i = n - 3;
+                i = max(i, 0);
+                i /= 2;
+                cout << i * (i + 1) + 1 << '\n';
+            }
+            else
+                cout << 0 << '\n';
+        }
+        else
+        {
+            if (n > 3)
+            {
+                int i = (n - 2) / 2;
+                cout << i * i << '\n';
+            }
+            else
+                cout << 0 << '\n';
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+        int n;
+        cin >> n;
+        vector<int> A(n), B(n);
+        for (int i = 0; i < n; ++i)
+            cin >> A[i];
+        for (int i = 0; i < n; ++i)
+            cin >> B[i];
+        bool pos = true;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            bool a = A[i] < A[i + 1];
+            bool b = B[i] < B[i + 1];
+            if (a != b)
+            {
+                pos = false;
+                break;
+            }
+        }
+
+        if (pos)
+            cout << "Yes" << '\n';
+        else
+            cout << "No" << '\n';
+    }
+    return 0;
+}
