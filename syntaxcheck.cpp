@@ -5686,3 +5686,76 @@ int main()
     }
     return 0;
 }
+
+class Solution
+{
+public:
+    int cntSubarrays(vector<int> &arr, int k)
+    {
+        int n = arr.size();
+        unordered_map<int, int> hash;
+        int ans = 0, sum = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            sum += arr[i];
+            if (hash.find(sum - k) != hash.end())
+                ans++;
+            hash[sum]++;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    long long maxSubarraySum(vector<int> &nums, int k)
+    {
+        // Maintain minimum prefix sum ending at every possible index%k.
+        unordered_map<int, long long> hash;
+
+        long long sum = 0;
+        int n = nums.size();
+        long long maxi = LLONG_MIN;
+        for (int i = 0; i < n; ++i)
+        {
+
+            sum += nums[i];
+            if (hash.find(i % k) != hash.end())
+            {
+                maxi = max(maxi, sum - hash[i % k]);
+                hash[i % k] = min(hash[i % k], sum);
+            }
+            else
+                hash[i % k] = sum;
+
+            if ((i + 1) % k == 0)
+                maxi = max(maxi, sum);
+        }
+
+        return maxi;
+    }
+};
+
+vector<int> Solution::addArrays(vector<int> &A, vector<int> &B)
+{
+    int n = A.size(), m = B.size();
+    int i = n - 1, j = m - 1, carry = 0;
+    vector<int> ans;
+    while (i >= 0 || j >= 0)
+    {
+        int a = 0, b = 0;
+        if (i >= 0)
+            a = A[i];
+        if (j >= 0)
+            b = B[j];
+        int sum = a + b + carry;
+        int put = (sum) % 10;
+        carry = sum / 10;
+        ans.push_back(put);
+        i--;
+        j--;
+    }
+    reverse(ans.begin(), ans.end());
+}
