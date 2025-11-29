@@ -5759,3 +5759,244 @@ vector<int> Solution::addArrays(vector<int> &A, vector<int> &B)
     }
     reverse(ans.begin(), ans.end());
 }
+
+bool check(vector<int> &arr, int num, int m)
+{
+
+    int n = arr.size();
+    int temp = num;
+    int st = 1;
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (temp < arr[i])
+        {
+            temp = num;
+            st++;
+        }
+        temp -= arr[i];
+    }
+    return st <= m;
+}
+
+int findPages(vector<int> &arr, int n, int m)
+{
+    // Write your code here.
+
+    if (m > n)
+        return -1;
+
+    int l = *max_element(arr.begin(), arr.end());
+    int r = 1e9;
+    int ans;
+    while (l <= r)
+    {
+
+        int mid = l + (r - l) / 2;
+        if (check(arr, mid, m))
+        {
+            ans = mid;
+            r = mid - 1;
+        }
+        else
+            l = mid + 1;
+    }
+
+    return ans;
+}
+
+int Solution::canJump(vector<int> &A)
+{
+    int maxi = 0;
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (i > maxi)
+            return 0;
+
+        maxi = max(maxi, i + A[i]);
+    }
+
+    return 1;
+}
+
+class Solution
+{
+public:
+    int nums;
+    int dfs(vector<vector<int>> &adj, vector<bool> &vis, vector<int> &values, int current, int parent, int k)
+    {
+
+        int sz = adj[current].size();
+        int temp = 0;
+        for (int i = 0; i < sz; ++i)
+        {
+            int next = adj[current][i];
+            if (!vis[next])
+            {
+                vis[next] = true;
+                temp += dfs(adj, vis, values, next, current, k);
+            }
+        }
+        temp = temp % k;
+        if (temp == 0)
+            nums++;
+
+        return temp;
+    }
+
+    int maxKDivisibleComponents(int n, vector<vector<int>> &edges, vector<int> &values, int k)
+    {
+        int n = values.size();
+        vector<vector<int>> adj(n);
+        nums = 0;
+
+        for (int i = 0; i < n - 1; ++i)
+        {
+
+            int n1 = edges[i][0];
+            int n2 = edges[i][1];
+            adj[n1].push_back(n2);
+            adj[n2].push_back(n1);
+        }
+        vector<bool> vis(n, false);
+
+        dfs(adj, vis, values, 0, -1, k);
+        return nums;
+    }
+};
+
+class Solution
+{
+public:
+    int firstMissingPositive(vector<int> &nums)
+    {
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int idx = nums[i] - 1;
+            if (idx >= 0 && idx < n)
+                nums[idx] = nums[i];
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (i + 1 != nums[i])
+                return i + 1;
+        }
+
+        return n + 1;
+    }
+};
+
+#include <bits/stdc++.h>
+
+class BinaryTreeNode
+{
+public:
+    int data;
+    BinaryTreeNode *left;
+    BinaryTreeNode *right;
+
+    BinaryTreeNode(int data)
+    {
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+int dfs(BinaryTreeNode *root, int value)
+{
+
+    if (root == NULL)
+        return 0;
+
+    int current = root->data;
+
+    int newcurrent = 0;
+    newcurrent += dfs(root->left, current);
+    newcurrent += dfs(root->right, current);
+
+    root->data = max(newcurrent, value);
+    return root->data;
+}
+
+void changeTree(BinaryTreeNode *root)
+{
+    // Write your code here.
+
+    dfs(root, 0);
+}
+
+class Solution
+{
+public:
+    vector<int> nextGreaterElements(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> ans(n);
+
+        stack<int> st1, st2;
+
+        for (int i = 0; i < n; ++i)
+        {
+            st1.push(i);
+        }
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+
+            while (!st2.empty() && st2.top() <= nums[i])
+                st2.pop();
+
+            if (!st2.empty())
+                ans[i] = st2.top();
+
+            if (st2.empty() || st2.top() <= nums[i])
+            {
+
+                while (!st1.empty() && nums[st1.top()] <= nums[i])
+                {
+                    st1.pop();
+                }
+
+                if (!st1.empty())
+                    ans[i] = nums[st1.top()];
+                else
+                    ans[i] = -1;
+            }
+
+            st2.push(nums[i]);
+        }
+        return ans;
+    }
+};
+
+string Solution::solve(string A, string B)
+{
+
+    int correct = 0;
+    int n = A.size();
+    vector<int> vec1(10), vec2(10);
+    for (int i = 0; i < n; ++i)
+    {
+        if (A[i] != B[i])
+        {
+            vec1[A[i]]++;
+            vec2[B[i]]++;
+        }
+        else
+            correct++;
+    }
+    int another = 0;
+    for (int i = 0; i < 10; ++i)
+        another += min(vec1[i], vec2[i]);
+    string s = "";
+    s += to_string(correct);
+    s += 'A';
+    s += to_string(another);
+    s += 'B';
+    return s;
+}
