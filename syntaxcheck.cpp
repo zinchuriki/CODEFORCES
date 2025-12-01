@@ -59,8 +59,6 @@ public:
             }
         }
         return s;
-
-        return s;
     }
 };
 
@@ -5135,7 +5133,7 @@ int sum(vector<vector<int>> &dp, vector<vector<int>> &A, int idx, int row)
     return dp[row][idx] = max(dp[row][idx], max(take, dtake));
 }
 
-int Solution::adjacent(vector<vector<int>> &A)
+int adjacent(vector<vector<int>> &A)
 {
     int n = A.size();
     vector<vector<int>> dp(2, vector<int>(n + 1, -1));
@@ -5220,7 +5218,7 @@ int move(vector<vector<int>> &dp, vector<vector<int>> &A, int row, int col)
     return dp[row][col] = A[row][col] + min(move(dp, A, row + 1, col), move(dp, A, row + 1, col + 1));
 }
 
-int Solution::solve(vector<vector<int>> &A)
+int solve(vector<vector<int>> &A)
 {
     int n = A.size(), m = A[0].size();
     vector<vector<int>> dp(n, vector<int>(m, -1));
@@ -5262,7 +5260,7 @@ int sum(vector<vector<int>> &dp, vector<vector<int>> &A, int row, int col)
     return dp[row][col] = A[row][col] + min(sum(dp, A, row + 1, col), sum(dp, A, row, col + 1));
 }
 
-int Solution::minPathSum(vector<vector<int>> &A)
+int minPathSum(vector<vector<int>> &A)
 {
 
     int n = A.size();
@@ -5442,7 +5440,7 @@ public:
     }
 };
 
-int Solution::checkPath(vector<vector<int>> &A)
+int checkPath(vector<vector<int>> &A)
 {
 
     pair<int, int> src, dest;
@@ -5738,7 +5736,7 @@ public:
     }
 };
 
-vector<int> Solution::addArrays(vector<int> &A, vector<int> &B)
+vector<int> addArrays(vector<int> &A, vector<int> &B)
 {
     int n = A.size(), m = B.size();
     int i = n - 1, j = m - 1, carry = 0;
@@ -5805,7 +5803,7 @@ int findPages(vector<int> &arr, int n, int m)
     return ans;
 }
 
-int Solution::canJump(vector<int> &A)
+int canJump(vector<int> &A)
 {
     int maxi = 0;
     int n = A.size();
@@ -5974,7 +5972,7 @@ public:
     }
 };
 
-string Solution::solve(string A, string B)
+string solve(string A, string B)
 {
 
     int correct = 0;
@@ -6000,3 +5998,214 @@ string Solution::solve(string A, string B)
     s += 'B';
     return s;
 }
+
+class Solution
+{
+public:
+    int countElements(vector<int> &nums, int k)
+    {
+        sort(nums.begin(), nums.end());
+        int ans = 0;
+        int num = nums[0];
+        int n = nums.size();
+        unordered_map<int, int> hash;
+        for (int i = 0; i < n; ++i)
+            hash[nums[i]]++;
+        auto it = nums.begin();
+        while (true && it != nums.end())
+        {
+            it = upper_bound(nums.begin(), nums.end(), num);
+            int count = nums.end() - it;
+            if (count >= k)
+                ans += hash[num];
+            else
+                break;
+            num = *it;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    long long reve(int n)
+    {
+        string s = to_string(n);
+        reverse(s.begin(), s.end());
+        return (long long)stoi(s);
+    }
+    // long long strip(int n){
+    //     while(n>0 && n%10 ==0) n/=10;
+    //     return (long long)n;
+    // }
+
+    int minMirrorPairDistance(vector<int> &nums)
+    {
+        int n = nums.size();
+        unordered_map<int, int> hash;
+        vector<long long> rev;
+
+        for (int i = 0; i < n - 1; ++i)
+        {
+            rev.push_back(reve(nums[i]));
+            hash[nums[i]] = i;
+        }
+        int ans = INT_MAX;
+        for (int i = 0; i < n; ++i)
+        {
+            long long a = rev[i];
+            if (hash.find(a) != hash.end())
+            {
+                int idx = hash[a];
+                if (idx > i)
+                    ans = min(ans, abs(idx - i));
+            }
+        }
+
+        if (ans == INT_MAX)
+            return -1;
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minSubarray(vector<int> &nums, int p)
+    {
+        long long sum = accumulate(nums.begin(), nums.end(), 0LL);
+        int rm = sum % p;
+        if (rm == 0)
+            return 0;
+        int n = nums.size();
+        unordered_map<long long, int> hash;
+        hash[0] = -1;
+        long long temp = 0;
+        int ans = INT_MAX;
+
+        for (int i = 0; i < n; ++i)
+        {
+            temp += nums[i];
+
+            int rem = temp % p;
+            long long left = abs(rm - rem);
+            if (rem >= rm)
+                left = rem - rm;
+            else
+                left = p - abs(rem - rm);
+
+            if (hash.find(left) != hash.end())
+            {
+                int che = INT_MAX;
+                che = i - hash[left];
+                ans = min(ans, che);
+            }
+            hash[rem] = i;
+        }
+
+        if (ans == INT_MAX || ans == n)
+            return -1;
+        return ans;
+    }
+};
+
+#include <bits/stdc++.h>
+
+template <typename T>
+class TreeNode
+{
+public:
+    T data;
+    TreeNode<T> *left;
+    TreeNode<T> *right;
+
+    TreeNode(T data)
+    {
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+void dfs(TreeNode<int> *root, int distance, map<int, pair<int, int>> &hash, int depth)
+{
+
+    if (root == NULL)
+        return;
+    if (hash.find(distance) == hash.end())
+        hash[distance] = {root->data, depth};
+    else
+    {
+        if (hash[distance].second <= depth)
+            hash[distance] = {root->data, depth};
+    }
+    dfs(root->left, distance - 1, hash, depth + 1);
+
+    dfs(root->right, distance + 1, hash, depth + 1);
+}
+
+vector<int> bottomView(TreeNode<int> *root)
+{
+    // Write your code here.
+    map<int, pair<int, int>> hash;
+    vector<int> ans;
+    dfs(root, 0, hash, 0);
+
+    for (auto it = hash.begin(); it != hash.end(); ++it)
+        ans.push_back(it->second.first);
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    bool check(vector<int> &batteries, int k, int n)
+    {
+
+        int sz = batteries.size();
+        int cnt = 0;
+        int temp = k;
+        int forw = 0;
+        long long sum = 0;
+
+        for (int i = 0; i < sz; ++i)
+        {
+            if (batteries[i] < k)
+            {
+                sum += batteries[i];
+                cnt++;
+            }
+        }
+        long long temp = sum / (long long)cnt;
+        if (temp >= k)
+            return true;
+
+        return false;
+    }
+    long long maxRunTime(int n, vector<int> &batteries)
+    {
+        long long r = accumulate(batteries.begin(), batteries.end(), 0LL);
+        long long l = 0;
+
+        long long ans = 0;
+
+        while (l <= r)
+        {
+            long long mid = l + (r - l) / 2;
+
+            if (check(batteries, mid, n))
+            {
+                ans = mid;
+                l = mid + 1;
+            }
+            else
+                r = mid - 1;
+        }
+
+        return ans;
+    }
+};
