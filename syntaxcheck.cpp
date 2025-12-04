@@ -6209,3 +6209,263 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int countTrapezoids(vector<vector<int>> &points)
+    {
+        unordered_map<int, int> hash;
+        long int ans = 0, sum = 0;
+
+        int n = points.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            hash[points[i][1]]++;
+        }
+        int MOD = 1e9 + 7;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            int nn = it->second;
+            int a = nn * (nn - 1) / 2;
+            int news = (a * sum) % MOD;
+            ans = (ans + news) % MOD;
+            sum += a;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool canJump(vector<int> &nums)
+    {
+        int maxi = 0;
+        int n = nums.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (maxi > i)
+                return false;
+            maxi = max(maxi, i + nums[i]);
+        }
+        return true;
+    }
+};
+
+class Solution
+{
+public:
+    int minimumEffortPath(vector<vector<int>> &heights)
+    {
+
+        priority_queue<tuple<int, int, int>,         // 1. Data Type
+                       vector<tuple<int, int, int>>, // 2. Container
+                       greater<tuple<int, int, int>> // 3. Comparator (Min-Heap)
+                       >
+            pq;
+
+        int n = heights.size();
+        int m = heights[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        vector<int> a{1, 0, -1, 0};
+        vector<int> b{0, 1, 0, -1};
+        pq.push({0, 0, 0});
+        while (!pq.empty())
+        {
+
+            auto [effortsf, x, y] = pq.top();
+            if (x == n - 1 && y == m - 1)
+                return effortsf;
+
+            vis[x][y] = true;
+            for (int i = 0; i < 4; ++i)
+            {
+                int nx = x + a[i];
+                int ny = y + b[i];
+                int cv = heights[x][y];
+                if (nx < n && nx >= 0 && ny < m && ny >= 0 && !vis[nx][ny])
+                {
+                    int neffort = max(abs(heights[nx][ny] - cv), effortsf);
+                    pq.push({neffort, nx, ny});
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+// User function template for C++
+
+class Solution
+{
+public:
+    void floydWarshall(vector<vector<int>> &dist)
+    {
+        // Code here
+        int n = dist.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int via_idx = i;
+            for (int i = 0; i < n; ++i)
+            {
+                int l = i;
+                for (int j = 0; j < n; ++j)
+                {
+                    int r = j;
+                    if (dist[l][via_idx] != 1e8 && dist[via_idx][r] != 1e8)
+                        dist[i][j] = min(dist[l][via_idx] + dist[via_idx][r], dist[i][j]);
+                }
+            }
+        }
+    }
+};
+
+class Solution
+{
+public:
+    long subarrayXor(vector<int> &arr, int k)
+    {
+        long ans = 0;
+        int n = arr.size();
+
+        unordered_map<int, int> hash;
+        hash[0] = 1;
+        long int xo = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            xo ^= arr[i];
+            if (hash.find(xo ^ k) != hash.end())
+            {
+                ans += hash[xo ^ k];
+            }
+            hash[xo]++;
+        }
+
+        return ans;
+    }
+};
+
+#include <bits/stdc++.h>
+int getLongestSubarray(vector<int> &nums, int k)
+{
+    // Write your code here
+    unordered_map<int, int> hash;
+
+    int n = nums.size();
+    hash[0] = -1;
+    long int sum = 0;
+    int ans = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        sum += nums[i];
+        int check = sum - k;
+
+        if (hash.find(check) != hash.end())
+            ans = max(ans, i - hash[check]);
+        else
+            hash[sum] = i;
+    }
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    int countTrapezoids(vector<vector<int>> &points)
+    {
+        unordered_map<double, unordered_set<double>> hash;
+
+        int n = points.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            double x1 = points[i][0];
+            double y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j)
+            {
+                double x2 = points[j][0];
+                double y2 = points[j][1];
+                double m = (y2 - y1) / (x2 - x1);
+                double c = y2 - m * x2;
+                hash[m].insert(c);
+            }
+        }
+
+        int ans = 0;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+
+            int sz = it->second.size();
+
+            ans += sz * (sz - 1) / 2;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int countTrapezoids(vector<vector<int>> &points)
+    {
+        map<pair<int, int>, unordered_map<int, int>> hash;
+        map<pair<int, int>, int> mp;
+
+        int n = points.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j)
+            {
+                int x2 = points[j][0];
+                int y2 = points[j][1];
+                int A = y2 - y1;
+                int B = x1 - x2;
+                int C = x2 * y1 - x1 * y2;
+                if (B < 0 || (B == 0 && A < 0))
+                {
+                    B = -B;
+                    A = -A;
+                }
+                mp[{x1 + x2, y1 + y2}]++;
+                int g = std::gcd(std::gcd(abs(A), abs(B)), abs(C));
+
+                if (g)
+                    A /= g, B /= g, C /= g;
+                hash[{A, B}][C]++;
+            }
+        }
+
+        int ans = 0;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+
+            int prev = 0;
+            int add = 0;
+            int sub = 0;
+            int prev = 0;
+            for (auto it2 = it->second.begin(); it2 != it->second.end();
+                 ++it2)
+            {
+                sub += it2->second * (it2->second - 1) / 2;
+                add += it2->second;
+            }
+            ans += add * (add - 1) / 2 - sub;
+        }
+        for (auto it = mp.begin(); it != mp.end(); ++it)
+        {
+            int temp = it->second;
+            ans -= temp * (temp - 1) / 2;
+        }
+
+        return ans;
+    }
+};
