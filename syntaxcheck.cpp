@@ -6428,19 +6428,26 @@ public:
                 int x2 = points[j][0];
                 int y2 = points[j][1];
                 int A = y2 - y1;
-                int B = x1 - x2;
-                int C = x2 * y1 - x1 * y2;
-                if (B < 0 || (B == 0 && A < 0))
-                {
-                    B = -B;
-                    A = -A;
-                }
+                int B = x2 - x1;
+                int C = B * y1 - A * x1;
+
                 mp[{x1 + x2, y1 + y2}]++;
+
                 int g = std::gcd(std::gcd(abs(A), abs(B)), abs(C));
 
                 if (g)
                     A /= g, B /= g, C /= g;
+
+                if (B < 0 || (B == 0 && A < 0))
+                {
+                    B = -B;
+                    A = -A;
+                    C = -C;
+                }
                 hash[{A, B}][C]++;
+                if (hash[{A, B}][C] > 1 && mp[{x1 + x2, y1 + y2}] > 0)
+                    continue;
+                mp[{x1 + x2, y1 + y2}]++;
             }
         }
 
@@ -6448,10 +6455,8 @@ public:
         for (auto it = hash.begin(); it != hash.end(); ++it)
         {
 
-            int prev = 0;
             int add = 0;
             int sub = 0;
-            int prev = 0;
             for (auto it2 = it->second.begin(); it2 != it->second.end();
                  ++it2)
             {
@@ -6467,5 +6472,135 @@ public:
         }
 
         return ans;
+    }
+};
+class Solution
+{
+public:
+    int countPartitions(vector<int> &nums)
+    {
+
+        int n = nums.size();
+        vector<int> suf(n, 0);
+        int sum = 0;
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+            suf[i] = sum;
+            sum += nums[i];
+        }
+
+        sum = 0;
+        int ans = 0;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            sum += nums[i];
+            int temp = sum - suf[i];
+            if (!(temp % 2))
+                ans++;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int countCollisions(string directions)
+    {
+        int n = directions.size();
+
+        int ans = 0;
+        int l = 0;
+        int dub = 0;
+        int r = 0;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            char cur1 = directions[i];
+            if (directions[i] == 'L')
+                l++;
+            else if (l > 0)
+            {
+                ans += l;
+                l = 0;
+            }
+
+            char cur2 = directions[n - i - i];
+            if (cur2 == 'R')
+                r++;
+            else if (r > 0)
+            {
+
+                ans += r;
+                r = 0;
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int countTrapezoids(vector<vector<int>> &points)
+    {
+        map<pair<int, int>, unordered_map<int, int>> hash;
+        map<pair<int, int>, unordered_map<int, map<pair<int, int>, int>>> mp;
+
+        int n = points.size();
+        int count = 0;
+
+        for (int i = 0; i < n; ++i)
+        {
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+            for (int j = i + 1; j < n; ++j)
+            {
+                int x2 = points[j][0];
+                int y2 = points[j][1];
+                int A = y2 - y1;
+                int B = x2 - x1;
+                int C = B * y1 - A * x1;
+
+                int g = std::gcd(std::gcd(abs(A), abs(B)), abs(C));
+
+                if (g)
+                    A /= g, B /= g, C /= g;
+
+                if (B < 0 || (B == 0 && A < 0))
+                {
+                    B = -B;
+                    A = -A;
+                    C = -C;
+                }
+                hash[{A, B}][C]++;
+
+                mp[{A, B}][C][{x1 + x2, y1 + y2}]++;
+                if (mp[{A, B}][C][{x1 + x2, y1 + y2}] == 1)
+                    count++;
+            }
+        }
+
+        int ans = 0;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+
+            int add = 0;
+            int sub = 0;
+            for (auto it2 = it->second.begin(); it2 != it->second.end();
+                 ++it2)
+            {
+                sub += it2->second * (it2->second - 1) / 2;
+                add += it2->second;
+            }
+            ans += add * (add - 1) / 2 - sub;
+        }
+        // for (auto it = mp.begin(); it != mp.end(); ++it) {
+        //     int temp = it->second;
+        //     ans -= temp * (temp - 1) / 2;
+        // }
+
+        return ans - count;
     }
 };
