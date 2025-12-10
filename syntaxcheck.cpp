@@ -6604,3 +6604,390 @@ public:
         return ans - count;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> asteroidCollision(vector<int> &asteroids)
+    {
+        vector<int> ans;
+        stack<int> st;
+        int n = asteroids.size();
+        st.push(asteroids[0]);
+
+        for (int i = 1; i < n; ++i)
+        {
+            int cur = asteroids[i];
+            int abs_cur = abs(cur);
+            if (!st.empty())
+            {
+                if (st.top() * cur >= 0)
+                    st.push(cur);
+                continue;
+            }
+            while (!st.empty())
+            {
+                if (st.top() * cur <= 0)
+                {
+
+                    int topper = st.top();
+                    int abs_topper = abs(topper);
+                    if (abs_topper == abs_cur)
+                    {
+                        st.pop();
+                        break;
+                    }
+
+                    else
+                    {
+                        if (abs_cur > abs_topper)
+                        {
+                            st.pop();
+                            if (st.empty())
+                            {
+                                st.push(abs_cur * (abs_cur / cur));
+                                break;
+                            }
+                        }
+                        else
+                        {
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        while (!st.empty())
+        {
+            ans.push_back(st.top());
+            st.pop();
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string toBinary(int x)
+    {
+        if (x == 0)
+            return "0";
+        string s = "";
+        while (x > 0)
+        {
+            s += char('0' + (x % 2));
+            x /= 2;
+        }
+        reverse(s.begin(), s.end());
+        return s;
+    }
+
+    int binaryToDecimal(string s)
+    {
+        int result = 0;
+        for (char c : s)
+        {
+            result = result * 2 + (c - '0');
+        }
+        return result;
+    }
+
+    vector<int> minOperations(vector<int> &nums)
+    {
+
+        int n = nums.size();
+        vector<int> ans(n);
+
+        for (int i = 0; i < n; ++i)
+        {
+            string temp = toBinary(nums[i]);
+            int l = 0, r = temp.size() - 1;
+            while (l <= r)
+            {
+                temp[r] = temp[l];
+                r--;
+                l++;
+            }
+            ans[i] = abs(nums[i] - binaryToDecimal(temp));
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int binaryToDecimal(const string &s)
+    {
+        int result = 0;
+        for (char c : s)
+        {
+            result = result * 2 + (c - '0');
+        }
+        return result;
+    }
+
+    int toBinary(int x)
+    {
+        if (x == 0)
+            return 0;
+        string s;
+        while (x > 0)
+        {
+            s.push_back((x & 1) ? '1' : '0');
+            x >>= 1;
+        }
+        return binaryToDecimal(s);
+    }
+
+    bool comp(int &a, int &b)
+    {
+        int a1 = toBinary(a);
+        int b1 = toBinary(b);
+        if (a1 == b1)
+            return a < b;
+        return a1 < b1;
+    }
+    vector<int> sortByReflection(vector<int> &nums)
+    {
+        sort(nums.begin(), nums.end(), comp);
+        return nums;
+    }
+};
+// ©leetcode
+
+class Solution
+{
+public:
+    // const int MAXN = 500000;
+    vector<bool> prime;
+
+    void precompute()
+    {
+        prime.resize(500000, true);
+        prime[0] = prime[1] = false;
+        for (int i = 2; i * i <= 500000; i++)
+            if (prime[i])
+                for (int j = i * i; j <= 500000; j += i)
+                    prime[j] = false;
+    }
+
+    Solution() { precompute(); }
+
+    int largestPrime(int n)
+    {
+
+        int ans = 0;
+        int limit = prime.size();
+        int sum = 0;
+        int i = -1;
+        while (sum < n && i < limit)
+        {
+            i++;
+            if (!prime[i])
+                continue;
+            sum += i + 2;
+            if (sum > n)
+                break;
+            if (prime[sum])
+                ans = sum;
+        }
+
+        return ans;
+    }
+};
+// ©leetcode
+
+class Solution
+{
+public:
+    long long totalScore(int hp, vector<int> &damage, vector<int> &requirement)
+    {
+        long long ans = 0;
+        int n = damage.size();
+
+        vector<int> pref(n);
+        long long sum = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            pref[i] = sum;
+            sum += damage[i];
+        }
+
+        sum = 0;
+        int l = 0;
+        for (int i = 0; i < n; ++i)
+        {
+
+            sum += damage[i];
+            long long left = hp - sum + pref[l];
+            while (left < requirement[i] && l <= i)
+            {
+                l++;
+                left = hp - sum + pref[l];
+            }
+            ans += i - l + 1;
+        }
+        return ans;
+    }
+};
+
+int solve(vector<int> &A)
+{
+    unordered_map<int, int> hash;
+    int c0 = 0, c1 = 0;
+
+    int n = A.size();
+    int ans = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (A[i] == 0)
+            c0++;
+        else
+            c1++;
+        int s = c1 - c0;
+        if (hash.find(s - 1) != hash.end())
+        {
+            ans = max(ans, i - hash[s - 1]);
+        }
+        if (hash.find(s) == hash.end())
+            hash[s] = i;
+    }
+    return ans;
+}
+
+class Solution
+{
+public:
+    int countTriples(int n)
+    {
+        int ans = 0;
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = i; j <= n; ++j)
+            {
+                if (i * i + j * j <= n * n)
+                    ans += 2;
+            }
+        }
+
+        return ans;
+    }
+};
+
+vector<int> slidingMaximum(const vector<int> &A, int B)
+{
+
+    vector<int> ans;
+    int n = A.size();
+    deque<int> q;
+    for (int i = 0; i < B; ++i)
+    {
+        while (!q.empty() && A[q.back()] < A[i])
+        {
+            q.pop_back();
+        }
+        q.push_back(i);
+    }
+    ans.push_back(A[q.front()]);
+    for (int i = B; i < n; ++i)
+    {
+        while (!q.empty() && A[q.back()] < A[i])
+        {
+            q.pop_back();
+        }
+        while (!q.empty() && q.back() <= i - B)
+            q.pop_back();
+        q.push_back(i);
+        ans.push_back(A[q.front()]);
+    }
+    return ans;
+}
+
+class Solution
+{
+public:
+    int specialTriplets(vector<int> &nums)
+    {
+        int ans = 0;
+        unordered_map<int, int> hash, temp;
+        int n = nums.size();
+        for (int i = 2; i < n; ++i)
+            hash[nums[i]]++;
+        temp[nums[0]]++;
+        int mod = 1e9 + 7;
+        for (int i = 1; i < n; ++i)
+        {
+            temp[nums[i]]++;
+            int right = hash[nums[i] * 2] - temp[nums[i] * 2];
+            int left = temp[nums[i] * 2];
+
+            ans = (ans + left * right) % mod;
+        }
+
+        return ans;
+    }
+};
+
+string lcp(string &a, string &b)
+{
+    int n = a.size();
+    int m = b.size();
+    string ans = "";
+    for (int i = 0; i < min(n, m); ++i)
+    {
+        if (a[i] == b[i])
+            ans += a[i];
+        else
+            return ans;
+    }
+    return "";
+}
+
+string longestCommonPrefix(vector<string> &A)
+{
+
+    int n = A.size();
+    string first = "";
+    if (n >= 1)
+        first = A[0];
+    else
+        return "";
+    for (int i = 1; i < n; ++i)
+    {
+        first = lcp(first, A[i]);
+        if (first == "")
+            return "";
+    }
+
+    return first;
+}
+
+class Solution
+{
+public:
+    int countPermutations(vector<int> &complexity)
+    {
+        int mini = complexity[0];
+        int n = complexity.size();
+
+        for (int i = 1; i < n; ++i)
+        {
+            if (complexity[i] == mini)
+                return 0;
+        }
+        long int ans = 1;
+        int mod = 1e9 + 7;
+        for (int i = n - 1; i >= 1; --i)
+        {
+            ans = (ans * i) % mod;
+        }
+
+        return ans;
+    }
+};
