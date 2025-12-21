@@ -1,6 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 class Solution
 {
 public:
@@ -6112,53 +6122,53 @@ public:
     }
 };
 
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 
-template <typename T>
-class TreeNode
-{
-public:
-    T data;
-    TreeNode<T> *left;
-    TreeNode<T> *right;
+// template <typename T>
+// class TreeNode
+// {
+// public:
+//     T data;
+//     TreeNode<T> *left;
+//     TreeNode<T> *right;
 
-    TreeNode(T data)
-    {
-        this->data = data;
-        left = NULL;
-        right = NULL;
-    }
-};
+//     TreeNode(T data)
+//     {
+//         this->data = data;
+//         left = NULL;
+//         right = NULL;
+//     }
+// };
 
-void dfs(TreeNode<int> *root, int distance, map<int, pair<int, int>> &hash, int depth)
-{
+// void dfs(TreeNode<int> *root, int distance, map<int, pair<int, int>> &hash, int depth)
+// {
 
-    if (root == NULL)
-        return;
-    if (hash.find(distance) == hash.end())
-        hash[distance] = {root->data, depth};
-    else
-    {
-        if (hash[distance].second <= depth)
-            hash[distance] = {root->data, depth};
-    }
-    dfs(root->left, distance - 1, hash, depth + 1);
+//     if (root == NULL)
+//         return;
+//     if (hash.find(distance) == hash.end())
+//         hash[distance] = {root->data, depth};
+//     else
+//     {
+//         if (hash[distance].second <= depth)
+//             hash[distance] = {root->data, depth};
+//     }
+//     dfs(root->left, distance - 1, hash, depth + 1);
 
-    dfs(root->right, distance + 1, hash, depth + 1);
-}
+//     dfs(root->right, distance + 1, hash, depth + 1);
+// }
 
-vector<int> bottomView(TreeNode<int> *root)
-{
-    // Write your code here.
-    map<int, pair<int, int>> hash;
-    vector<int> ans;
-    dfs(root, 0, hash, 0);
+// vector<int> bottomView(TreeNode<int> *root)
+// {
+//     // Write your code here.
+//     map<int, pair<int, int>> hash;
+//     vector<int> ans;
+//     dfs(root, 0, hash, 0);
 
-    for (auto it = hash.begin(); it != hash.end(); ++it)
-        ans.push_back(it->second.first);
+//     for (auto it = hash.begin(); it != hash.end(); ++it)
+//         ans.push_back(it->second.first);
 
-    return ans;
-}
+//     return ans;
+// }
 
 class Solution
 {
@@ -6987,6 +6997,288 @@ public:
         {
             ans = (ans * i) % mod;
         }
+
+        return ans;
+    }
+};
+
+int solve(vector<int> &A, int B)
+{
+
+    int n = A.size();
+    if (n == 1)
+        return n;
+
+    sort(A.begin(), A.end());
+
+    int a = A[0];
+
+    for (int i = 1; i < n; ++i)
+    {
+        if (A[i] - a != 0 && A[i] - a != B && A[i] - a != 2 * B)
+            return 0;
+    }
+    return 1;
+}
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+        int n;
+        cin >> n;
+        vector<int> ans;
+        unordered_map<string, int> hash;
+        string a;
+        int c;
+        for (int i = 0; i < 3 * n; ++i)
+        {
+            cin >> a >> c;
+            hash[a] += c;
+        }
+
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+            ans.push_back(it->second);
+
+        sort(ans.begin(), ans.end());
+        for (int i = 0; i < hash.size(); ++i)
+            cout << ans[i] << '\n';
+    }
+    return 0;
+}
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+
+        unordered_map<int, int> hash;
+        int n;
+        cin >> n;
+        int cnt = 0, a = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            cin >> a;
+            hash[a]++;
+        }
+
+        int ans = n;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            int change = n - it->second;
+            ans = min(ans, change * it->first);
+        }
+
+        cout << ans << '\n';
+    }
+    return 0;
+}
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int tt;
+    cin >> tt;
+    while (tt--)
+    {
+
+        int n;
+        cin >> n;
+        int a;
+        unordered_map<int, int> hash;
+        for (int i = 0; i < 2 * n; ++i)
+        {
+            cin >> a;
+            hash[a]++;
+        }
+        bool pos = true;
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            if (it->second == 1)
+            {
+                pos = false;
+                break;
+            }
+        }
+        if (pos)
+            cout << "YES";
+        else
+            cout << "NO";
+        cout << '\n';
+    }
+    return 0;
+}
+
+// class Solution
+// {
+// public:
+//     int ans = 0;
+//     int dfs(map<TreeNode*t,int>& hash, TreeNode *n)
+//     {
+
+//         if (n == NULL)
+//             return 0;
+
+//         if (hash.find(n) != hash.end())
+//             return hash.end();
+//         int a = 0, b = 0;
+//         a = max(a, dfs(hash, n->left));
+//         b = max(a, dfs(hash, n->right));
+//         int value = n->val;
+//         ans = max(ans, val + a + b);
+//         return hash[n] = max(value, value + max(a, b));
+//     }
+
+//     int maxPathSum(TreeNode *root)
+//     {
+//         map<TreeNode *, int> hash;
+//         ans = max(ans, dfs(hash, root));
+//         return ans;
+//     }
+// };
+
+class Solution
+{
+public:
+    int countCoveredBuildings(int n, vector<vector<int>> &buildings)
+    {
+        unordered_map<string, int> mini, maxi;
+        int n = buildings.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int x = buildings[i][0];
+            string xx = "x" + to_string(x);
+            int y = buildings[i][1];
+            string yy = "y" + to_string(y);
+            if (maxi.find(xx) != maxi.end())
+                maxi[xx] = max(maxi[xx], y);
+            else
+                maxi[xx] = y;
+            if (mini.find(xx) != mini.end())
+                mini[xx] = min(mini[xx], y);
+            else
+                mini[xx] = y;
+            if (maxi.find(yy) != maxi.end())
+                maxi[yy] = max(maxi[yy], x);
+            else
+                maxi[yy] = x;
+            if (mini.find(yy) != mini.end())
+                mini[yy] = min(mini[yy], x);
+            else
+                mini[yy] = x;
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int x = buildings[i][0];
+            string xx = "x" + to_string(x);
+            int y = buildings[i][1];
+            string yy = "y" + to_string(y);
+            int llx = mini[xx];
+            int ulx = maxi[xx];
+            int lly = mini[yy];
+            int uly = maxi[yy];
+            if (y < ulx && y > llx && x < uly && x > lly)
+                ans++;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool cmp(vector<string> &v1, vector<string> &v2)
+    {
+
+        if (v1[1] == v2[1])
+            return v1[0] > v2[0];
+
+        return v1[1] < v2[1];
+    }
+    vector<int> countMentions(int numberOfUsers, vector<vector<string>> &events)
+    {
+        vector<int> ans(numberOfUsers, 0);
+        int n = events.size();
+        sort(events.begin(), events.end(), cmp);
+        deque<pair<int, int>> dq;
+
+        int cnt = 0;
+
+        for (auto &v : events)
+        {
+
+            string &event = v[0];
+            int ts = stoi(v[1]);
+            string &mention = v[2];
+            while (!dq.empty() && dq.front().first <= ts)
+                dq.pop_front();
+            if (event == "OFFLINE")
+            {
+
+                dq.push_back({ts + 60, stoi(mention)});
+            }
+            else
+            {
+                if (mention == "ALL")
+                {
+                    cnt++;
+                }
+                else if (mention == "HERE")
+                {
+                    cnt++;
+                    for (auto [ts, id] : dq)
+                    {
+                        ans[id]--;
+                    }
+                }
+                else
+                {
+                    string temp = "";
+                    for (char c : mention)
+                    {
+                        if (c <= '9' && c >= '0')
+                            temp += c;
+                        else
+                        {
+                            if (temp.size())
+                            {
+                                ans[stoi(temp)]++;
+                                temp = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < ans.size(); ++i)
+            ans[i] += cnt;
 
         return ans;
     }
