@@ -7283,3 +7283,29 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int minDeletionSize(vector<string> &strs)
+    {
+        int n = strs.size();
+        int m = strs[0].size();
+        vector<int> dp(m, 0);
+        int maxi = 0;
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = i + 1; j < m; ++j)
+            {
+                for (int k = 0; k < n; ++k)
+                {
+                    if (strs[k][j] >= strs[k][i])
+                        dp[j] = max(dp[j], dp[i] + 1);
+                    maxi = max(maxi, dp[j]);
+                }
+            }
+        }
+
+        return maxi;
+    }
+};
