@@ -7291,21 +7291,24 @@ public:
     {
         int n = strs.size();
         int m = strs[0].size();
-        vector<int> dp(m, 0);
+        vector<int> dp(m, 1);
         int maxi = 0;
         for (int i = 0; i < m; ++i)
         {
             for (int j = i + 1; j < m; ++j)
             {
+                int cnt = 0;
                 for (int k = 0; k < n; ++k)
                 {
                     if (strs[k][j] >= strs[k][i])
-                        dp[j] = max(dp[j], dp[i] + 1);
-                    maxi = max(maxi, dp[j]);
+                        cnt++;
                 }
+                if (cnt == n)
+                    dp[j] = max(dp[j], dp[i] + 1);
+                maxi = max(maxi, dp[j]);
             }
         }
 
-        return maxi;
+        return m - maxi;
     }
 };
