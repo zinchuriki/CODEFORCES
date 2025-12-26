@@ -7312,3 +7312,37 @@ public:
         return m - maxi;
     }
 };
+
+class Solution
+{
+public:
+    int bestClosingTime(string customers)
+    {
+        int pen = 0;
+        int no_customers = 0;
+        int n = customers.size();
+        vector<int> vec(n, 0);
+        int x = 0;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            if (customers[i] == 'Y')
+                x++;
+            vec[i] = x;
+        }
+        x = 0;
+        int ans = 0;
+        int current = INT_MAX;
+        for (int i = 0; i < n; ++i)
+        {
+            if (current > vec[i] + x)
+            {
+                ans = i;
+                current = vec[i] + x;
+            }
+            if (customers[i] == 'N')
+                x++;
+        }
+
+        return ans;
+    }
+};
