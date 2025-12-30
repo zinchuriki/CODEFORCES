@@ -7346,3 +7346,61 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int mostBooked(int n, vector<vector<int>> &meetings)
+    {
+        sort(meetings.begin(), meetings.end());
+        priority_queue<long int, vector<long int>, greater<long int>> pq1;
+        priority_queue<pair<long int, int>, vector<pair<long int, int>>,
+                       greater<pair<long int, int>>>
+            pq2;
+
+        int m = meetings.size();
+        vector<int> vis(n, 0);
+        for (int i = 0; i < n; ++i)
+        {
+            pq1.push(i);
+        }
+
+        for (int i = 0; i < m; ++i)
+        {
+
+            long int next_start = meetings[i][0];
+            long int next_end = meetings[i][1];
+            long int duration = next_end - next_start;
+            while (!pq2.empty() && next_start >= pq2.top().first)
+            {
+                pq1.push(pq2.top().second);
+                pq2.pop();
+            }
+            if (!pq1.empty())
+            {
+                pq2.push({next_end, pq1.top()});
+                vis[pq1.top()]++;
+                pq1.pop();
+            }
+            else
+            {
+                int latest_end = pq2.top().first;
+                int latest_room = pq2.top().second;
+                pq2.pop();
+                pq2.push({(long int)latest_end + (long int)duration, latest_room});
+                vis[latest_room]++;
+            }
+        }
+        int maxi = 0;
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (vis[i] > maxi)
+            {
+                ans = i;
+                maxi = vis[i];
+            }
+        }
+        return ans;
+    }
+};
