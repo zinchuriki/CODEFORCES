@@ -7404,3 +7404,67 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    bool check(vector<vector<int>> &grid, int row, int col)
+    {
+        int n = grid.size(), m = grid[0].size();
+        for (int i = row; i < row + 3; ++i)
+        {
+            int temp = 0;
+            for (int j = col; j < col + 3; ++j)
+            {
+                temp += grid[i][j];
+            }
+            if (temp != 15)
+                return false;
+        }
+
+        for (int j = col; j < col + 3; ++j)
+        {
+            int temp = 0;
+            for (int i = row; i < row + 3; ++i)
+            {
+                temp += grid[i][j];
+            }
+            if (temp != 15)
+                return false;
+        }
+        int temp = 0;
+        int temp2 = 0;
+        for (int a = 0; a < 3; ++a)
+        {
+            temp += grid[row + a][col + a];
+            temp2 += grid[row + 2 - a][col + a];
+        }
+        if (temp != 15 || temp2 != 15)
+            return false;
+
+        return true;
+    }
+
+    int numMagicSquaresInside(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        if (n < 3 || m < 3)
+            return 0;
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (n - i < 2)
+                break;
+            for (int j = 0; j < m; ++j)
+            {
+                if (m - j < 2)
+                    break;
+                if (check(grid, i, j))
+                    ans++;
+            }
+        }
+        return ans;
+    }
+};
