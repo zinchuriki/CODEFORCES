@@ -7468,3 +7468,72 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    bool check(vector<vector<int>> &cells, int idx, int row, int col)
+    {
+
+        vector<vector<int>> temp(row + 1, vector<int>(col + 1, 0));
+
+        for (int i = 0; i < idx; ++i)
+        {
+            int rows = cells[i][0];
+            int cols = cells[i][1];
+            temp[row][col] = 1;
+        }
+
+        priority_queue<pair<int, int>> pq;
+        for (int i = 0; i < col; ++i)
+        {
+            if (temp[0][i] == 0)
+                pq.push({0, i});
+        }
+
+        vector<int> v = {1, 0, 0};
+        vector<int> v1 = {0, 1, -1};
+        vector<vector<bool>> vis(row + 1, vector<bool>(col + 1, 0));
+        while (!pq.empty())
+        {
+            auto [rows, cols] = pq.top();
+            pq.pop();
+            if (vis[rows][cols])
+                continue;
+            vis[rows][cols] = true;
+            if (rows == row)
+                return true;
+            for (int i = 0; i < 3; ++i)
+            {
+                int new_r = rows + v[i];
+                int new_c = cols + v1[i];
+                if (new_r < row && new_c < col && temp[new_r][new_c] == 0 && vis[new_r][new_c] == false)
+                {
+                    pq.push({new_r, new_c});
+                }
+            }
+        }
+
+        return false;
+    }
+
+    int latestDayToCross(int row, int col, vector<vector<int>> &cells)
+    {
+
+        int sz = cells.size();
+
+        int l = 0, r = sz;
+        int ans = 0;
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+            if (check(cells, mid, row, col))
+            {
+                ans = mid;
+                l = mid + 1;
+            }
+            else
+                r = mid - 1;
+        }
+    }
+};
