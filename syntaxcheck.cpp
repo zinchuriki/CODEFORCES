@@ -7556,3 +7556,33 @@ public:
         return 0;
     }
 };
+
+class Solution
+{
+public:
+    int maxTwoEvents(vector<vector<int>> &events)
+    {
+
+        auto cmp = [](const vector<int> &a, const vector<int> &b)
+        {
+            return a[2] < b[2];
+        };
+        priority_queue<vector<int>, vector<vector<int>>, decltype(cmp)> pq(cmp);
+        sort(events.begin(), events.end(), [](const vector<int> &a, const vector<int> &b)
+             { return a[1] < b[1]; });
+        int n = events.size();
+        for (int i = 0; i < n; ++i)
+            pq.push(events[i]);
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            while (!pq.empty() && pq.top()[0] <= events[i][1])
+                pq.pop();
+            if (!pq.empty())
+            {
+                ans = max(ans, events[i][2] + pq.top()[2]);
+            }
+        }
+        return ans;
+    }
+};
