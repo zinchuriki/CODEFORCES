@@ -7586,3 +7586,21 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int numOfWays(int n)
+    {
+        int t1 = 6, t2 = 6;
+        for (int i = 1; i < n; ++i)
+        {
+            int newt1 = t1 * 2 + t2 * 2;
+            int newt2 = t1 * 2 + t2 * 3;
+            t1 = newt1;
+            t2 = newt2;
+        }
+
+        return t1 + t2;
+    }
+};
