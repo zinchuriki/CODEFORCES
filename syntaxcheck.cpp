@@ -7604,3 +7604,71 @@ public:
         return t1 + t2;
     }
 };
+
+class Solution
+{
+public:
+    vector<bool> isPrime;
+    const int N = 1e5;
+    unordered_map<int, int> hash;
+    vector<int> temp;
+    void prime()
+    {
+        isPrime[0] = isPrime[1] = false;
+
+        for (int i = 2; i * i <= N; i++)
+        {
+            if (isPrime[i])
+            {
+                for (int j = i * i; j <= N; j += i)
+                {
+                    isPrime[j] = false;
+                }
+            }
+        }
+    }
+
+    void cal()
+    {
+        for (int i = 2; i <= 50000; ++i)
+        {
+            if (isPrime[i])
+                temp.push_back(i);
+        }
+
+        int sz = temp.size();
+        for (int i = 0; i < sz; ++i)
+        {
+            int first = temp[i];
+            for (int j = i + 1; j < sz; ++j)
+            {
+                int second = temp[j];
+                int temp2 = first * second;
+                if (temp2 > 100000)
+                    break;
+                hash[temp2] = 1 + temp2 + first + second;
+            }
+        }
+    }
+
+    Solution()
+    {
+        isPrime.resize(100000, true);
+        prime();
+
+        cal();
+    }
+
+    int sumFourDivisors(vector<int> &nums)
+    {
+        int ans = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (hash.find(nums[i]) != hash.end())
+                ans += hash[nums[i]];
+        }
+
+        return ans;
+    }
+};
