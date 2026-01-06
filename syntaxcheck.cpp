@@ -7700,3 +7700,44 @@ public:
             return ans - abs(mini);
     }
 };
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    void traverse(int level, TreeNode *root, vector<int> &vec)
+    {
+        if (root == NULL)
+            return;
+        vec[level] += root->val;
+        traverse(level + 1, root->left, vec);
+        traverse(level + 1, root->right, vec);
+    }
+
+    int maxLevelSum(TreeNode *root)
+    {
+        vector<int> vec(10000, 0);
+        int ans = 1;
+        int maxi = INT_MIN;
+
+        for (int i = 0; i < 10000; ++i)
+        {
+            if (vec[i] > maxi)
+            {
+                ans = i + 1;
+                maxi = vec[i];
+            }
+        }
+        return ans;
+    }
+};
