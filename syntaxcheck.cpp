@@ -7767,3 +7767,124 @@ vector<int> primesum(int A)
 
     return {};
 }
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    int MOD;
+    void sum(TreeNode *root, long int &total_sum1)
+    {
+        if (root == NULL)
+            return;
+        sum(root->left, total_sum1);
+        total_sum1 += root->val;
+        sum(root->right, total_sum1);
+    }
+
+    long int traverse(TreeNode *root, long int &maxi, long int &total_sum1)
+    {
+        if (root == NULL)
+            return;
+        long int left = traverse(root->left, maxi, total_sum1);
+        long int right = traverse(root->right, maxi, total_sum1);
+        long int total_sum2 = root->val + left + right;
+        long int s1 = total_sum2;
+        long int s2 = total_sum1 - total_sum2;
+        maxi = max(maxi, (s2 * s1) % MOD);
+        return total_sum2;
+    }
+    int maxProduct(TreeNode *root)
+    {
+
+        long int maxi = INT_MIN;
+        long int total_sum1 = 0, total_sum2 = 0;
+        MOD = 1e9 + 7;
+        sum(root, total_sum1);
+        traverse(root, maxi, total_sum1);
+
+        return maxi % MOD;
+    }
+};
+
+class Solution
+{
+public:
+    int maxDotProduct(vector<int> &nums1, vector<int> &nums2)
+    {
+        int n = nums1.size();
+        int m = nums2.size();
+        int ans = nums1[n - 1] * nums2[m - 1];
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+
+        for (int j = m - 1; j >= 0; --j)
+        {
+            dp[n - 1][j] = nums1[n - 1] * nums2[j];
+            ans = max(ans, dp[n - 1][j]);
+        }
+        for (int i = n - 2; i >= 0; --i)
+        {
+            for (int j = m - 1; j >= 0; --j)
+            {
+                dp[i][j] = nums1[i] * nums2[j];
+
+                dp[i][j] = max(dp[i][j], dp[i][j] + dp[i + 1][j + 1]);
+                ans = max(ans, dp[i][j]);
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int countSubarrays(vector<int> &arr, int k)
+    {
+        // code here
+        vector<int> temp;
+        int n = arr.size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (arr[i] % 2)
+                temp.push_back(arr[i]);
+        }
+        int m = temp.size();
+        int l = 0, r = k - 1;
+        int ans = 0;
+        int prev = 0;
+        int next = 0;
+        if (k < m)
+            next = temp[k];
+        else
+            next = n - 1;
+        while (l < m && r < m)
+        {
+
+            int right = temp[r];
+            int left = temp[l];
+            ans += left - prev;
+            ans += next - right;
+            ans++;
+            prev = temp[l];
+            l++;
+            r++;
+            if (r < m)
+                next = temp[r];
+            else
+                next = n - 1;
+        }
+        return ans;
+    }
+};
