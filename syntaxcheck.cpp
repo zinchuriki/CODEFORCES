@@ -7853,38 +7853,88 @@ public:
     int countSubarrays(vector<int> &arr, int k)
     {
         // code here
-        vector<int> temp;
         int n = arr.size();
-        for (int i = 0; i < n; ++i)
-        {
-            if (arr[i] % 2)
-                temp.push_back(arr[i]);
-        }
-        int m = temp.size();
-        int l = 0, r = k - 1;
-        int ans = 0;
-        int prev = 0;
-        int next = 0;
-        if (k < m)
-            next = temp[k];
-        else
-            next = n - 1;
-        while (l < m && r < m)
-        {
 
-            int right = temp[r];
-            int left = temp[l];
-            ans += left - prev;
-            ans += next - right;
-            ans++;
-            prev = temp[l];
+        int l = 0, r = 0, ans = 0;
+        int count = 0;
+        while (l < n && r < n)
+
+        {
+            if (arr[r] % 2)
+                count++;
+
+            if (count == k)
+                ans++;
+            while (count > k)
+                if (arr[l] % 2)
+                    count--;
             l++;
-            r++;
-            if (r < m)
-                next = temp[r];
-            else
-                next = n - 1;
+            ans++;
         }
         return ans;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    int maxi;
+    void traverse(TreeNode *root, int ht)
+    {
+        if (root == NULL)
+            return;
+
+        maxi = max(maxi, ht);
+        traverse(root->left, ht + 1);
+        traverse(root->right, ht + 1);
+    }
+
+    void travel(TreeNode *root, unordered_map<TreeNode *, bool> &hash, int ht)
+    {
+
+        if (ht == maxi)
+            hash[root] = true;
+        if (root == NULL)
+            return;
+        travel(root->left, hash, ht + 1);
+        travel(root->right, hash, ht + 1);
+    }
+
+    TreeNode *ans(TreeNode *root, unordered_map<TreeNode *, bool> &hash)
+    {
+
+        if (root == NULL)
+            return NULL;
+        if (hash.find(root) != hash.end())
+            return root;
+        TreeNode *left = ans(root->left, hash);
+        TreeNode *right = ans(root->right, hash);
+
+        if (left == NULL)
+            return right;
+        if (right == NULL)
+            return left;
+        if (left != NULL && right != NULL)
+            return root;
+    }
+
+    TreeNode *subtreeWithAllDeepest(TreeNode *root)
+    {
+        maxi = 0;
+        unordered_map<TreeNode *, bool> hash;
+        traverse(root, 1);
+        travel(root, hash, 1);
+        return ans(root, hash);
     }
 };
