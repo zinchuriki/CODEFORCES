@@ -7998,3 +7998,60 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int largestRectangleArea(vector<int> &heights)
+    {
+        int n = heights.size();
+        vector<int> temp(n, -1);
+        stack<int> st, st2;
+        for (int i = 0; i < n; ++i)
+        {
+
+            while (!st.empty() && heights[st.top()] >= heights[i])
+                st.pop();
+            if (!st.empty())
+                temp[i] = st.top();
+            st.push(i);
+        }
+        int ans = heights[0];
+        for (int i = n - 1; i >= 0; --i)
+        {
+            while (!st2.empty() && heights[i] < heights[st2.top()])
+                st2.pop();
+            if (!st2.empty())
+            {
+                ans = max(ans, (st2.top() - temp[i] - 1) * heights[i]);
+            }
+            else
+                ans = max(ans, (n - temp[i] - 1) * heights[i]);
+            st2.push(i);
+        }
+        return ans;
+    }
+
+    int maximalRectangle(vector<vector<char>> &matrix)
+    {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<int> temp(m, 0);
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                int mat = matrix[i][j]-'0';
+                if (mat == 0)
+                    temp[j] = 0;
+                else
+                    temp[j]++;
+            }
+            ans = max(ans, largestRectangleArea(temp));
+        }
+
+        return ans;
+    }
+};
