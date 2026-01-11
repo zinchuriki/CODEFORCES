@@ -7938,3 +7938,63 @@ public:
         return ans(root, hash);
     }
 };
+
+class Solution
+{
+public:
+    int lcs(vector<vector<int>> &dp, string &s1, string &s2, int i, int j)
+    {
+
+        if (i < 0 || j < 0)
+            return 0;
+        if (dp[i][j] != -1)
+            return dp[i][j];
+        if (s1[i] == s2[j])
+            return dp[i][j] = 1 + lcs(dp, s1, s2, i - 1, j - 1);
+
+        return dp[i][j] = min(int(s1[i]) + lcs(dp, s1, s2, i - 1, j), int(s2[i]) + lcs(dp, s1, s2, i, j - 1));
+    }
+
+    int minimumDeleteSum(string s1, string s2)
+    {
+        int n = s1.size();
+        int m = s2.size();
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+        lcs(dp, s1, s2, n - 1, m - 1);
+        return dp[n - 1][m - 1];
+    }
+};
+
+class Solution
+{
+public:
+    int largestRectangleArea(vector<int> &heights)
+    {
+        int n = heights.size();
+        vector<int> temp(n, -1);
+        stack<int> st, st2;
+        for (int i = 0; i < n; ++i)
+        {
+
+            while (!st.empty() && heights[st.top()] >= heights[i])
+                st.pop();
+            if (!st.empty())
+                temp[i] = st.top();
+            st.push(i);
+        }
+        int ans = heights[0];
+        for (int i = n - 1; i >= 0; --i)
+        {
+            while (!st2.empty() && heights[i] < heights[st2.top()])
+                st2.pop();
+            if (!st2.empty())
+            {
+                ans = max(ans, (st2.top() - temp[i] - 1) * heights[i]);
+            }
+            else
+                ans = max(ans, (n - temp[i] - 1) * heights[i]);
+            st2.push(i);
+        }
+        return ans;
+    }
+};
