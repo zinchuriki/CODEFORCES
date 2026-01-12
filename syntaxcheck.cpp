@@ -8043,7 +8043,7 @@ public:
         {
             for (int j = 0; j < m; ++j)
             {
-                int mat = matrix[i][j]-'0';
+                int mat = matrix[i][j] - '0';
                 if (mat == 0)
                     temp[j] = 0;
                 else
@@ -8053,5 +8053,76 @@ public:
         }
 
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string minWindow(string s, string t)
+    {
+        int n = s.size();
+        int m = t.size();
+        if (m > n)
+            return "";
+
+        unordered_map<char, int> hash1, hash2;
+        unordered_map<char, bool> hash, hash3;
+        for (char c : t)
+        {
+            hash1[c]++;
+            hash[c] = true;
+        }
+
+        int l = 0, r = 0;
+        int ansl = 0, ansr = INT_MAX, ans = 0;
+        while (l < n && r < n)
+        {
+            if (hash == hash3)
+            {
+                if (r - l < ansr - ansl)
+                {
+                    ansr = r;
+                    ansl = l;
+                }
+                if (hash1.count(s[l]))
+                { // Only process if char is in T
+                    hash2[s[l]]--;
+                    if (hash2[s[l]] < hash1[s[l]])
+                        hash3[s[l]] = false;
+                }
+                l++;
+            }
+            else
+            {
+                if (hash1.find(s[r]) != hash1.end())
+                {
+                    hash2[s[r]]++;
+                    if (hash2[s[r]] >= hash1[s[r]])
+                        hash3[s[r]] = true;
+                }
+                r++;
+            }
+        }
+
+        while (hash == hash3)
+        {
+            if (r - l < ansr - ansl)
+            {
+                ansr = r;
+                ansl = l;
+            }
+            if (hash1.count(s[l]))
+            { // Only process if char is in T
+                hash2[s[l]]--;
+                if (hash2[s[l]] < hash1[s[l]])
+                    hash3[s[l]] = false;
+            }
+            l++;
+        }
+
+        if (ansr == INT_MAX)
+            return "";
+        return s.substr(ansl, ansr - ansl);
     }
 };
