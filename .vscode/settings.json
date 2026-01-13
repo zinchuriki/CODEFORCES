@@ -97,10 +97,12 @@
     },
     "makefile.compileCommandsPath": ".vscode/compile_commands.json",
     "cSpell.words": [
+      "ansl",
       "desti",
       "dista",
       "lmax",
       "nomid",
+      "primesum",
       "rmax"
     ]
   }

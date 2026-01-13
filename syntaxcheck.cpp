@@ -8126,3 +8126,55 @@ public:
         return s.substr(ansl, ansr - ansl);
     }
 };
+
+class Solution
+{
+public:
+    double t_area;
+    bool pos(vector<vector<int>> &squares, double y)
+    {
+
+        double temp = 0;
+        int n = squares.size();
+        for (int i = 0; i < n; ++i)
+        {
+            double nx = squares[i][0];
+            int ny = squares[i][1];
+            double l = squares[i][2];
+
+            if (ny >= y)
+                continue;
+
+            temp += l * min((double)l, y - ny);
+            if (temp == t_area)
+                return true;
+        }
+        return false;
+    }
+    double separateSquares(vector<vector<int>> &squares)
+    {
+        int n = squares.size();
+
+        for (int i = 0; i < n; ++i)
+            t_area += squares[i][2] * squares[i][2];
+
+        t_area /= (double)2;
+
+        double l = 0, r = 1e9;
+        double div = 2;
+        double ans = 0;
+        while (abs(r - l) > 0.00001)
+        {
+
+            double mid = l / div + (r - l) / div;
+            if (pos(squares, mid))
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+            else
+                l = mid + 1;
+        }
+        return ans;
+    }
+};
