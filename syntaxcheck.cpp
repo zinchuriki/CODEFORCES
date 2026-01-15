@@ -8178,3 +8178,42 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int maximizeSquareHoleArea(int n, int m, vector<int> &hBars, vector<int> &vBars)
+    {
+        sort(hBars.begin(), hBars.end());
+        sort(vBars.begin(), vBars.end());
+        int temp = 1;
+        int h = 1, v = 1;
+        int sz1 = hBars.size();
+        int sz2 = vBars.size();
+        for (int i = 1; i < sz1; ++i)
+        {
+            if (hBars[i] - hBars[i - 1] == 1)
+            {
+                temp++;
+                h = max(temp, h);
+            }
+            else
+                temp = 1;
+        }
+        temp = 1;
+        for (int i = 1; i < sz2; ++i)
+        {
+            if (vBars[i] - vBars[i - 1] == 1)
+            {
+                temp++;
+                v = max(temp, v);
+            }
+            else
+                temp = 1;
+        }
+
+        int ans = min(h, v);
+        ans += 2;
+        return ans * ans;
+    }
+};
