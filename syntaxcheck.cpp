@@ -8257,3 +8257,40 @@ public:
         return ans * ans;
     }
 };
+
+class Solution
+{
+public:
+    long long largestSquareArea(vector<vector<int>> &bottomLeft,
+                                vector<vector<int>> &topRight)
+    {
+        long long ans = 0;
+        int n = bottomLeft.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            int fx1 = bottomLeft[i][0];
+            int fy1 = bottomLeft[i][1];
+            int fx2 = topRight[i][0];
+            int fy2 = topRight[i][1];
+
+            for (int j = i + 1; j < n; ++j)
+            {
+
+                int sx1 = bottomLeft[j][0];
+                int sy1 = bottomLeft[j][1];
+                int sx2 = topRight[j][0];
+                int sy2 = topRight[j][1];
+                int a = min(fx2, sx2) - max(fx1, sx1);
+                int b = min(fy2, sy2) - max(fy1, sy1);
+                if (a <= 0 || b <= 0)
+                    continue;
+
+                long long temp = min(a, b);
+                ans = max(ans, temp * temp);
+            }
+        }
+
+        return ans;
+    }
+};
