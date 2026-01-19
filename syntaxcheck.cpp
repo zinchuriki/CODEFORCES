@@ -8287,7 +8287,7 @@ public:
                     continue;
 
                 long long temp = min(a, b);
-                ans = max(ans, temp * temp);
+                ans = max(ans, temp * temp)
             }
         }
 
