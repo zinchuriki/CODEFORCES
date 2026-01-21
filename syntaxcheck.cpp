@@ -8287,10 +8287,96 @@ public:
                     continue;
 
                 long long temp = min(a, b);
-                ans = max(ans, temp * temp)
+                ans = max(ans, temp * temp);
             }
         }
 
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int n, m;
+
+    bool pos(vector<vector<int>> temp, int threshold, int mid)
+    {
+
+        for (int i = 0; i <= n - mid; ++i)
+        {
+            for (int j = mid; j < m; ++j)
+            {
+                int t = 0;
+                for (int k = 0; k < mid; ++k)
+                {
+                    t += temp[i + k][j];
+                    int tt = j - mid + 1;
+                    if (tt >= 0)
+                    {
+                        t -= temp[i + k][tt];
+                    }
+                }
+                if (t <= threshold)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    int maxSideLength(vector<vector<int>> &mat, int threshold)
+    {
+        n = mat.size();
+        m = mat[0].size();
+        vector<vector<int>> temp(n, vector<int>(m, 0));
+        for (int i = 0; i < n; ++i)
+        {
+            int t = 0;
+            for (int j = 0; j < m; ++j)
+            {
+                t += mat[i][j];
+                temp[i][j] = t;
+            }
+        }
+
+        int l = 0;
+        int r = min(n, m);
+        int ans = 0;
+        while (l < r)
+        {
+            int mid = l + (r - l) / 2;
+            if (pos(temp, threshold, mid))
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+            else
+                l = mid + 1;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> minBitwiseArray(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> ans(n, -1);
+
+        for (int i = 0; i < n; ++i)
+        {
+            int a = nums[i];
+            for (int i = 1; i < a; ++i)
+            {
+                if (i | (i + 1) == a)
+                {
+                    ans[i] = i;
+                    break;
+                }
+            }
+        }
         return ans;
     }
 };
