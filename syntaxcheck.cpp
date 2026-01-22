@@ -8380,3 +8380,32 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int anss(int a)
+    {
+        int count = 0;
+        int temp = a;
+        while (temp > 0)
+        {
+            if (temp % 2 == 0)
+                return a - pow(2, count);
+            count++;
+            temp /= 2;
+        }
+        return a - pow(2, count - 1);
+    }
+    vector<int> minBitwiseArray(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        for (int i = 0; i < n; ++i)
+        {
+            if (nums[i] & 1)
+                ans[i] = anss(nums[i]);
+        }
+        return ans;
+    }
+};
