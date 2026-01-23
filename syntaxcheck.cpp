@@ -8409,3 +8409,49 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    bool check(vector<int> &nums)
+    {
+        int n = nums.size();
+        for (int i = 1; i < n; ++i)
+        {
+            if (nums[i] < nums[i - 1])
+                return false;
+        }
+        return true;
+    }
+    int minimumPairRemoval(vector<int> &nums)
+    {
+
+        int count = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (!check(nums))
+            {
+                int sum = INT_MAX;
+                int idx = 0;
+                int temp = nums[0];
+                for (int i = 1; i < n; ++i)
+                {
+                    temp += nums[i];
+                    if (temp < sum)
+                    {
+                        sum = temp;
+                        idx = i - 1;
+                    }
+                }
+
+                nums.erase(nums.begin() + idx);
+                nums.erase(nums.begin() + idx);
+                nums.insert(nums.begin() + idx, sum);
+            }
+            else
+                return count;
+        }
+        return -1;
+    }
+};
