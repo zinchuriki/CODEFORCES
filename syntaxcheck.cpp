@@ -8453,5 +8453,27 @@ public:
                 return count;
         }
         return -1;
-    
+    }
+};
+
+class Solution
+{
+public:
+    int minimumDifference(vector<int> &nums, int k)
+    {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        int ans = INT_MAX;
+        int mini = INT_MAX, maxi = INT_MIN;
+        for (int i = 0; i < n - k; ++i)
+        {
+            for (int j = i; j < i + k; ++j)
+            {
+                mini = min(mini, nums[j]);
+                maxi = max(maxi, nums[j]);
+            }
+            ans = min(ans, maxi - mini);
+        }
+        return ans;
+    }
 };
