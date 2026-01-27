@@ -8477,3 +8477,44 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int minCost(int n, vector<vector<int>> &edges)
+    {
+        vector<int> dist(n, INT_MAX);
+
+        int sz = edges.size();
+        priority_queue<pair<int, int>, vector<pair<int, int>>,
+                       greater<pair<int, int>>>
+            pq;
+        vector<vector<pair<int, int>>> adj(n);
+        for (int i = 0; i < sz; ++i)
+        {
+            int one = edges[i][0];
+            int second = edges[i][1];
+            int wt = edges[i][2];
+            adj[one].push_back({wt, second});
+            adj[second].push_back({2 * wt, one});
+        }
+        pq.push({0, 0});
+        while (!pq.empty())
+        {
+            auto [weight, cur] = pq.top();
+            pq.pop();
+            if (cur == n - 1)
+                return weight;
+            int siz = adj[cur].size();
+            for (int i = 0; i < siz; ++i)
+            {
+                auto [weight1, next] = adj[cur][i];
+                if (weight1 + weight > dist[next])
+                    continue;
+                dist[next] = weight1 + weight;
+                pq.push({dist[next], next});
+            }
+        }
+        return -1;
+    }
+};
