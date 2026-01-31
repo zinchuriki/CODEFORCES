@@ -8515,6 +8515,6 @@ public:
                 pq.push({dist[next], next});
             }
         }
-        return -1;
+        return -1
     }
 };
