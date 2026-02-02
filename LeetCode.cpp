@@ -8543,3 +8543,91 @@ public:
         return first + mn1 + mn2;
     }
 };
+
+class Solution
+{
+public:
+    long long minimumCost(vector<int> &nums, int k, int dist)
+    {
+        long long ans = LLONG_MAX;
+        int n = nums.size();
+        int l = 1, r = 2 + dist;
+        long long sum = nums[0];
+
+        multiset<int> asc;
+        multiset<int, greater<int>> desc;
+        for (int i = 1; i < min(2 + dist, n); ++i)
+        {
+            int rr = nums[i];
+            asc.insert(rr);
+            while (!desc.empty() && !asc.empty() && *desc.begin() > *asc.begin())
+            {
+                auto it1 = desc.begin();
+                auto it2 = asc.begin();
+                int swap1 = *it1;
+                int swap2 = *it2;
+                desc.erase(it1);
+                asc.erase(it2);
+                sum -= swap1;
+                sum += swap2;
+
+                asc.insert(swap1);
+                desc.insert(swap2);
+            }
+            if (desc.size() < k - 1)
+            {
+                desc.insert(*asc.begin());
+                sum += *asc.begin();
+                asc.erase(asc.begin());
+            }
+        }
+        ans = min(ans, sum);
+        while (l < n && r < n)
+        {
+
+            int ll = nums[l];
+            int rr = nums[r];
+            auto it3 = desc.find(ll);
+            if (it3 != desc.end())
+            {
+                desc.erase(it3);
+                sum -= ll;
+            }
+            else
+            {
+                auto it = asc.find(ll);
+                if (it != asc.end())
+                {
+                    asc.erase(it);
+                }
+            }
+
+            asc.insert(rr);
+            while (!desc.empty() && !asc.empty() && *desc.begin() > *asc.begin())
+            {
+                auto it1 = desc.begin();
+                auto it2 = asc.begin();
+                int swap1 = *it1;
+                int swap2 = *it2;
+                desc.erase(it1);
+                asc.erase(it2);
+                sum -= swap1;
+                sum += (long long)swap2;
+
+                asc.insert(swap1);
+                desc.insert(swap2);
+            }
+            while (desc.size() < k - 1 && !asc.empty())
+            {
+                desc.insert(*asc.begin());
+                sum += (long long)*asc.begin();
+                asc.erase(asc.begin());
+            }
+
+            ans = min(ans, sum);
+            l++;
+            r++;
+        }
+        return ans;
+    }
+};
