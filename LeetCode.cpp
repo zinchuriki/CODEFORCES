@@ -8631,3 +8631,73 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    bool isTrionic(vector<int> &nums)
+    {
+        bool fi = false, fd = false, si = false;
+
+        int n = nums.size();
+        for (int i = 1; i < n; ++i)
+        {
+            int prev = nums[i - 1];
+            int cur = nums[i];
+            if (cur <= prev)
+            {
+                if (!fi || si)
+                    return false;
+                else
+                    fd = true;
+            }
+            else
+            {
+                if (fd)
+                    si = true;
+                else
+                    fi = true;
+            }
+        }
+
+        if (si)
+            return true;
+
+        return false;
+    }
+};
+class Solution
+{
+public:
+    long long maxSumTrionic(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<long long> dp0(n, 0);
+        vector<long long> dp1(n, 0);
+        vector<long long> dp2(n, 0);
+        vector<long long> dp3(n, 0);
+        long long ans = 0;
+        for (int i = 1; i < n; ++i)
+        {
+            int prev = nums[i - 1];
+            int cur = nums[i];
+
+            if (cur > prev)
+            {
+                dp1[i] = max(dp1[i - 1] + nums[i], dp0[i - 1] + nums[i]);
+                dp3[i] = max(dp3[i - 1] + nums[i], dp2[i - 1] + nums[i]);
+            }
+            else
+            {
+                if (cur < prev)
+                {
+                    dp2[i] = max(dp2[i - 1] + nums[i], dp1[i - 1] + nums[i]);
+                }
+            }
+            dp0[i] = dp0[i - 1] + nums[i];
+
+            ans = max(ans, dp3[i]);
+        }
+        return ans;
+    }
+};
