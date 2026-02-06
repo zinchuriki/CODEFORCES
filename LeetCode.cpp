@@ -8694,7 +8694,7 @@ public:
                     dp2[i] = max(dp2[i - 1] + nums[i], dp1[i - 1] + nums[i]);
                 }
             }
-            dp0[i] = dp0[i - 1] + nums[i];
+            dp0[i] = dp0[i - 1] + nums[i]
 
             ans = max(ans, dp3[i]);
         }
