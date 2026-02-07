@@ -8694,9 +8694,34 @@ public:
                     dp2[i] = max(dp2[i - 1] + nums[i], dp1[i - 1] + nums[i]);
                 }
             }
-            dp0[i] = dp0[i - 1] + nums[i]
+            dp0[i] = dp0[i - 1] + nums[i];
 
             ans = max(ans, dp3[i]);
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minimumDeletions(string s)
+    {
+        stack<char> st;
+        int n = s.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] == 'b')
+                st.push('b');
+            else
+            {
+                if (!st.empty())
+                {
+                    ans++;
+                    st.pop();
+                }
+            }
         }
         return ans;
     }
