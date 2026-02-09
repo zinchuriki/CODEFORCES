@@ -8847,3 +8847,59 @@ long long int houseRobber(vector<int> &valueInHouse)
     vector<vector<long long int>> dp(n, vector<long long int>(2, -1));
     return ans(dp, valueInHouse, 0, 1);
 }
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    TreeNode *nn(int val)
+    {
+
+        TreeNode *temp = new TreeNode(val);
+
+        return temp;
+    }
+    int n;
+    TreeNode *build(vector<int> &vec, int left, int right)
+    {
+        if (left > right)
+            return;
+        int mid = left + (right - left) / 2;
+        TreeNode* node;
+        node = nn(vec[mid]);
+
+        node->left = build(vec, left, mid - 1);
+        node->right = build(vec, mid + 1, right);
+        return node;
+    }
+
+    void inorder(vector<int> &vec, TreeNode *root)
+    {
+        if (root == NULL)
+            return;
+        inorder(vec, root->left);
+        vec.push_back(root->val);
+        inorder(vec, root->right);
+    }
+
+    TreeNode *balanceBST(TreeNode *root)
+    {
+
+        vector<int> vec;
+
+        inorder(vec, root);
+        n = vec.size();
+        return build(vec, 0, n - 1);
+    }
+};
