@@ -8771,82 +8771,82 @@ struct TreeNode
 //     }
 // };
 
-class Solution
-{
-public:
-    int n;
-    int ans(vector<vector<int>> &dp, vector<int> &nums, int idx, int last)
-    {
+// class Solution
+// {
+// public:
+//     int n;
+//     int ans(vector<vector<int>> &dp, vector<int> &nums, int idx, int last)
+//     {
 
-        if (idx >= n)
-            return 0;
+//         if (idx >= n)
+//             return 0;
 
-        int take = 0, dtake = 0;
-        if (dp[idx][last] != -1)
-            return dp[idx][last];
-        if (idx == 0)
-        {
-            take = nums[0] + ans(dp, nums, idx + 2, 0);
-        }
-        else
-        {
-            if (idx == n - 1)
-            {
-                if (last)
-                    take = nums[n - 1] + ans(dp, nums, idx + 2, 0);
-            }
+//         int take = 0, dtake = 0;
+//         if (dp[idx][last] != -1)
+//             return dp[idx][last];
+//         if (idx == 0)
+//         {
+//             take = nums[0] + ans(dp, nums, idx + 2, 0);
+//         }
+//         else
+//         {
+//             if (idx == n - 1)
+//             {
+//                 if (last)
+//                     take = nums[n - 1] + ans(dp, nums, idx + 2, 0);
+//             }
 
-            else
-                take = nums[idx] + ans(dp, nums, idx + 2, last);
-        }
+//             else
+//                 take = nums[idx] + ans(dp, nums, idx + 2, last);
+//         }
 
-        dtake = ans(dp, nums, idx + 1, last);
+//         dtake = ans(dp, nums, idx + 1, last);
 
-        return dp[idx][last] = max(take, dtake);
-    }
-    int rob(vector<int> &nums)
-    {
-        n = nums.size();
-        vector<vector<int>> dp(n, vector<int>(2, -1));
-        return ans(dp, nums, 0, 1);
-    }
-};
+//         return dp[idx][last] = max(take, dtake);
+//     }
+//     int rob(vector<int> &nums)
+//     {
+//         n = nums.size();
+//         vector<vector<int>> dp(n, vector<int>(2, -1));
+//         return ans(dp, nums, 0, 1);
+//     }
+// };
 
-int n;
-long long int ans(vector<vector<long long int>> &dp, vector<int> &nums, int idx, int last)
-{
-    if (idx >= n)
-        return 0;
-    if (dp[idx][last] != -1)
-        return dp[idx][last];
-    long long int take = 0, dtake = 0;
+// int n;
+// long long int ans(vector<vector<long long int>> &dp, vector<int> &nums, int idx, int last)
+// {
+//     if (idx >= n)
+//         return 0;
+//     if (dp[idx][last] != -1)
+//         return dp[idx][last];
+//     long long int take = 0, dtake = 0;
 
-    if (idx == 0)
-    {
-        take = nums[idx] + ans(dp, nums, idx + 2, 0);
-    }
-    else
-    {
-        if (idx == n - 1)
-        {
-            if (last)
-                take = nums[n - 1];
-        }
-        else
-        {
-            take = nums[idx] + ans(dp, nums, idx + 2, last);
-        }
-    }
-    dtake = ans(dp, nums, idx + 1, last);
-    return dp[idx][last] = max(take, dtake);
-}
-long long int houseRobber(vector<int> &valueInHouse)
-{
-    n = valueInHouse.size();
+//     if (idx == 0)
+//     {
+//         take = nums[idx] + ans(dp, nums, idx + 2, 0);
+//     }
+//     else
+//     {
+//         if (idx == n - 1)
+//         {
+//             if (last)
+//                 take = nums[n - 1];
+//         }
+//         else
+//         {
+//             take = nums[idx] + ans(dp, nums, idx + 2, last);
+//         }
+//     }
+//     dtake = ans(dp, nums, idx + 1, last);
+//     return dp[idx][last] = max(take, dtake);
+// }
+// long long int houseRobber(vector<int> &valueInHouse)
+// {
+//     n = valueInHouse.size();
 
-    vector<vector<long long int>> dp(n, vector<long long int>(2, -1));
-    return ans(dp, valueInHouse, 0, 1);
-}
+//     vector<vector<long long int>> dp(n, vector<long long int>(2, -1));
+//     return ans(dp, valueInHouse, 0, 1);
+// }
 
 /**
  * Definition for a binary tree node.
@@ -8860,46 +8860,70 @@ long long int houseRobber(vector<int> &valueInHouse)
  * right(right) {}
  * };
  */
+// class Solution
+// {
+// public:
+//     TreeNode *nn(int val)
+//     {
+
+//         TreeNode *temp = new TreeNode(val);
+
+//         return temp;
+//     }
+//     int n;
+//     TreeNode *build(vector<int> &vec, int left, int right)
+//     {
+//         if (left > right)
+//             return;
+//         int mid = left + (right - left) / 2;
+//         TreeNode* node;
+//         node = nn(vec[mid]);
+
+//         node->left = build(vec, left, mid - 1);
+//         node->right = build(vec, mid + 1, right);
+//         return node;
+//     }
+
+//     void inorder(vector<int> &vec, TreeNode *root)
+//     {
+//         if (root == NULL)
+//             return;
+//         inorder(vec, root->left);
+//         vec.push_back(root->val);
+//         inorder(vec, root->right);
+//     }
+
+//     TreeNode *balanceBST(TreeNode *root)
+//     {
+
+//         vector<int> vec;
+
+//         inorder(vec, root);
+//         n = vec.size();
+//         return build(vec, 0, n - 1);
+//     }
+// };
+
 class Solution
 {
 public:
-    TreeNode *nn(int val)
+    int longestBalanced(vector<int> &nums)
     {
-
-        TreeNode *temp = new TreeNode(val);
-
-        return temp;
-    }
-    int n;
-    TreeNode *build(vector<int> &vec, int left, int right)
-    {
-        if (left > right)
-            return;
-        int mid = left + (right - left) / 2;
-        TreeNode* node;
-        node = nn(vec[mid]);
-
-        node->left = build(vec, left, mid - 1);
-        node->right = build(vec, mid + 1, right);
-        return node;
-    }
-
-    void inorder(vector<int> &vec, TreeNode *root)
-    {
-        if (root == NULL)
-            return;
-        inorder(vec, root->left);
-        vec.push_back(root->val);
-        inorder(vec, root->right);
-    }
-
-    TreeNode *balanceBST(TreeNode *root)
-    {
-
-        vector<int> vec;
-
-        inorder(vec, root);
-        n = vec.size();
-        return build(vec, 0, n - 1);
+        int n = nums.size();
+        int ans = 0;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            unordered_map<int, int> od, ev;
+            for (int j = i; j < n; ++j)
+            {
+                if (nums[i] & 1)
+                    od[nums[i]]++;
+                else
+                    ev[nums[i]]++;
+                if (od.size() == ev.size())
+                    ans = max(ans, j - i + 1);
+            }
+        }
+        return ans;
     }
 };
