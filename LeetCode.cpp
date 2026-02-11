@@ -8927,3 +8927,128 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int n;
+    const static int MAX = 1e5; // Max size of array
+    int tree[4 * MAX];          // Segment tree
+    int lazy[4 * MAX];          // Lazy array to propagate updates
+
+    // Function to build the tree
+    // void build(int node, int start, int end) {
+    //     if (start == end) {
+    //         // Leaf node will have a single element
+    //         tree[node] = 0;
+    //     } else {
+    //         int mid = (start + end) / 2;
+    //         // Recur for the 2 children
+    //         build(2 * node, start, mid);
+    //         build(2 * node + 1, mid + 1, end);
+    //         // Internal node will have the minimum of both of its children
+    //         tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+    //     }
+    // }
+
+    // Function to update a node
+    void update(int node, int start, int end, int l, int r, int val)
+    {
+        if (lazy[node] != 0)
+        {
+            // This node needs to be updated
+            tree[node] += lazy[node]; // Update it
+            if (start != end)
+            {
+                lazy[node * 2] += lazy[node];     // Mark child as lazy
+                lazy[node * 2 + 1] += lazy[node]; // Mark child as lazy
+            }
+            lazy[node] = 0; // Reset it
+        }
+        if (start > end or start > r or end < l)
+            return; // Current segment is not within range [l, r]
+        if (start >= l and end <= r)
+        {
+            // Segment is fully within range
+            tree[node] += val;
+            if (start != end)
+            {
+                // Not leaf node
+                lazy[node * 2] += val;
+                lazy[node * 2 + 1] += val;
+            }
+            return;
+        }
+        int mid = (start + end) / 2;
+        update(node * 2, start, mid, l, r, val);       // Updating left child
+        update(node * 2 + 1, mid + 1, end, l, r, val); // Updating right child
+        tree[node] = min(tree[node * 2],
+                         tree[node * 2 + 1]); // Updating root with min value
+    }
+
+    // Function to query the tree
+    int query(int node, int start, int end, int l, int r)
+    {
+        if (start > end or start > r or end < l)
+            return MAX; // Out of range
+        if (lazy[node] != 0)
+        {
+            // This node needs to be updated
+            tree[node] += lazy[node]; // Update it
+            if (start != end)
+            {
+                lazy[node * 2] += lazy[node];     // Mark child as lazy
+                lazy[node * 2 + 1] += lazy[node]; // Mark child as lazy
+            }
+            lazy[node] = 0; // Reset it
+        }
+        if (start >= l and end <= r)
+        {
+            if (tree[node] == 0)
+                return r;
+            return -1;
+        } // Current segment is totally within range [l, r]
+
+        int mid = (start + end) / 2;
+        int p1 = query(node * 2, start, mid, l, r);       // Query left child
+        int p2 = query(node * 2 + 1, mid + 1, end, l, r); // Query right child
+        return max(p1, p2);
+    }
+
+    int longestBalanced(vector<int> &nums)
+    {
+        n = nums.size();
+        vector<priority_queue<int, vector<int>, greater<int>>> pos(1e5 +
+                                                                   1);
+        for (int i = 0; i < n; ++i)
+        {
+            int cur = nums[i];
+            pos[cur].push(i);
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            int sign = 1;
+            if (nums[i] & 1)
+                sign *= (-1);
+            int p = pos[nums[i]].top();
+            update(0, 0, n - 1, p, n - 1, sign);
+        }
+        int ans = 0;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            ans = max(ans, query(0, 0, n - 1, i, n - 1));
+            int posi = n;
+            pos[nums[i]].pop();
+            if (!pos[nums[i]].empty())
+            {
+                posi = pos[nums[i]].top();
+            }
+            int sign = 1;
+            if (nums[i] & 1)
+                sign = -sign;
+            update(0, 0, n - 1, posi - 1, n - 1, -sign);
+        }
+        return ans;
+    }
+};
