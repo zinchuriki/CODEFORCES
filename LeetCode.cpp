@@ -9052,3 +9052,35 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int longestBalanced(string s)
+    {
+        int n = s.size();
+        int ans = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            set<pair<int, char>> st;
+            vector<int> vec(26, false);
+            for (int j = i; j < n; ++j)
+            {
+                int ch = s[j] - 'a';
+                int freq = vec[ch];
+                if (freq > 0)
+                {
+                    auto it = st.find({freq, s[j]});
+                    st.erase(it);
+                }
+                vec[ch]++;
+                st.insert({freq + 1, s[j]});
+                auto [af, a] = *st.begin();
+                auto [lf, b] = *prev(st.end());
+                if (lf == af)
+                    ans = max(ans, (int)st.size() * lf);
+            }
+        }
+        return ans;
+    }
+};
