@@ -9084,3 +9084,71 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int longestBalanced(string s)
+    {
+        map<pair<int, int>, int> hash, hash1, hash2, hash3;
+
+        int n = s.size();
+        hash[{0, 0}] = -1;
+        hash1[{0, 0}] = -1;
+        hash2[{0, 0}] = -1;
+        hash3[{0, 0}] = -1;
+
+        int a = 0, b = 0, c = 0;
+        int ca = 0, cb = 0, cc = 0;
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int cur = s[i];
+            if (cur == 'a')
+            {
+                ca++;
+                cb = 0;
+                cc = 0;
+            }
+            else if (cur == 'b')
+            {
+                cb++;
+                ca = 0;
+                cc = 0;
+            }
+            else
+            {
+                cc++;
+                ca = 0;
+                cb = 0;
+            }
+
+            ans = max({ans, ca, cb, cc});
+
+            if (cur == 'a')
+                a++;
+            else if (cur == 'b')
+                b++;
+            else
+                c++;
+            if (hash1.find({b - a, c}) != hash1.end())
+                ans = max(ans, i - hash1[{b - a, c}]);
+            else
+                hash1[{b - a, c}] = i;
+            if (hash2.find({c - a, b}) != hash2.end())
+                ans = max(ans, i - hash2[{c - a, b}]);
+            else
+                hash2[{c - a, b}] = i;
+            if (hash3.find({b - c, a}) != hash3.end())
+                ans = max(ans, i - hash3[{b - c, a}]);
+            else
+                hash3[{b - c, a}] = i;
+
+            if (hash.find({b - a, c - a}) != hash.end())
+                ans = max(ans, i - hash[{b - a, c - a}]);
+            else
+                hash[{b - a, c - a}] = i;
+        }
+        return ans;
+    }
+};
