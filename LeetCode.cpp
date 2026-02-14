@@ -9152,3 +9152,28 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    double rt;
+    double ans(vector<vector<double>> &dp, int qr, int qg)
+    {
+        if (qr == 0 && qg == 0)
+            return rt;
+        if (qr == 0)
+            return 0;
+        if (dp[qr][qg] != -1)
+            return dp[qr][qg];
+
+        return dp[qr][qg] = max((double)0, ((ans(dp, qr - 1, qg) - 1) / (double)2)) +
+                            max((double)0, ((ans(dp, qr - 1, qg - 1) - 1) / (double)2));
+    }
+
+    double champagneTower(int poured, int query_row, int query_glass)
+    {
+        rt = poured;
+        vector<vector<double>> dp(query_row, vector<double>(query_glass, -1));
+        return min((double)1, ans(dp, query_row, query_glass));
+    }
+};
