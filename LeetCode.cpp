@@ -9176,4 +9176,4 @@ public:
         vector<vector<double>> dp(query_row, vector<double>(query_glass, -1));
         return min((double)1, ans(dp, query_row, query_glass));
     }
-}
+};
