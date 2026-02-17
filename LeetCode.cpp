@@ -9177,3 +9177,46 @@ public:
         return min((double)1, ans(dp, query_row, query_glass));
     }
 };
+class Solution
+{
+public:
+    vector<string> ans;
+    unordered_map<string, bool> hash;
+    void backt(vector<int> &hrs, vector<int> &mns, int hr, int min, int idx1,
+               int idx2, int temp)
+    {
+        if (temp == 0)
+        {
+            if (hr >= 12 || min >= 60)
+                return;
+
+            string hour = to_string(hr);
+            string minute = to_string(min);
+            if (minute.size() == 1)
+            {
+                minute = "0" + minute;
+            }
+            string temp = hour + ":" + minute;
+            if (hash.find(temp) == hash.end())
+                ans.push_back(temp);
+            hash[temp] = true;
+            return;
+        }
+        if (idx1 > 3 && idx2 > 5)
+            return;
+        if (idx2 <= 5)
+            backt(hrs, mns, hr, min + mns[idx2], idx1, idx2 + 1, temp - 1);
+        if (idx1 <= 3)
+            backt(hrs, mns, hr + hrs[idx1], min, idx1 + 1, idx2, temp - 1);
+
+        backt(hrs, mns, hr, min, idx1 + 1, idx2 + 1, temp);
+    }
+    vector<string> readBinaryWatch(int turnedOn)
+    {
+        vector<int> hrs = {8, 4, 2, 1};
+        vector<int> min = {32, 16, 8, 4, 2, 1};
+        backt(hrs, min, 0, 0, 0, 0, turnedOn);
+
+        return ans;
+    }
+};
