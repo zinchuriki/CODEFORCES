@@ -9220,3 +9220,28 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int countBinarySubstrings(string s)
+    {
+        int n = s.size();
+        int prev = -1;
+        int ans = 0;
+        vector<int> vec(2, 0);
+        for (int i = 0; i < n; ++i)
+        {
+            int cur = s[i] - '0';
+            if (cur != prev)
+            {
+                ans += min(vec[0], vec[1]);
+                vec[cur] = 0;
+            }
+            vec[cur]++;
+            prev = cur;
+        }
+        ans += min(vec[0], vec[1]);
+        return ans;
+    }
+};
