@@ -9245,4 +9245,82 @@ public:
         return ans;
     }
 };
-//
+
+class Solution
+{
+public:
+    string large(string s)
+    {
+        if (s.size() <= 1)
+            return s;
+
+        vector<string> vec;
+        int n = s.size();
+        string temp = "";
+        string emp = "";
+        int count = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] == '1')
+                count++;
+            else
+                count--;
+            temp += s[i];
+            if (count == 0)
+            {
+
+                string a = temp.substr(1, temp.size() - 2);
+                if (a.size() > 2)
+                    a = large(a);
+                else if (a.size() == 2)
+                    a = "10";
+
+                vec.push_back("1" + a + "0");
+                temp = "";
+            }
+        }
+        sort(vec.begin(), vec.end(), greater<string>());
+        temp = "";
+        for (int i = 0; i < vec.size(); ++i)
+        {
+            temp += vec[i];
+        }
+        return temp;
+    }
+    string makeLargestSpecial(string s)
+    {
+        return large(s);
+    }
+};
+
+class Solution
+{
+public:
+    unordered_map<int, bool> prime;
+    vector<int> vec;
+    Solution()
+    {
+        int cnt = 0;
+
+        prime[2] = true;
+        prime[3] = true;
+        prime[5] = true;
+        prime[7] = true;
+        prime[11] = true;
+        prime[13] = true;
+        prime[17] = true;
+        prime[19] = true;
+        for (int i = 1; i < 1e6; ++i)
+        {
+            int a = __builtin_popcount(i);
+            if (prime.find(a) != prime.end())
+                cnt++;
+            vec.push_back(cnt);
+        }
+    }
+    int countPrimeSetBits(int left, int right)
+    {
+
+        return vec[right - 1] - vec[left - 2];
+    }
+};
