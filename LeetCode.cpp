@@ -9347,3 +9347,57 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int n;
+    int cal(vector<vector<int>> &dp, int idx, int mul, vector<int> &sat)
+    {
+
+        if (idx >= n)
+            return 0;
+        if (dp[idx][mul] != -1)
+            return dp[idx][mul];
+        int take = mul * sat[idx] + cal(dp, idx + 1, mul + 1, sat);
+        int dtake = cal(dp, idx + 1, mul, sat);
+
+        return dp[idx][mul] = max(take, dtake);
+    }
+    int maxSatisfaction(vector<int> &satisfaction)
+    {
+        sort(satisfaction.begin(), satisfaction.end());
+        n = satisfaction.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+
+        return cal(dp, 0, 1, satisfaction);
+    }
+};
+
+class Solution
+{
+public:
+    bool hasAllCodes(string s, int k)
+    {
+        unordered_map<string, bool> hash;
+        int n = s.size();
+        string temp = "";
+        for (int i = 0; i < min(k, n); ++i)
+        {
+            temp += s[i];
+        }
+        hash[temp] = true;
+        int l = 1, r = k;
+
+        while (r < n && l < n)
+        {
+            temp.erase(0, 1);
+            temp += s[r];
+            hash[temp] = true;
+        }
+
+        if (hash.size() == (int)pow(2, k))
+            return true;
+        return false;
+    }
+};
