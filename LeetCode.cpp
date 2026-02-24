@@ -9401,3 +9401,54 @@ public:
         return false;
     }
 };
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    int total_sum;
+
+    void sums(TreeNode *root, int sum)
+    {
+        if (root == NULL)
+            return;
+        int cur = root->val;
+        if (root->left == NULL && root->right == NULL)
+        {
+            total_sum += sum * 2 + cur;
+            return;
+        }
+
+        sums(root->left, sum * 2 + cur);
+        sums(root->right, sum * 2 + cur);
+    }
+
+    int sumRootToLeaf(TreeNode *root)
+    {
+        total_sum = 0;
+        sums(root, 0);
+        return total_sum;
+    }
+};
