@@ -9449,6 +9449,6 @@ public:
     {
         total_sum = 0;
         sums(root, 0);
-        return total_sum
+        return total_sum;
     }
 };
