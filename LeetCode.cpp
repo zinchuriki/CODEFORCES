@@ -9449,6 +9449,36 @@ public:
     {
         total_sum = 0;
         sums(root, 0);
-        return total_sum
+        return total_sum;
+    }
+};
+
+class Solution
+{
+public:
+    int minOperations(string s, int k)
+    {
+        int z = 0;
+        int n = s.size();
+        for (int i = 0; i < n; ++i)
+            if (s[i] == '0')
+                z++;
+
+        if (z == 0)
+            return z;
+        if (n == k)
+            return -1;
+        int base = n - k;
+
+        int odd = std::max((z + k - 1) / k, (n - z + base - 1) / base);
+        int even = std::max((z + k - 1) / k, (z + base - 1) / base);
+        int ans = INT_MAX;
+        if (k % 2 == z % 2)
+            ans = min(ans, odd);
+        if (z % 2 == 0)
+            ans = min(ans, even);
+        if (ans == INT_MAX)
+            return -1;
+        return ans;
     }
 };
