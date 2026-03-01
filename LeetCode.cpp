@@ -9325,28 +9325,28 @@ public:
         return vec[right - 1] - vec[left - 2];
     }
 };
-class Solution
-{
-public:
-    int binaryGap(int n)
-    {
-        string s = std::format("{:b}", n);
+// class Solution
+// {
+// public:
+//     int binaryGap(int n)
+//     {
+//         string s = std::format("{:b}", n);
 
-        int prev = 0;
-        int ans = 0;
-        int sz = s.size();
-        for (int i = 0; i < sz; ++i)
-        {
-            int cur = s[i] - '0';
-            if (cur == 1)
-            {
-                ans = max(i - prev, ans);
-                prev = i;
-            }
-        }
-        return ans;
-    }
-};
+//         int prev = 0;
+//         int ans = 0;
+//         int sz = s.size();
+//         for (int i = 0; i < sz; ++i)
+//         {
+//             int cur = s[i] - '0';
+//             if (cur == 1)
+//             {
+//                 ans = max(i - prev, ans);
+//                 prev = i;
+//             }
+//         }
+//         return ans;
+//     }
+// };
 
 class Solution
 {
