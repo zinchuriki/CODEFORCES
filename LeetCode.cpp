@@ -9294,37 +9294,37 @@ public:
     }
 };
 
-class Solution
-{
-public:
-    unordered_map<int, bool> prime;
-    vector<int> vec;
-    Solution()
-    {
-        int cnt = 0;
+// class Solution
+// {
+// public:
+//     unordered_map<int, bool> prime;
+//     vector<int> vec;
+//     Solution()
+//     {
+//         int cnt = 0;
 
-        prime[2] = true;
-        prime[3] = true;
-        prime[5] = true;
-        prime[7] = true;
-        prime[11] = true;
-        prime[13] = true;
-        prime[17] = true;
-        prime[19] = true;
-        for (int i = 1; i < 1e6; ++i)
-        {
-            int a = __builtin_popcount(i);
-            if (prime.find(a) != prime.end())
-                cnt++;
-            vec.push_back(cnt);
-        }
-    }
-    int countPrimeSetBits(int left, int right)
-    {
+//         prime[2] = true;
+//         prime[3] = true;
+//         prime[5] = true;
+//         prime[7] = true;
+//         prime[11] = true;
+//         prime[13] = true;
+//         prime[17] = true;
+//         prime[19] = true;
+//         for (int i = 1; i < 1e6; ++i)
+//         {
+//             int a = __builtin_popcount(i);
+//             if (prime.find(a) != prime.end())
+//                 cnt++;
+//             vec.push_back(cnt);
+//         }
+//     }
+//     int countPrimeSetBits(int left, int right)
+//     {
 
-        return vec[right - 1] - vec[left - 2];
-    }
-};
+//         return vec[right - 1] - vec[left - 2];
+//     }
+// };
 // class Solution
 // {
 // public:
