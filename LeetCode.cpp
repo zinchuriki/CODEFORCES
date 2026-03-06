@@ -9558,20 +9558,31 @@ public:
     }
 };
 
-
-
-class Solution {
+class Solution
+{
 public:
-    int minOperations(string s) {
+    int minOperations(string s)
+    {
         int count = 0;
         int n = s.length();
-        
-        for (int i = 0; i < n; ++i) {
-            if (s[i] - '0' != i % 2) {
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] - '0' != i % 2)
+            {
                 count++;
             }
         }
-        
+
         return min(count, n - count);
+    }
+};
+
+class Solution
+{
+public:
+    bool checkOnesSegment(string s)
+    {
+        return s.find("01") == string::npos;
     }
 };
