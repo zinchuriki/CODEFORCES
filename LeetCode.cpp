@@ -9585,4 +9585,4 @@ public:
     {
         return s.find("01") == string::npos;
     }
-};
+}
