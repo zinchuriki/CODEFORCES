@@ -9585,4 +9585,26 @@ public:
     {
         return s.find("01") == string::npos;
     }
-}
+};
+
+class Solution
+{
+public:
+    string findDifferentBinaryString(vector<string> &nums)
+    {
+        int n = nums.size();
+
+        string s(n, '0');
+        int idx = 0;
+
+        for (int i = 0; i < n; ++i)
+        {
+            auto it = find(nums.begin(), nums.end(), s);
+            if (it == nums.end())
+                return s;
+            s[idx] = '1';
+            idx++;
+        }
+        return s;
+    }
+};
