@@ -9608,3 +9608,47 @@ public:
         return s;
     }
 };
+
+class Solution
+{
+public:
+    int countSubmatrices(vector<vector<int>> &grid, int k)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        if (grid[0][0] > k)
+            return 0;
+        vector<vector<int>> pref(n, vector<int>(m, 0));
+        for (int i = 0; i < n; ++i)
+        {
+            int cur = 0;
+            for (int j = 0; j < m; ++j)
+            {
+                cur += grid[i][j];
+                pref[i][j] = cur;
+            }
+        }
+        // for (int i = 0; i < m; ++i) {
+        //     int cur = 0;
+        //     for (int j = 0; j < n; ++j) {
+        //         cur += grid[j][i];
+        //         pref2[j][i] = cur;
+        //     }
+        // }
+        int ans = 0;
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = 1; j <= m; ++j)
+            {
+                int temp = 0;
+                for (int l = 0; l < i; ++l)
+                {
+                    temp += pref[l][j - 1];
+                }
+                if (temp < k)
+                    ans++;
+            }
+        }
+        return ans;
+    }
+}
