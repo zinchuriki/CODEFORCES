@@ -9671,9 +9671,9 @@ public:
     }
     vector<vector<int>> minAbsDiff(vector<vector<int>> &grid, int k)
     {
-        int n=grid.size();
-        int m=grid[0].size();
-        vector<vector<int>> ans(n - k + 1, vector < int >(m - k + 1, 0));
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> ans(n - k + 1, vector<int>(m - k + 1, 0));
 
         if (k == 1)
             return ans;
@@ -9695,4 +9695,47 @@ public:
         }
         return ans;
     }
-}
+};
+
+class Solution
+{
+public:
+    bool findRotation(vector<vector<int>> &mat, vector<vector<int>> &target)
+    {
+        if (mat == target)
+            return true;
+        int n = mat.size();
+        int m = mat[0].size();
+        bool pos = true;
+        vector<vector<int>> vec;
+
+        for (int i = 0; i < m; ++i)
+        {
+            vector<int> temp;
+            for (int j = n - 1; j >= 0; --j)
+            {
+                temp.push_back(mat[j][i]);
+            }
+            vec.push_back(temp);
+        }
+        if (vec == target)
+            return true;
+        bool pos2 = true;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            for (int j = m - 1; j >= 0; --j)
+            {
+                if (mat[i][j] != target[n - 1 - i][m - 1 - j])
+                {
+                    pos = false;
+                }
+                if (vec[i][j] != target[n - i - 1][m - 1 - j])
+                    pos2 = false;
+            }
+        }
+        if (pos == true || pos2)
+            return true;
+
+        return false;
+    }
+};
