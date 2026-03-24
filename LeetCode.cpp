@@ -9809,3 +9809,228 @@ public:
         return max_pos(grid, dp_pos, dp_neg, n - 1, m - 1);
     }
 };
+
+class Solution
+{
+public:
+    class DSU
+    {
+    public:
+        vector<int> parent;
+        vector<int> sz;
+        DSU(int n)
+        {
+            parent.resize(n);
+            sz.resize(n, 0);
+            for (int i = 0; i < n; ++i)
+            {
+                parent[i] = i;
+            }
+        }
+
+        int UltimateParent(int a)
+        {
+
+            if (parent[a] = a)
+                return a;
+
+            parent[a] = UltimateParent(parent[a]);
+        }
+
+        void Union(int a, int b)
+        {
+            int parent_a = UltimateParent(a);
+            int parent_b = UltimateParent(b);
+
+            if (parent_a == parent_b)
+                return;
+
+            int size_parent_a = sz[parent_a];
+            int size_parent_b = sz[parent_b];
+
+            if (size_parent_a > size_parent_b)
+            {
+                parent[parent_b] = parent_b;
+                sz[parent_a] += size_parent_b;
+            }
+            else
+            {
+                parent[parent_a] = parent_b;
+                sz[parent_b] += size_parent_a;
+            }
+        }
+    };
+
+    int maxStability(int n, vector<vector<int>> &edges, int k)
+    {
+
+        vector<bool> vis(n, false);
+        int m = edges.size();
+        int ans = INT_MAX;
+        int re = n - 1;
+        DSU d(n);
+        vector<pair<int, pair<int, int>>> v;
+        for (int i = 0; i < m; ++i)
+        {
+            int n1 = edges[i][0];
+            int n2 = edges[i][1];
+            int must = edges[i][3];
+            int wt = edges[i][2];
+            if (must == 1)
+            {
+                int p_n1 = d.UltimateParent(n1);
+                int p_n2 = d.UltimateParent(n2);
+                if (p_n1 == p_n2)
+                    return -1;
+                d.Union(n1, n2);
+                ans = min(ans, wt);
+                re--;
+            }
+            else
+            {
+                v.push_back({wt, {n1, n2}});
+            }
+        }
+        sort(v.begin(), v.end(), greater<>());
+
+        int sz = v.size();
+
+        for (int i = 0; i < re; ++i)
+        {
+            int wt = v[i].first;
+            int n1 = v[i].second.first;
+            int n2 = v[i].second.second;
+            int p_n1 = d.UltimateParent(n1);
+            int p_n2 = d.UltimateParent(n2);
+            if (p_n1 == p_n2)
+                continue;
+            int left = re - i;
+            d.Union(n1, n2);
+            if (left <= k)
+            {
+                ans = min(ans, 2 * wt);
+            }
+            else
+            {
+                ans = min(ans, wt);
+            }
+        }
+        return ans;
+    }
+};
+
+class Fancy
+{
+public:
+    vector<int> vec;
+    vector<tuple<int, int, int>> v;
+    int MOD;
+
+    int bs(int l, int r, int val)
+    {
+        int ret;
+        while (l < r)
+        {
+            int mid = l + (r - l) / 2;
+            auto [size, sign, value] = v[mid];
+            if (size < val)
+                l++;
+            else
+            {
+                ret = r;
+                r--;
+            }
+        }
+        return ret;
+    }
+
+    Fancy() { MOD = 1e9 + 7; }
+
+    void append(int val) { vec.push_back(val); }
+
+    void addAll(int inc)
+    {
+        int sz = vec.size();
+        v.push_back({sz - 1, 0, inc});
+    }
+
+    void multAll(int m)
+    {
+        int sz = vec.size();
+        v.push_back({sz - 1, 1, m});
+    }
+
+    int getIndex(int idx)
+    {
+        int size_vec = vec.size();
+        int size_v = v.size();
+
+        if (idx >= size_vec)
+            return -1;
+        long int temp = vec[idx];
+
+        int idxx = bs(0, size_v - 1, idx);
+
+            for (int i = idxx; i < size_v; ++i)
+        {
+            auto [size, sign, value] = v[i];
+
+            if (sign == 0)
+            {
+                temp += value;
+            }
+            else
+            {
+                temp = (temp * value) % MOD;
+            }
+        }
+        return temp % MOD;
+    }
+};
+
+/**
+ * Your Fancy object will be instantiated and called as such:
+ * Fancy* obj = new Fancy();
+ * obj->append(val);
+ * obj->addAll(inc);
+ * obj->multAll(m);
+ * int param_4 = obj->getIndex(idx);
+ */
+
+class Solution
+{
+public:
+    vector<vector<int>> constructProductMatrix(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        long int MOD = 1e9 + 7;
+        vector<vector<int>> pref(n, vector<int>(m, 1));
+        vector<vector<int>> suf(n, vector<int>(m, 1));
+        vector<vector<int>> ans(n, vector<int>(m, 1));
+        long int temp_pref = 1;
+        long int temp_suf = 1;
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                pref[i][j] = temp_pref;
+                temp_pref = (temp_pref * grid[i][j]) % MOD;
+                suf[n - i - 1][m - j - 1] = temp_suf;
+                temp_suf = (temp_suf * grid[n - i - 1][m - j - 1]) % MOD;
+            }
+        }
+        // ans[0][0]=suf[0][0];
+        // ans[n-1][m-1]=pref[n-1][m-1];
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                ans[i][j] = (pref[i][j] * suf[i][j]) % MOD;
+            }
+        }
+        return ans;
+    }
+};
