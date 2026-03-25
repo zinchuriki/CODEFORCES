@@ -9971,7 +9971,7 @@ public:
 
         int idxx = bs(0, size_v - 1, idx);
 
-            for (int i = idxx; i < size_v; ++i)
+        for (int i = idxx; i < size_v; ++i)
         {
             auto [size, sign, value] = v[i];
 
@@ -10032,5 +10032,50 @@ public:
             }
         }
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool canPartitionGrid(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<long int> pref_horizontal(n, 0);
+        vector<long int> pref_vertical(m, 0);
+        long int total_sum = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                total_sum += grid[i][j];
+            }
+            pref_horizontal[i] = total_sum;
+        }
+        total_sum = 0;
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                total_sum += grid[j][i];
+            }
+            pref_vertical[i] = total_sum;
+        }
+
+        for (int i = 0; i < max(n, m); ++i)
+        {
+            if (i < m)
+            {
+                if (total_sum == 2 * pref_vertical[i])
+                    return true;
+            }
+            if (i < n)
+            {
+                if (total_sum == 2 * pref_horizontal[i])
+                    return true;
+            }
+        }
+        return false;
     }
 };
