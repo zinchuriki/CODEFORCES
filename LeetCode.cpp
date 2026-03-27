@@ -10079,3 +10079,33 @@ public:
         return false;
     }
 };
+
+class Solution
+{
+public:
+    bool areSimilar(vector<vector<int>> &mat, int k)
+    {
+        int n = mat.size();
+        int m = mat[0].size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if (i & 1)
+                {
+                    int sh = j + k;
+                    if (mat[i][sh % m] != mat[i][j])
+                        return false;
+                }
+                else
+                {
+                    int sh = ((-k+j) % m + m) % m;
+                    if (mat[i][sh] != mat[i][j])
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+};
