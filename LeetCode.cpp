@@ -10100,6 +10100,7 @@ public:
                 }
                 else
                 {
+                    
                     int sh = ((-k+j) % m + m) % m;
                     if (mat[i][sh] != mat[i][j])
                         return false;
