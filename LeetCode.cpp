@@ -10100,13 +10100,43 @@ public:
                 }
                 else
                 {
-                    
-                    int sh = ((-k+j) % m + m) % m;
+
+                    int sh = ((-k + j) % m + m) % m;
                     if (mat[i][sh] != mat[i][j])
                         return false;
                 }
             }
         }
         return true;
+    }
+};
+
+class Solution
+{
+public:
+    bool canBeEqual(string s1, string s2)
+    {
+        int n1 = s1.size();
+        int n2 = s2.size();
+        unordered_map<char, int> hash1, hash2, hash3, hash4;
+        for (int i = 0; i < n1; ++i)
+        {
+            if (i & 1)
+                hash1[s1[i]] = true;
+            else
+                hash2[s1[i]] = true;
+        }
+        for (int i = 0; i < n2; ++i)
+        {
+            if (i & 1)
+                hash3[s2[i]] = true;
+            else
+                hash4[s2[i]] = true;
+        }
+
+        if (hash1 == hash3 && hash2 == hash4)
+            return true;
+
+        return false;
     }
 };
