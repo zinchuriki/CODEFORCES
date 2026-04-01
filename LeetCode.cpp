@@ -10136,8 +10136,86 @@ public:
 
         if (hash1 == hash3 && hash2 == hash4)
             return true;
-            
 
         return false;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> survivedRobotsHealths(vector<int> &positions,
+                                      vector<int> &healths, string directions)
+    {
+        int n = directions.size();
+        vector<tuple<int, int, char>> vec;
+
+        for (int i = 0; i < n; ++i)
+            vec.emplace_back(i, healths[i], directions[i]);
+
+        sort(vec.begin(), vec.end(),
+             [&positions](const tuple<int, int, char> &a,
+                          const tuple<int, int, char> &b)
+             {
+                 int indexA = get<0>(a);
+
+                 int indexB = get<0>(b);
+
+                 return positions[indexA] < positions[indexB];
+             });
+
+        stack<pair<int, int>> st;
+        vector<pair<int, int>> ans;
+
+        for (int i = 0; i < n; ++i)
+        {
+            auto [pos, health, dir] = vec[i];
+            if (dir == 'R')
+            {
+                st.push({pos, health});
+            }
+            else
+            {
+
+                while (!st.empty())
+                {
+                    auto [pos_st, health_r] = st.top();
+                    st.pop();
+                    if (health_r == health)
+                    {
+                        health;
+                        break;
+                    }
+                    else
+                    {
+                        if (health_r > health)
+                        {
+                            st.push({pos_st, health_r - 1});
+                            health = 0;
+                            break;
+                        }
+                        else
+                        {
+                            health--;
+                        }
+                    }
+                }
+                if (health > 0)
+                    ans.push_back({pos, health});
+            }
+        }
+        while (!st.empty())
+        {
+            auto [pos, health] = st.top();
+            ans.push_back({pos, health});
+        }
+        sort(ans.begin(), ans.end());
+
+        vector<int> ans_final;
+        for (int i = 0; i < ans.size(); ++i)
+        {
+            ans_final.push_back(ans[i].second);
+        }
+        return ans_final;
     }
 };
