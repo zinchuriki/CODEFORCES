@@ -9810,114 +9810,114 @@ public:
     }
 };
 
-class Solution
-{
-public:
-    class DSU
-    {
-    public:
-        vector<int> parent;
-        vector<int> sz;
-        DSU(int n)
-        {
-            parent.resize(n);
-            sz.resize(n, 0);
-            for (int i = 0; i < n; ++i)
-            {
-                parent[i] = i;
-            }
-        }
+// class Solution
+// {
+// public:
+//     class DSU
+//     {
+//     public:
+//         vector<int> parent;
+//         vector<int> sz;
+//         DSU(int n)
+//         {
+//             parent.resize(n);
+//             sz.resize(n, 0);
+//             for (int i = 0; i < n; ++i)
+//             {
+//                 parent[i] = i;
+//             }
+//         }
 
-        int UltimateParent(int a)
-        {
+//         int UltimateParent(int a)
+//         {
 
-            if (parent[a] = a)
-                return a;
+//             if (parent[a] = a)
+//                 return a;
 
-            parent[a] = UltimateParent(parent[a]);
-        }
+//             parent[a] = UltimateParent(parent[a]);
+//         }
 
-        void Union(int a, int b)
-        {
-            int parent_a = UltimateParent(a);
-            int parent_b = UltimateParent(b);
+//         void Union(int a, int b)
+//         {
+//             int parent_a = UltimateParent(a);
+//             int parent_b = UltimateParent(b);
 
-            if (parent_a == parent_b)
-                return;
+//             if (parent_a == parent_b)
+//                 return;
 
-            int size_parent_a = sz[parent_a];
-            int size_parent_b = sz[parent_b];
+//             int size_parent_a = sz[parent_a];
+//             int size_parent_b = sz[parent_b];
 
-            if (size_parent_a > size_parent_b)
-            {
-                parent[parent_b] = parent_b;
-                sz[parent_a] += size_parent_b;
-            }
-            else
-            {
-                parent[parent_a] = parent_b;
-                sz[parent_b] += size_parent_a;
-            }
-        }
-    };
+//             if (size_parent_a > size_parent_b)
+//             {
+//                 parent[parent_b] = parent_b;
+//                 sz[parent_a] += size_parent_b;
+//             }
+//             else
+//             {
+//                 parent[parent_a] = parent_b;
+//                 sz[parent_b] += size_parent_a;
+//             }
+//         }
+//     };
 
-    int maxStability(int n, vector<vector<int>> &edges, int k)
-    {
+//     int maxStability(int n, vector<vector<int>> &edges, int k)
+//     {
 
-        vector<bool> vis(n, false);
-        int m = edges.size();
-        int ans = INT_MAX;
-        int re = n - 1;
-        DSU d(n);
-        vector<pair<int, pair<int, int>>> v;
-        for (int i = 0; i < m; ++i)
-        {
-            int n1 = edges[i][0];
-            int n2 = edges[i][1];
-            int must = edges[i][3];
-            int wt = edges[i][2];
-            if (must == 1)
-            {
-                int p_n1 = d.UltimateParent(n1);
-                int p_n2 = d.UltimateParent(n2);
-                if (p_n1 == p_n2)
-                    return -1;
-                d.Union(n1, n2);
-                ans = min(ans, wt);
-                re--;
-            }
-            else
-            {
-                v.push_back({wt, {n1, n2}});
-            }
-        }
-        sort(v.begin(), v.end(), greater<>());
+//         vector<bool> vis(n, false);
+//         int m = edges.size();
+//         int ans = INT_MAX;
+//         int re = n - 1;
+//         DSU d(n);
+//         vector<pair<int, pair<int, int>>> v;
+//         for (int i = 0; i < m; ++i)
+//         {
+//             int n1 = edges[i][0];
+//             int n2 = edges[i][1];
+//             int must = edges[i][3];
+//             int wt = edges[i][2];
+//             if (must == 1)
+//             {
+//                 int p_n1 = d.UltimateParent(n1);
+//                 int p_n2 = d.UltimateParent(n2);
+//                 if (p_n1 == p_n2)
+//                     return -1;
+//                 d.Union(n1, n2);
+//                 ans = min(ans, wt);
+//                 re--;
+//             }
+//             else
+//             {
+//                 v.push_back({wt, {n1, n2}});
+//             }
+//         }
+//         sort(v.begin(), v.end(), greater<>());
 
-        int sz = v.size();
+//         int sz = v.size();
 
-        for (int i = 0; i < re; ++i)
-        {
-            int wt = v[i].first;
-            int n1 = v[i].second.first;
-            int n2 = v[i].second.second;
-            int p_n1 = d.UltimateParent(n1);
-            int p_n2 = d.UltimateParent(n2);
-            if (p_n1 == p_n2)
-                continue;
-            int left = re - i;
-            d.Union(n1, n2);
-            if (left <= k)
-            {
-                ans = min(ans, 2 * wt);
-            }
-            else
-            {
-                ans = min(ans, wt);
-            }
-        }
-        return ans;
-    }
-};
+//         for (int i = 0; i < re; ++i)
+//         {
+//             int wt = v[i].first;
+//             int n1 = v[i].second.first;
+//             int n2 = v[i].second.second;
+//             int p_n1 = d.UltimateParent(n1);
+//             int p_n2 = d.UltimateParent(n2);
+//             if (p_n1 == p_n2)
+//                 continue;
+//             int left = re - i;
+//             d.Union(n1, n2);
+//             if (left <= k)
+//             {
+//                 ans = min(ans, 2 * wt);
+//             }
+//             else
+//             {
+//                 ans = min(ans, wt);
+//             }
+//         }
+//         return ans;
+//     }
+// };
 
 class Fancy
 {
