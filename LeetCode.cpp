@@ -9740,75 +9740,75 @@ public:
     }
 };
 
-class Solution
-{
-public:
-    int n, m;
-    long int max_neg(vector<vector<int>> &grid,
-                     vector<vector<long int>> &dp_pos,
-                     vector<vector<long int>> &dp_neg, int i, int j)
-    {
+// class Solution
+// {
+// public:
+//     int n, m;
+//     long int max_neg(vector<vector<int>> &grid,
+//                      vector<vector<long int>> &dp_pos,
+//                      vector<vector<long int>> &dp_neg, int i, int j)
+//     {
 
-        if (i < 0 || j < 0)
-            return 0;
-        if (i == 0 && j == 0)
-            return min(0, grid[0][0]);
-        if (dp_neg[i][j] != -1)
-            return dp_neg[i][j];
-        int cur = grid[i][j];
-        if (cur == 0)
-            return dp_neg[i][j] = 0;
-        int up = INT_MIN, left = INT_MIN;
-        if (cur > 0)
-        {
-            up = max_neg(grid, dp_pos, dp_neg, i - 1, j);
-            left = max_neg(grid, dp_pos, dp_neg, i, j - 1);
-        }
-        else
-        {
-            up = max_pos(grid, dp_pos, dp_neg, i - 1, j);
-            left = max_pos(grid, dp_pos, dp_neg, i, j - 1);
-        }
+//         if (i < 0 || j < 0)
+//             return 0;
+//         if (i == 0 && j == 0)
+//             return min(0, grid[0][0]);
+//         if (dp_neg[i][j] != -1)
+//             return dp_neg[i][j];
+//         int cur = grid[i][j];
+//         if (cur == 0)
+//             return dp_neg[i][j] = 0;
+//         int up = INT_MIN, left = INT_MIN;
+//         if (cur > 0)
+//         {
+//             up = max_neg(grid, dp_pos, dp_neg, i - 1, j);
+//             left = max_neg(grid, dp_pos, dp_neg, i, j - 1);
+//         }
+//         else
+//         {
+//             up = max_pos(grid, dp_pos, dp_neg, i - 1, j);
+//             left = max_pos(grid, dp_pos, dp_neg, i, j - 1);
+//         }
 
-        return dp_neg[i][j] = cur * min(up, left);
-    }
-    long int max_pos(vector<vector<int>> &grid,
-                     vector<vector<long int>> &dp_pos,
-                     vector<vector<long int>> &dp_neg, int i, int j)
-    {
-        if (i < 0 || j < 0)
-            return 0;
-        if (i == 0 && j == 0)
-            return max(0, grid[0][0]);
-        if (dp_pos[i][j] != -1)
-            return dp_pos[i][j];
-        int cur = grid[i][j];
-        if (cur == 0)
-            return dp_pos[i][j] = 0;
-        int up = INT_MIN, left = INT_MIN;
-        if (cur > 0)
-        {
-            up = max_pos(grid, dp_pos, dp_neg, i - 1, j);
-            left = max_pos(grid, dp_pos, dp_neg, i, j - 1);
-        }
-        else
-        {
-            up = max_neg(grid, dp_pos, dp_neg, i - 1, j);
-            left = max_neg(grid, dp_pos, dp_neg, i, j - 1);
-        }
+//         return dp_neg[i][j] = cur * min(up, left);
+//     }
+//     long int max_pos(vector<vector<int>> &grid,
+//                      vector<vector<long int>> &dp_pos,
+//                      vector<vector<long int>> &dp_neg, int i, int j)
+//     {
+//         if (i < 0 || j < 0)
+//             return 0;
+//         if (i == 0 && j == 0)
+//             return max(0, grid[0][0]);
+//         if (dp_pos[i][j] != -1)
+//             return dp_pos[i][j];
+//         int cur = grid[i][j];
+//         if (cur == 0)
+//             return dp_pos[i][j] = 0;
+//         int up = INT_MIN, left = INT_MIN;
+//         if (cur > 0)
+//         {
+//             up = max_pos(grid, dp_pos, dp_neg, i - 1, j);
+//             left = max_pos(grid, dp_pos, dp_neg, i, j - 1);
+//         }
+//         else
+//         {
+//             up = max_neg(grid, dp_pos, dp_neg, i - 1, j);
+//             left = max_neg(grid, dp_pos, dp_neg, i, j - 1);
+//         }
 
-        return dp_pos[i][j] = cur * max(up, left);
-    }
+//         return dp_pos[i][j] = cur * max(up, left);
+//     }
 
-    int maxProductPath(vector<vector<int>> &grid)
-    {
-        n = grid.size(), m = grid[0].size();
-        vector<vector<long int>> dp_pos(n, vector<long int>(m, -1));
-        vector<vector<long int>> dp_neg(n, vector<long int>(m, -1));
-        int cur = grid[n - 1][m - 1];
-        return max_pos(grid, dp_pos, dp_neg, n - 1, m - 1);
-    }
-};
+//     int maxProductPath(vector<vector<int>> &grid)
+//     {
+//         n = grid.size(), m = grid[0].size();
+//         vector<vector<long int>> dp_pos(n, vector<long int>(m, -1));
+//         vector<vector<long int>> dp_neg(n, vector<long int>(m, -1));
+//         int cur = grid[n - 1][m - 1];
+//         return max_pos(grid, dp_pos, dp_neg, n - 1, m - 1);
+//     }
+// };
 
 // class Solution
 // {
