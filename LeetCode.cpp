@@ -10251,3 +10251,57 @@ public:
         return x == 0 && y == 0;
     }
 };
+
+class Solution
+{
+public:
+    int robotSim(vector<int> &commands, vector<vector<int>> &obstacles)
+    {
+
+        set<pair<int, int>> obs;
+        for (const auto &ob : obstacles)
+        {
+            obs.insert({ob[0], ob[1]});
+        }
+
+        int dx[4] = {0, 1, 0, -1};
+        int dy[4] = {1, 0, -1, 0};
+
+        int x = 0, y = 0, dir = 0;
+        int max_dist = 0;
+
+        for (int cmd : commands)
+        {
+            if (cmd == -2)
+            {
+                dir = (dir + 3) % 4; // Turn Left
+            }
+            else if (cmd == -1)
+            {
+                dir = (dir + 1) % 4; // Turn Right
+            }
+            else
+            {
+                // Move forward one step at a time
+                for (int step = 0; step < cmd; ++step)
+                {
+                    int nx = x + dx[dir];
+                    int ny = y + dy[dir];
+
+                    // Check if the pair exists in the ordered set
+                    if (obs.count({nx, ny}))
+                    {
+                        break; // Obstacle hit, stop moving
+                    }
+
+                    // Step is safe!
+                    x = nx;
+                    y = ny;
+                    max_dist = max(max_dist, x * x + y * y);
+                }
+            }
+        }
+
+        return max_dist;
+    }
+};
