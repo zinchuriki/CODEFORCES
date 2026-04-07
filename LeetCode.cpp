@@ -10305,3 +10305,66 @@ public:
         return max_dist;
     }
 };
+
+class Robot
+{
+public:
+    vector<int> dx;
+    vector<int> dy;
+    int width;
+    int height;
+    int dir;
+    pair<int, int> cur;
+    int sum = 0;
+    Robot(int width, int height)
+    {
+        dx = {1, 0, -1, 0};
+        dy = {0, 1, 0, -1};
+        dir = 0;
+        cur = {0, 0};
+        sum = 2 * width + 2 * height - 4;
+        this->width = width;
+        this->height = height;
+    }
+
+    void step(int num)
+    {
+        int steps = num;
+        while (steps > 0)
+        {
+            int dxx = dx[dir];
+            int dyy = dy[dir];
+            int cur_dx = cur.first;
+            int cur_dy = cur.second;
+            int next_cur_dx = max(0, min(steps * dxx + cur_dx, width - 1));
+            int next_cur_dy = max(0, min(steps * dyy + cur_dy, height - 1));
+            steps -= abs(next_cur_dx - cur_dx + next_cur_dy - cur_dy);
+            steps = steps % sum;
+            if (steps > 0)
+                dir = (dir + 1) % 4;
+
+            cur = {next_cur_dx, next_cur_dy};
+        }
+    }
+
+    vector<int> getPos() { return {cur.first, cur.second}; }
+
+    string getDir()
+    {
+        if (dir == 0)
+            return "East";
+        if (dir == 1)
+            return "North";
+        if (dir == 2)
+            return "West";
+        return "South";
+    }
+};
+
+/**
+ * Your Robot object will be instantiated and called as such:
+ * Robot* obj = new Robot(width, height);
+ * obj->step(num);
+ * vector<int> param_2 = obj->getPos();
+ * string param_3 = obj->getDir();
+ */
