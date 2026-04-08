@@ -10368,3 +10368,76 @@ public:
  * vector<int> param_2 = obj->getPos();
  * string param_3 = obj->getDir();
  */
+class Solution
+{
+public:
+    vector<int> temp;
+    bool check(unsigned int n)
+    {
+        if (n == 0)
+            return "0";
+
+        string binary;
+        binary.reserve(sizeof(n) * 8); // Pre-allocate to avoid reallocations
+
+        while (n > 0)
+        {
+            binary.push_back((n & 1) ? '1'
+                                     : '0'); // Append least significant bit
+            n >>= 1;                         // Shift right to process next bit
+        }
+
+        int l = 0, r = binary.size() - 1;
+
+        while (l <= r)
+        {
+            if (binary[l] != binary[r])
+                return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+    Solution()
+    {
+        for (int i = 1; i <= 5000; ++i)
+            if (check(i))
+                temp.push_back(i);
+    }
+
+    int findClosest(const std::vector<int> &arr, int target)
+    {
+        // lower_bound returns iterator to first element >= target
+        auto it = std::lower_bound(arr.begin(), arr.end(), target);
+
+        // Edge case: target is greater than all elements
+        if (it == arr.end())
+        {
+            return arr.back();
+        }
+        // Edge case: target is less than or equal to the first element
+        if (it == arr.begin())
+        {
+            return *it;
+        }
+
+        // Compare the element at `it` and the one right before it
+        int after = *it;
+        int before = *(it - 1);
+
+        // Prefer smaller value on tie. Change `<=` to `<` if you prefer larger.
+        return (std::abs(after - target) < std::abs(before - target)) ? after
+                                                                      : before;
+    }
+    vector<int> minOperations(vector<int> &nums)
+    {
+        vector<int> ans;
+
+        int n = nums.size();
+
+        for (int i = 0; i < n; ++i)
+            ans.push_back(abs(findClosest(temp, nums[i]) - nums[i]));
+
+        return ans;
+    }
+};
