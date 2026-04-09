@@ -10439,5 +10439,6 @@ public:
             ans.push_back(abs(findClosest(temp, nums[i]) - nums[i]));
 
         return ans;
+        
     }
 };
