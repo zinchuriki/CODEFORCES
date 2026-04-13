@@ -10463,7 +10463,30 @@ public:
                 }
             }
         }
-        if(ans==INT_MAX) return -1;
+        if (ans == INT_MAX)
+            return -1;
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int getMinDistance(std::vector<int> &nums, int target, int start)
+    {
+        // Start with a large number because we want to find the minimum
+        int min_dist = 10000;
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] == target)
+            {
+                // Calculate the distance and save it if it is the smallest so far
+                int current_dist = std::abs(i - start);
+                min_dist = std::min(min_dist, current_dist);
+            }
+        }
+
+        return min_dist;
     }
 };
