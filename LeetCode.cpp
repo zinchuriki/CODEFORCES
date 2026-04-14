@@ -10487,6 +10487,6 @@ public:
             }
         }
 
-        return min_dist;
+        return min_dist ;
     }
 };
