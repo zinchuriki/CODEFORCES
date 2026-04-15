@@ -10487,6 +10487,34 @@ public:
             }
         }
 
-        return min_dist ;
+        return min_dist;
+    }
+};
+
+class Solution
+{
+public:
+    int closestTarget(vector<string> &words, string target, int startIndex)
+    {
+        int n = words.size();
+        int min_dist = n; // Start with a max value (n is larger than any possible distance)
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (words[i] == target)
+            {
+                // Calculate the direct distance
+                int dist = abs(i - startIndex);
+
+                // The shortest way to this specific target is either direct or wrap-around
+                int shortest_path = min(dist, n - dist);
+
+                // Update the overall minimum distance
+                min_dist = min(min_dist, shortest_path);
+            }
+        }
+
+        // If min_dist is still n, it means we never found the target
+        return min_dist == n ? -1 : min_dist;
     }
 };
