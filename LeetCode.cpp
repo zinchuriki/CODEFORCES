@@ -10404,7 +10404,7 @@ public:
             if ( check(i))
                 temp.push_back(i);
 
-    
+    }
 
     int findClosest(const std::vector<int> &arr, int target)
     {
@@ -10517,5 +10517,9 @@ public:
 
         // If min_dist is still n, it means we never found the target
         return min_dist == n ? -1 : min_dist;
+        
     }
 };
+
+
+
