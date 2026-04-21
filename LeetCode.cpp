@@ -10401,9 +10401,8 @@ public:
     Solution()
     {
         for (int i = 1; i <= 5000; ++i)
-            if ( check(i))
+            if (check(i))
                 temp.push_back(i);
-
     }
 
     int findClosest(const std::vector<int> &arr, int target)
@@ -10517,9 +10516,72 @@ public:
 
         // If min_dist is still n, it means we never found the target
         return min_dist == n ? -1 : min_dist;
-        
     }
 };
 
+class Solution
+{
+public:
+    int n;
 
+    class DSU
+    {
+    public:
+        vector<int> parent;
+        DSU(int n)
+        {
+            parent.resize(n);
+            for (int i = 0; i < n; ++i)
+                parent[i] = i;
+        }
 
+        int find_up(int p)
+        {
+
+            if (parent[p] == p)
+                return p;
+
+            return parent[p] = find_up(parent[p]);
+        }
+
+        void un(int u, int v)
+        {
+            int uu = find_up(u);
+            int uv = find_up(v);
+
+            if (uu == uv)
+                return;
+
+            parent[uu] = uv;
+        }
+    };
+
+    int minimumHammingDistance(vector<int> &source, vector<int> &target,
+                               vector<vector<int>> &allowedSwaps)
+    {
+
+        n = source.size();
+        DSU d(n);
+        int m = allowedSwaps.size();
+        for (auto swaps : allowedSwaps)
+            d.un(swaps[0], swaps[1]);
+
+        unordered_map<int, unordered_map<int, int>> hash;
+
+        for (int i = 0; i < n; ++i)
+        {
+            int r = d.find_up(i);
+            hash[r][source[i]]++;
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int r = d.find_up(i);
+            if (hash[r][target[i]] > 0)
+                hash[r][target[i]]--;
+            else
+                ans++;
+        }
+        return ans;
+    }
+};
