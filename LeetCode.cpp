@@ -10617,3 +10617,36 @@ public:
         return ans;
     }
 };
+
+
+
+class Solution {
+public:
+    vector<long long> getDistances(vector<int>& nums) {
+        int n = nums.size();
+        vector<long long> ans(n, 0);
+        int value = nums[0];
+        unordered_map<int, long long> hash;
+        unordered_map<int, int> hash1;
+        vector<pair<long long, int>> vec;
+        for (int i = 0; i < n; ++i) {
+
+            vec.push_back({(long long)hash[nums[i]], hash1[nums[i]]});
+            hash[nums[i]] += (long long)i;
+            hash1[nums[i]]++;
+        }
+
+        for (int i = 0; i < n; ++i) {
+
+            auto [sum_before, number_before] = vec[i];
+            ans[i] = number_before * (long long)i - sum_before + hash[nums[i]] -
+                     sum_before -
+                     (long long)(hash1[nums[i]] - number_before) * i;
+        }
+
+        return ans;
+
+
+        return ans;
+    }
+};
