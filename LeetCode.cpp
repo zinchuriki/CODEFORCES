@@ -10618,25 +10618,27 @@ public:
     }
 };
 
-
-
-class Solution {
+class Solution
+{
 public:
-    vector<long long> getDistances(vector<int>& nums) {
+    vector<long long> getDistances(vector<int> &nums)
+    {
         int n = nums.size();
         vector<long long> ans(n, 0);
         int value = nums[0];
         unordered_map<int, long long> hash;
         unordered_map<int, int> hash1;
         vector<pair<long long, int>> vec;
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
+        {
 
             vec.push_back({(long long)hash[nums[i]], hash1[nums[i]]});
             hash[nums[i]] += (long long)i;
             hash1[nums[i]]++;
         }
 
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
+        {
 
             auto [sum_before, number_before] = vec[i];
             ans[i] = number_before * (long long)i - sum_before + hash[nums[i]] -
@@ -10646,8 +10648,102 @@ public:
 
         return ans;
 
-
         return ans;
     }
 };
 
+class Solution
+{
+public:
+    long long sd;
+    bool check(int k, int dist, vector<long long> &vec)
+    {
+        long long n = vec.size();
+        long long first;
+        long long prev;
+        long long a = k;
+        for (int j = 0; j <= n - a; ++j)
+        {
+            prev = vec[j];
+            first = vec[j];
+            k = a - 1;
+            while (k > 0)
+            {
+                long long new_d = prev + dist;
+                auto it = lower_bound(vec.begin(), vec.end(), new_d);
+                if (it != vec.end())
+                {
+                    prev = *it;
+                    k--;
+                }
+                else
+                    break;
+
+                if (k <= 0)
+                {
+                    if (4 * sd - prev + first >= dist)
+                        return true;
+                    break;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    int maxDistance(int side, vector<vector<int>> &points, int k)
+    {
+        vector<long long> vec;
+        sd = side;
+        int n = points.size();
+        for (int i = 0; i < n; ++i)
+        {
+            int x = points[i][0];
+            int y = points[i][1];
+            if (x == 0 && y == 0)
+            {
+                vec.push_back(0);
+                continue;
+            }
+            if (x == 0 && y != 0)
+            {
+                vec.push_back(y);
+                continue;
+            }
+            if (y == side && x != 0)
+            {
+                vec.push_back(y + x);
+                continue;
+            }
+
+            if (x == side && y != side)
+            {
+                vec.push_back(2 * sd + sd - y);
+                continue;
+            }
+            if (y == 0 && x != side)
+            {
+                vec.push_back(3 * sd + sd - x);
+                continue;
+            }
+        }
+        sort(vec.begin(), vec.end());
+        int max_p = 2 * side;
+        int l = 0;
+        int r = max_p;
+        int ans = 0;
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+            if (check(k, mid, vec))
+            {
+                ans = mid;
+                l = mid + 1;
+            }
+            else
+                r = mid - 1;
+        }
+
+        return ans;
+    }
+};
