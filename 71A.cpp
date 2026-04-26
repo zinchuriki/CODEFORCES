@@ -30,25 +30,30 @@
 // i18n
 // p43s
 
-
-#include<iostream>
+#include <iostream>
 using namespace std;
-#include<string>
-int main(){
+#include <string>
+
+int main()
+{
+
     int t;
-    cin>>t;
+    cin >> t;
     string q[t];
-    
-    for(int i=0; i<t; ++i){
-        cin>>q[i];
+
+    for (int i = 0; i < t; ++i)
+    {
+        cin >> q[i];
     }
-    for(int i=0; i<t; ++i){
-        if(q[i].size()>10){
-        cout<<q[i][0];
-        cout<<q[i].size()-2;
-        cout<<q[i][(q[i].size())-1]<<endl;   
+    for (int i = 0; i < t; ++i)
+    {
+        if (q[i].size() > 10)
+        {
+            cout << q[i][0];
+            cout << q[i].size() - 2;
+            cout << q[i][(q[i].size()) - 1] << endl;
         }
-        else cout<<q[i]<<"\n";
+        else
+            cout << q[i] << "\n";
     }
-    
 }
