@@ -10747,3 +10747,62 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int n, m;
+
+    bool dfs(pair<int, int> parent, pair<int, int> &start, pair<int, int> cur,
+             vector<vector<char>> &grid, vector<vector<bool>> &vis, int count)
+    {
+
+        auto [parent_x, parent_y] = parent;
+        auto [start_x, start_y] = start;
+        auto [cur_x, cur_y] = cur;
+        if (cur_x < 0 || cur_x >= n || cur_y < 0 || cur_y >= m)
+            return false;
+        if (parent_x != -1)
+        {
+            if (grid[cur_x][cur_y] != grid[parent_x][parent_y])
+                return false;
+            if (vis[cur_x][cur_y])
+                return true;
+        }
+        vis[cur_x][cur_y] = true;
+        bool up = false;
+        bool down = false;
+        bool left = false;
+        bool right = false;
+        if (make_pair(cur_x - 1, cur_y) != parent)
+            up = dfs(cur, start, {cur_x - 1, cur_y}, grid, vis, count + 1);
+        if (make_pair(cur_x + 1, cur_y) != parent)
+            down = dfs(cur, start, {cur_x + 1, cur_y}, grid, vis, count + 1);
+        if (make_pair(cur_x, cur_y - 1) != parent)
+            left = dfs(cur, start, {cur_x, cur_y - 1}, grid, vis, count + 1);
+        if (make_pair(cur_x, cur_y + 1) != parent)
+            right = dfs(cur, start, {cur_x, cur_y + 1}, grid, vis, count + 1);
+
+        return up | left | down | right;
+    }
+
+    bool containsCycle(vector<vector<char>> &grid)
+    {
+        n = grid.size();
+        m = grid[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if (!vis[i][j])
+                {
+                    pair<int, int> st = {i, j};
+                    if (dfs({-1, -1}, st, {i, j}, grid, vis, 1))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+};
