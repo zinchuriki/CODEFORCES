@@ -10806,3 +10806,102 @@ public:
         return false;
     }
 };
+
+class Solution
+{
+public:
+    int n, m;
+
+    vector<string> vec;
+
+    bool check(int i, int j, int new_i, int new_j, vector<vector<int>> &grid,
+               string tg)
+    {
+
+        if (new_i < 0 || new_i >= n || new_j < 0 || new_j >= m)
+            return false;
+        string ntg;
+        if (tg == "U")
+            ntg = "D";
+        if (tg == "L")
+            ntg = "R";
+        if (tg == "D")
+            ntg = "U";
+        if (tg == "R")
+            ntg = "L";
+        int s1 = grid[i][j];
+
+        int s2 = grid[new_i][new_j];
+        bool a = false;
+        bool b = false;
+        for (int i = 0; i < 2; ++i)
+        {
+            if (vec[s1][i] == tg[0])
+            {
+                a = true;
+                break;
+            }
+        }
+        for (int i = 0; i < 2; ++i)
+        {
+            if (vec[s2][i] == ntg[0])
+            {
+                b = true;
+                break;
+            }
+        }
+        if (a && b)
+            return true;
+
+        return false;
+    }
+
+    bool dfs(vector<vector<bool>> &vis, vector<vector<int>> &grid, int i,
+             int j)
+    {
+
+        if (i == n - 1 && j == m - 1)
+            return true;
+        if (vis[i][j])
+            return false;
+
+        bool up = false;
+        bool left = false;
+        bool right = false;
+        bool down = false;
+        vis[i][j] = true;
+
+        // up
+        if (check(i, j, i - 1, j, grid, "U"))
+            up = dfs(vis, grid, i - 1, j);
+        // down
+        if (check(i, j, i + 1, j, grid, "D"))
+            down = dfs(vis, grid, i + 1, j);
+        // left
+        if (check(i, j, i, j - 1, grid, "L"))
+            left = dfs(vis, grid, i, j - 1);
+        // right
+        if (check(i, j, i, j + 1, grid, "R"))
+            right = dfs(vis, grid, i, j + 1);
+
+        return up | down | left | right;
+    }
+
+    bool hasValidPath(vector<vector<int>> &grid)
+    {
+
+        vec.push_back("");
+        vec.push_back("LR");
+        vec.push_back("UD");
+        vec.push_back("LD");
+        vec.push_back("RD");
+        vec.push_back("LU");
+        vec.push_back("RU");
+
+        n = grid.size();
+        m = grid[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+        return dfs(vis, grid, 0, 0);
+    }
+};
