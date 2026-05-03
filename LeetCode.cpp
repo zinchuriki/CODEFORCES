@@ -10905,3 +10905,54 @@ public:
         return dfs(vis, grid, 0, 0);
     }
 };
+
+class Solution
+{
+public:
+    int minOperations(vector<vector<int>> &grid, int x)
+    {
+        vector<int> vec;
+        int n = grid.size();
+        int m = grid[0].size();
+        long int sum = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                sum += grid[i][j];
+                vec.push_back(grid[i][j]);
+            }
+        }
+        sort(vec.begin(), vec.end());
+        long int ans = INT_MAX;
+        int idx = 0;
+        long int sum1 = 0;
+        for (int i = 0; i < n * m; ++i)
+        {
+            long int ts = vec[i] * idx - sum1 + (sum - vec[i] - sum1) - ((n * m - i - 1) * vec[i]);
+            if (ts % x == 0)
+                ans = min(ts / x, ans);
+        }
+
+        if (ans == INT_MAX)
+            return -1;
+    }
+};
+
+class Solution
+{
+public:
+    bool rotateString(string s, string goal)
+    {
+        if (goal.size() != s.size())
+            return false;
+        string a = s + s;
+
+        for (int i = 0; i < goal.size(); i++)
+        {
+            if (goal == a.substr(i, goal.size()))
+                return true;
+        }
+        return false;
+    }
+};
