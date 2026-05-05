@@ -12,6 +12,14 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
 // class Solution
 // {
 // public:
@@ -10976,5 +10984,48 @@ public:
         }
 
         matrix = vec;
+    }
+};
+
+class Solution
+{
+public:
+    ListNode *rotateRight(ListNode *head, int k)
+    {
+
+        int n = 0;
+
+        ListNode *temp = head;
+        ListNode *last = NULL;
+        while (temp != NULL)
+        {
+            n++;
+            last = temp;
+            temp = temp->next;
+        }
+        if (n == 0)
+            return head;
+        k = k % n;
+        if (k == 0)
+            return head;
+        k = n - k;
+
+        ListNode *start = head;
+        while (k > 0)
+        {
+            head = head->next;
+            k--;
+        }
+
+        ListNode *cur = head;
+        while (last->next != head)
+        {
+            last->next = start;
+            last = start;
+            start = start->next;
+        }
+        last->next = NULL;
+
+        return head;
     }
 };
