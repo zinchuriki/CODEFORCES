@@ -20,6 +20,19 @@ struct ListNode
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
+
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x)
+    {
+        data = x;
+        left = right = nullptr;
+    }
+};
 // class Solution
 // {
 // public:
