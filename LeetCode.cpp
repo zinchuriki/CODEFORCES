@@ -11095,3 +11095,36 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> maxValue(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> pref(n);
+        vector<int> suf(n);
+        int maxi = INT_MIN;
+        int mini = INT_MAX;
+        for (int i = 0; i < n; ++i)
+        {
+            maxi = max(maxi, nums[i]);
+            pref[i] = maxi;
+            suf[n - i - 1] = mini;
+            mini = min(mini, nums[n - i - 1]);
+        }
+        int ans = pref[n - 1];
+        vector<int> vec(n);
+        for (int i = n - 1; i >= 0; --i)
+        {
+
+            if (pref[i] <= suf[i])
+            {
+                ans = pref[i];
+            }
+            vec[i] = ans;
+        }
+
+        return vec;
+    }
+};
