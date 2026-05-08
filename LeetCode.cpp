@@ -11141,3 +11141,112 @@ public:
         return vec;
     }
 };
+
+class Solution
+{
+public:
+    int n;
+
+    bool isPrime(int n)
+    {
+
+        if (n <= 1)
+            return false;
+        if (n == 2)
+            return true;
+
+        if (n % 2 == 0)
+            return false;
+
+        int limit = std::sqrt(n);
+        for (int i = 3; i <= limit; i += 2)
+        {
+            if (n % i == 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    int bfs(unordered_map<int, vector<int>> &hash, vector<int> &nums)
+    {
+
+        queue<pair<int, int>> pq;
+        pq.push({0, 0});
+
+        vector<bool> vis(n, false);
+        vis[0] = true;
+        int ans = INT_MAX;
+        while (!pq.empty())
+        {
+            auto [dist, node] = pq.front();
+            pq.pop();
+            if (node == n - 1)
+            {
+                ans = min(ans, dist);
+                continue;
+            }
+
+            if (node - 1 >= 0 && !vis[node - 1])
+            {
+                pq.push({dist + 1, node - 1});
+                vis[node - 1] = true;
+            }
+            if (node + 1 < n && !vis[node + 1])
+            {
+                pq.push({dist + 1, node + 1});
+                vis[node + 1] = true;
+            }
+
+            for (int i = 0; i < hash[nums[node]].size(); ++i)
+            {
+                int cur_node = hash[nums[node]][i];
+                if (!vis[cur_node])
+                {
+                    pq.push({dist + 1, cur_node});
+                    vis[cur_node] = true;
+                }
+            }
+            hash[nums[node]] = {};
+        }
+
+        return ans;
+    }
+
+    int minJumps(vector<int> &nums)
+    {
+        vector<int> primes;
+        vector<int> comp;
+        n = nums.size();
+        unordered_map<int, vector<int>> hash;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (isPrime(nums[i]))
+            {
+                primes.push_back(i);
+                hash[nums[i]].push_back(i);
+            }
+            else
+            {
+                comp.push_back(i);
+            }
+        }
+
+        for (int i = 0; i < comp.size(); ++i)
+        {
+            for (int j = 0; j < primes.size(); ++j)
+            {
+                if (nums[comp[i]] % nums[primes[j]] == 0 &&
+                    abs(comp[i] - primes[j]) != 1)
+                {
+                    hash[nums[primes[j]]].push_back(comp[i]);
+                }
+            }
+        }
+
+        return bfs(hash, nums);
+    }
+};
