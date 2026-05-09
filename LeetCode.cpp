@@ -11250,3 +11250,87 @@ public:
         return bfs(hash, nums);
     }
 };
+
+class Solution
+{
+public:
+    void rotate(std::vector<int> &arr, int k)
+    {
+        int n = arr.size();
+        if (n == 0)
+            return;
+
+        // Normalize k in case k > n
+        k = k % n;
+        if (k == 0)
+            return;
+
+        // 1. Reverse the entire array
+        std::reverse(arr.begin(), arr.end());
+
+        // 2. Reverse the first k elements (0 to k-1)
+        std::reverse(arr.begin(), arr.begin() + k);
+
+        // 3. Reverse the rest (k to n-1)
+        std::reverse(arr.begin() + k, arr.end());
+    }
+    vector<vector<int>> rotateGrid(vector<vector<int>> &grid, int k)
+    {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        int size_grid = min(n, m) / 2;
+        int cur_div = 2 * (n + m - 2);
+        int iter = 0;
+
+        while (iter < size_grid)
+        {
+
+            int sx = iter;
+            int sy = iter;
+
+            int limit_x = n - iter;
+            int limit_y = m - iter;
+
+            vector<int> temp;
+            for (int i = sx; i < limit_x; ++i)
+                temp.push_back(grid[i][sy]);
+
+            for (int i = sy + 1; i < limit_y; ++i)
+                temp.push_back(grid[limit_x - 1][i]);
+
+            for (int i = limit_x - 2; i >= sx; --i)
+            {
+                temp.push_back(grid[i][limit_y - 1]);
+            }
+
+            for (int i = limit_y - 2; i >= sy + 1; --i)
+            {
+                temp.push_back(grid[sx][i]);
+            }
+
+            rotate(temp, k);
+
+            int j = 0;
+            for (int i = sx; i < limit_x; ++i)
+                grid[i][sy] = temp[j++];
+
+            for (int i = sy + 1; i < limit_y; ++i)
+                grid[limit_x - 1][i] = temp[j++];
+
+            for (int i = limit_x - 2; i >= sx; --i)
+            {
+                grid[i][limit_y - 1] = temp[j++];
+            }
+
+            for (int i = limit_y - 2; i >= sy + 1; --i)
+            {
+                grid[sx][i] = temp[j++];
+            }
+
+            iter++;
+        }
+
+        return grid;
+    }
+};
