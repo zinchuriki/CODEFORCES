@@ -11334,3 +11334,94 @@ public:
         return grid;
     }
 };
+
+class Solution
+{
+public:
+    int n;
+    int t;
+    int cal(vector<int> &dp, vector<int> &nums, int jumps, int idx)
+    {
+
+        if (idx == n - 1)
+            return 0;
+
+        if (dp[idx] != -1)
+            return dp[idx];
+
+        int temp = INT_MIN;
+
+        for (int i = idx + 1; i < n; ++i)
+        {
+            if (abs(nums[idx] - nums[i]) <= t)
+                temp = max(temp, 1 + cal(dp, nums, jumps + 1, i));
+        }
+
+        return dp[idx] = temp;
+    }
+
+    int maximumJumps(vector<int> &nums, int target)
+    {
+        n = nums.size();
+        t = target;
+        vector<int> dp(n + 1, -1);
+
+        return max(-1, cal(dp, nums, 0, 0));
+    }
+};
+
+class Solution
+{
+public:
+    int maxProfit(int x, int y, vector<int> &a, vector<int> &b)
+    {
+        // code here
+        priority_queue<pair<int, int>> pq;
+        int n = a.size();
+        for (int i = 0; i < n; ++i)
+        {
+
+            pq.push({abs(b[i] - a[i]), i});
+        }
+        vector<int> vis(n, false);
+        vector<int> vec = {x, y};
+        int div = 1e5;
+        int ans = 0;
+        while (!pq.empty())
+        {
+            auto [val, task] = pq.top();
+            pq.pop();
+            int c;
+            if (a[task] > b[task] && vec[0] > 0)
+                c = 0;
+
+            else
+            {
+                if (vec[1] > 0)
+                    c = 1;
+                else
+                    c = 0;
+            }
+
+            if (a[task] == b[task])
+            {
+                if (vec[0] > 0)
+                    c = 0;
+                else
+                    c = 1;
+            }
+
+            if (vis[task] || vec[c] <= 0)
+                continue;
+
+            vis[task] = true;
+            vec[c]--;
+            if (c == 0)
+                ans += a[task];
+            else
+                ans += b[task];
+        }
+
+        return ans;
+    }
+};
