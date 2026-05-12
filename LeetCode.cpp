@@ -11425,3 +11425,173 @@ public:
         return ans;
     }
 };
+
+vector<vector<int>> anagrams(const vector<string> &A)
+{
+
+    vector<vector<int>> ans;
+    map<vector<int>, vector<int>> hash;
+
+    int n = A.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        vector<int> temp(26, 0);
+        for (int j = 0; j < A[i].size(); ++j)
+        {
+            temp[A[i][j] - 'a']++;
+        }
+
+        hash[temp].push_back(i);
+    }
+
+    for (auto it = hash.begin(); it != hash.end(); ++it)
+    {
+        ans.push_back(it->second);
+    }
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    int temp;
+    bool check(string &s)
+    {
+
+        int n = s.size();
+        int left = 0, right = 0;
+        if (n != temp)
+            return false;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (isalpha(s[i]))
+                continue;
+
+            if (s[i] == '(')
+                left++;
+            else
+            {
+                left--;
+                if (left < 0)
+                    return false;
+            }
+        }
+        if (left == 0)
+            return true;
+
+        return false;
+    }
+
+    vector<string> ans;
+
+    void cal(string s, int idx, string &org)
+    {
+        int n = org.size();
+        if (idx >= n)
+        {
+            if (check(s))
+            {
+                ans.push_back(s);
+            }
+            return;
+        }
+
+        cal(s + org[idx], idx + 1, org);
+        cal(s, idx + 1, org);
+    }
+
+    vector<string> validParenthesis(string &s)
+    {
+
+        int left = 0;
+        temp = 0;
+        int n = s.size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (isalpha(s[i]))
+                continue;
+
+            if (s[i] == '(')
+                left++;
+            else
+            {
+                left--;
+                if (left < 0)
+                {
+                    temp++;
+                    left = 0;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minimumEffort(vector<vector<int>> &tasks)
+    {
+
+        int n = tasks.size();
+        sort(tasks.begin(), tasks.end(), [](const vector<int> &a, const vector<int> &b)
+             {
+        // Calculate the difference for both inner vectors
+        int diffA = a[1] - a[0];
+        int diffB = b[1] - b[0];
+        
+        // Return true if 'a' should come before 'b' (Descending order)
+        return diffA > diffB; });
+
+        int ini = tasks[0][1];
+
+        int left = ini - tasks[0][0];
+
+        for (int i = 1; i < n; ++i)
+        {
+            int req = tasks[i][1];
+            int used = tasks[i][0];
+            if (left >= req)
+            {
+                left -= used;
+            }
+            else
+            {
+                ini += req - left;
+                left = req - used;
+            }
+        }
+
+        return ini;
+    }
+};
+
+vector<int> intersect(const vector<int> &A, const vector<int> &B)
+{
+
+    int l = 0, r = 0;
+    int n = A.size();
+    int m = B.size();
+    vector<int> ans;
+    while (l < n && r < m)
+    {
+        if (A[l] == B[r])
+        {
+            ans.push_back(B[l]);
+            l++;
+            r++;
+        }
+        else if (A[l] < B[r])
+        {
+            l++;
+        }
+        else
+            r++;
+    }
+
+    return ans;
+}
