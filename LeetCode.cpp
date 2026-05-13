@@ -11595,3 +11595,114 @@ vector<int> intersect(const vector<int> &A, const vector<int> &B)
 
     return ans;
 }
+
+class Solution
+{
+public:
+    void dfs(vector<vector<int>> &edges, vector<bool> &gvis, vector<bool> &vis, int cur, int &temp)
+    {
+
+        if (!vis[cur])
+            temp++;
+        vis[cur] = true;
+        gvis[cur] = true;
+        int n = edges[cur].size();
+        for (int i = 0; i < n; ++i)
+        {
+            int next = edges[cur][i];
+            if (!vis[next])
+                dfs(edges, gvis, vis, next, temp);
+        }
+    }
+
+    int findMotherVertex(int V, vector<vector<int>> &edges)
+    {
+        vector<bool> vis(V, false);
+        int n = edges.size();
+        vector<vector<int>> g(V);
+        for (int i = 0; i < n; ++i)
+        {
+            int n1 = edges[i][0];
+            int n2 = edges[i][1];
+            g[n1].push_back(n2);
+        }
+
+        for (int i = 0; i < V; ++i)
+        {
+            vector<bool> visited(V, false);
+            int temp = 0;
+            if (!vis[i])
+                dfs(g, vis, visited, i, temp);
+            if (temp == V)
+                return i;
+        }
+
+        return -1;
+    }
+};
+
+int Solution(const string A, const string B)
+{
+    int n = A.size();
+    int m = B.size();
+    int l = 0;
+    while (l < n)
+    {
+        int temp = 0;
+        int r = 0;
+        while (r < m && l < n && A[l] == B[r])
+        {
+            l++;
+            r++;
+            temp++;
+        }
+        if (temp == m)
+            return l - temp + 1;
+    }
+
+    return -1;
+}
+
+
+class Solution {
+public:
+    int minMoves(vector<int>& nums, int limit) {
+        int n = nums.size();
+        
+        // Difference array size needs to be 2 * limit + 2 
+        // to safely handle the R + 1 boundary conditions.
+        vector<int> diff(2 * limit + 2, 0);
+        
+        // Loop through the first half of the array to pair elements
+        for (int i = 0; i < n / 2; ++i) {
+            int a = min(nums[i], nums[n - 1 - i]);
+            int b = max(nums[i], nums[n - 1 - i]);
+            
+            // Case 1: Interval [2, 2 * limit] takes 2 moves
+            diff[2] += 2;
+            diff[2 * limit + 1] -= 2;
+            
+            // Case 2: Interval [a + 1, b + limit] takes 1 move 
+            // (Subtract 1 from the default 2 moves)
+            diff[a + 1] -= 1;
+            diff[b + limit + 1] += 1;
+            
+            // Case 3: Exact sum [a + b] takes 0 moves
+            // (Subtract another 1 from the current 1 move)
+            diff[a + b] -= 1;
+            diff[a + b + 1] += 1;
+        }
+        
+        int min_moves = n; // The maximum possible moves is n (changing everything)
+        int current_moves = 0;
+        
+        // Loop over the difference array to calculate the prefix sum
+        // and find the minimum possible moves to reach any sum.
+        for (int i = 2; i <= 2 * limit; ++i) {
+            current_moves += diff[i];
+            min_moves = min(min_moves, current_moves);
+        }
+        
+        return min_moves;
+    }
+};

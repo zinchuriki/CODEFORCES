@@ -38,3 +38,30 @@ from orders
     JOIN manager m ON  orders.Segment=m.Segment
 WHERE orders.Order_Date NOT LIKE '%-20'
 GROUP BY m.Segment_Manager
+
+
+SELECT
+    o.customer_id AS customer_id,
+    o.product_id AS product_id,
+    p.product_name AS product_name
+FROM Orders o
+    JOIN Products p ON o.product_id = p.product_id
+GROUP BY o.customer_id, o.product_id, p.product_name
+HAVING COUNT(o.order_id) = (
+    SELECT MAX(cnt)
+FROM (
+        SELECT COUNT(order_id) as cnt
+    FROM Orders
+    WHERE customer_id = o.customer_id
+    GROUP BY product_id
+    ) as temp
+)
+ORDER BY o.customer_id;
+
+
+
+
+SELECT i.invoice_id AS invoice_id, p.name AS name, SUM(i.rest) AS rest, SUM(i.paid) AS paid, SUM(i.cancelled) AS cancelled, SUM(i.refunded) AS refunded
+FROM Product p
+    LEFT JOIN Invoice i ON p.product_id=i.product_id
+GROUP BY name;
