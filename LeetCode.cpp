@@ -11663,46 +11663,91 @@ int Solution(const string A, const string B)
     return -1;
 }
 
-
-class Solution {
+class Solution
+{
 public:
-    int minMoves(vector<int>& nums, int limit) {
+    int minMoves(vector<int> &nums, int limit)
+    {
         int n = nums.size();
-        
-        // Difference array size needs to be 2 * limit + 2 
+
+        // Difference array size needs to be 2 * limit + 2
         // to safely handle the R + 1 boundary conditions.
         vector<int> diff(2 * limit + 2, 0);
-        
+
         // Loop through the first half of the array to pair elements
-        for (int i = 0; i < n / 2; ++i) {
+        for (int i = 0; i < n / 2; ++i)
+        {
             int a = min(nums[i], nums[n - 1 - i]);
             int b = max(nums[i], nums[n - 1 - i]);
-            
+
             // Case 1: Interval [2, 2 * limit] takes 2 moves
             diff[2] += 2;
             diff[2 * limit + 1] -= 2;
-            
-            // Case 2: Interval [a + 1, b + limit] takes 1 move 
+
+            // Case 2: Interval [a + 1, b + limit] takes 1 move
             // (Subtract 1 from the default 2 moves)
             diff[a + 1] -= 1;
             diff[b + limit + 1] += 1;
-            
+
             // Case 3: Exact sum [a + b] takes 0 moves
             // (Subtract another 1 from the current 1 move)
             diff[a + b] -= 1;
             diff[a + b + 1] += 1;
         }
-        
+
         int min_moves = n; // The maximum possible moves is n (changing everything)
         int current_moves = 0;
-        
+
         // Loop over the difference array to calculate the prefix sum
         // and find the minimum possible moves to reach any sum.
-        for (int i = 2; i <= 2 * limit; ++i) {
+        for (int i = 2; i <= 2 * limit; ++i)
+        {
             current_moves += diff[i];
             min_moves = min(min_moves, current_moves);
         }
-        
+
         return min_moves;
     }
 };
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int ck;
+
+bool traverse(TreeNode *root, vector<int> &ans)
+{
+
+    if (root == NULL)
+        return false;
+
+    if (root->val == ck)
+    {
+        ans.push_back(ck);
+        return true;
+    }
+
+    if (traverse(root->left, ans) || traverse(root->right, ans))
+    {
+        ans.push_back(root->val);
+        return true;
+    }
+
+    return false;
+}
+
+vector<int> Solve(TreeNode *A, int B)
+{
+    ck = B;
+    vector<int> ans;
+    traverse(A, ans);
+
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
