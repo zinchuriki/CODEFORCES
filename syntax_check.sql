@@ -65,3 +65,11 @@ SELECT i.invoice_id AS invoice_id, p.name AS name, SUM(i.rest) AS rest, SUM(i.pa
 FROM Product p
     LEFT JOIN Invoice i ON p.product_id=i.product_id
 GROUP BY name;
+
+
+select e.employee_id as employee_id, e.name as name, COUNT(*) AS reports_count , AVG(e.age) AS age
+from Employees e, Employee f
+WHERE e.employee_id=f.reports_to
+GROUP BY employee_id
+ORDER BY employee_id;
+
