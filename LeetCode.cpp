@@ -11773,3 +11773,165 @@ public:
         return nums[l];
     }
 };
+
+class Solution
+{
+public:
+    class SegmentTree
+    {
+
+        vector<long long> tree;
+        vector<int> arr;
+        int n;
+
+    public:
+        SegmentTree(vector<int> &input)
+        {
+
+            arr = input;
+            n = arr.size();
+
+            tree.resize(4 * n);
+
+            build(0, 0, n - 1);
+        }
+
+        // BUILD
+
+        long long build(int idx, int l, int r)
+        {
+
+            if (l == r)
+            {
+                tree[idx] = arr[l];
+                return tree[idx];
+            }
+
+            int mid = l + (r - l) / 2;
+
+            long long left =
+                build(2 * idx + 1, l, mid);
+
+            long long right =
+                build(2 * idx + 2, mid + 1, r);
+
+            return tree[idx] = lcm(left, right);
+        }
+
+        // QUERY
+
+        long long query(int idx,
+                        int l,
+                        int r,
+                        int ql,
+                        int qr)
+        {
+
+            // COMPLETE OVERLAP
+
+            if (l >= ql && r <= qr)
+                return tree[idx];
+
+            // NO OVERLAP
+
+            if (r < ql || l > qr)
+                return 1;
+
+            // PARTIAL OVERLAP
+
+            int mid = l + (r - l) / 2;
+
+            long long left =
+                query(2 * idx + 1,
+                      l,
+                      mid,
+                      ql,
+                      qr);
+
+            long long right =
+                query(2 * idx + 2,
+                      mid + 1,
+                      r,
+                      ql,
+                      qr);
+
+            return lcm(left, right);
+        }
+
+        // UPDATE
+
+        void update(int idx,
+                    int l,
+                    int r,
+                    int pos,
+                    int val)
+        {
+
+            if (l == r)
+            {
+                tree[idx] = val;
+                arr[pos] = val;
+                return;
+            }
+
+            int mid = l + (r - l) / 2;
+
+            if (pos <= mid)
+            {
+
+                update(2 * idx + 1,
+                       l,
+                       mid,
+                       pos,
+                       val);
+            }
+            else
+            {
+
+                update(2 * idx + 2,
+                       mid + 1,
+                       r,
+                       pos,
+                       val);
+            }
+
+            tree[idx] =
+                lcm(tree[2 * idx + 1],
+                    tree[2 * idx + 2]);
+        }
+
+        // WRAPPERS
+
+        long long query(int l, int r)
+        {
+
+            return query(0, 0, n - 1, l, r);
+        }
+
+        void update(int pos, int val)
+        {
+
+            update(0, 0, n - 1, pos, val);
+        }
+    };
+
+    vector<long long> RangeLCMQuery(vector<int> &arr, vector<vector<int>> &queries)
+    {
+
+        SegmentTree s1(arr);
+
+        int n = queries.size();
+        vector<long long> ans;
+        for (int i = 0; i < n; ++i)
+        {
+
+            if (queries[i][0] == 1)
+            {
+                s1.update(queries[i][1], queries[i][2]);
+            }
+            else
+                ans.push_back(s1.query(queries[i][1], queries[i][2]));
+        }
+        return ans;
+    }
+};

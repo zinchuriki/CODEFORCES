@@ -73,3 +73,9 @@ WHERE e.employee_id=f.reports_to
 GROUP BY employee_id
 ORDER BY employee_id;
 
+
+
+select i.Title as title , i.Rating as rating
+FROM IMDB i
+    JOIN earning e ON e.Movie_id=i.Movie_id
+WHERE i.Title LIKE '%2012%' AND i.MetaCritic>60 AND e.Domestic>100000000
