@@ -11935,3 +11935,24 @@ public:
         return ans;
     }
 };
+
+bool check(TreeNode *A, TreeNode *B)
+{
+
+    if (A == NULL && B == NULL)
+    {
+        if (A != B)
+            return false;
+        return true;
+    }
+
+    if (A->val != B->val)
+        return false;
+
+    return check(A->left, B->left) && check(A->right, B->right);
+}
+int isSameTree(TreeNode *A, TreeNode *B)
+{
+
+    return check(A, B);
+}
