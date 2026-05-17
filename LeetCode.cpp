@@ -11956,3 +11956,32 @@ int isSameTree(TreeNode *A, TreeNode *B)
 
     return check(A, B);
 }
+
+class Solution
+{
+public:
+    int n;
+    bool dfs(vector<bool> &vis, vector<int> &arr, int idx)
+    {
+
+        if (idx >= n || idx < 0)
+            return false;
+        if (vis[idx])
+            return false;
+        vis[idx] = true;
+        int val = arr[idx];
+        if (val == 0)
+            return true;
+        bool left = dfs(vis, arr, idx - val);
+        bool right = dfs(vis, arr, idx + val);
+
+        return left || right;
+    }
+
+    bool canReach(vector<int> &arr, int start)
+    {
+        n = arr.size();
+        vector<bool> vis(n, false);
+        return dfs(vis, arr, start);
+    }
+};
