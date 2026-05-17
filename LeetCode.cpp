@@ -11985,3 +11985,41 @@ public:
         return dfs(vis, arr, start);
     }
 };
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+        
+        void Traverse(TreeNode* A, int prev, long int & ans){
+                if(A==NULL) return;
+            
+            if(A->left==NULL && A->right==NULL){
+                
+                      int value=A->val;
+                      prev=(prev*10+value)%1003;
+                      ans=(ans+prev)%1003;
+                
+                
+                return;
+            }
+            
+        
+            int value=A->val;
+            int passs= (prev*10+value)%1003;
+            Traverse(A->left,passs,ans);
+            Traverse(A->right,passs,ans);
+            
+                    
+            
+        }
+        
+int sumNumbers(TreeNode* A) {
+    long int ans=0;
+    Traverse(A,0,ans);
+    return ans;
+}
