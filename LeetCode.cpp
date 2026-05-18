@@ -11994,32 +11994,97 @@ public:
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-        
-        void Traverse(TreeNode* A, int prev, long int & ans){
-                if(A==NULL) return;
-            
-            if(A->left==NULL && A->right==NULL){
-                
-                      int value=A->val;
-                      prev=(prev*10+value)%1003;
-                      ans=(ans+prev)%1003;
-                
-                
-                return;
-            }
-            
-        
-            int value=A->val;
-            int passs= (prev*10+value)%1003;
-            Traverse(A->left,passs,ans);
-            Traverse(A->right,passs,ans);
-            
-                    
-            
-        }
-        
-int sumNumbers(TreeNode* A) {
-    long int ans=0;
-    Traverse(A,0,ans);
+
+void Traverse(TreeNode *A, int prev, long int &ans)
+{
+    if (A == NULL)
+        return;
+
+    if (A->left == NULL && A->right == NULL)
+    {
+
+        int value = A->val;
+        prev = (prev * 10 + value) % 1003;
+        ans = (ans + prev) % 1003;
+
+        return;
+    }
+
+    int value = A->val;
+    int passs = (prev * 10 + value) % 1003;
+    Traverse(A->left, passs, ans);
+    Traverse(A->right, passs, ans);
+}
+
+int sumNumbers(TreeNode *A)
+{
+    long int ans = 0;
+    Traverse(A, 0, ans);
     return ans;
 }
+
+class Solution
+{
+public:
+    int n;
+
+    int bfs(vector<int> &arr, unordered_map<int, vector<int>> hash)
+    {
+
+        queue<pair<int, int>> q;
+
+        q.push({0, 0});
+        vector<bool> vis(n, false);
+        while (!q.empty())
+        {
+
+            auto [cur_node, dist] = q.front();
+            q.pop();
+
+            if (cur_node == n - 1)
+                return dist;
+
+            if (cur_node < n - 1 && vis[cur_node + 1] != true)
+            {
+
+                q.push({cur_node + 1, dist + 1});
+                vis[cur_node + 1] = true;
+            }
+
+            if (cur_node > 1 && vis[cur_node - 1] != true)
+            {
+
+                q.push({cur_node - 1, dist + 1});
+
+                vis[cur_node + 1] = true;
+            }
+
+            int sz = hash[arr[cur_node]].size();
+
+            for (int i = 0; i < sz; ++i)
+            {
+                int next_node = hash[arr[cur_node]][i];
+                if (!vis[next_node])
+                {
+                    q.push({next_node, dist + 1});
+                    vis[next_node] = true;
+                }
+            }
+            hash[arr[cur_node]].clear();
+        }
+
+        return -1;
+    }
+
+    int minJumps(vector<int> &arr)
+    {
+        n = arr.size();
+
+        unordered_map<int, vector<int>> hash;
+
+        for (int i = 0; i < n; ++i)
+            hash[arr[i]].push_back(i);
+
+        return bfs(arr, hash);
+    }
+};
