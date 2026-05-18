@@ -22,7 +22,7 @@ const join = function (arr1, arr2) {
   arr1.sort(sortById);
   arr2.sort(sortById);
 
-  const result = [];
+  let result = [];
   let i = 0,
     j = 0;
 
