@@ -65,3 +65,38 @@ butn.addEventListener("click", () => {
 
   p.textContent = `Total Budget: $${incm}`;
 });
+
+let amount = 0;
+let arr = JSON.parse(localStorage.getItem("expenses")) || [];
+function addExpense() {
+  const expname = document.querySelector("#expenseName");
+  const amountInput = document.querySelector("#amount");
+  const date = document.querySelector("#date");
+
+  arr.push({
+    name: expname.value,
+    amount: amountInput.value,
+    date: date.value,
+  });
+  amount += Number(amountInput.value);
+  const e = document.querySelector("#totalAmount");
+  e.textContent = amount;
+
+  localStorage.setItem("expenses", JSON.stringify(arr));
+
+  displayExpenses();
+}
+
+function displayExpenses() {
+  const ul = document.querySelector("#expenseList");
+
+  ul.innerHTML = "";
+
+  arr.forEach((item) => {
+    const li = document.createElement("li");
+
+    li.textContent = `${item.name} - $${item.amount} - ${item.date}`;
+
+    ul.appendChild(li);
+  });
+}
