@@ -12088,3 +12088,35 @@ public:
         return bfs(arr, hash);
     }
 };
+
+class Solution
+{
+public:
+    int cal(vector<int> &dp, int n)
+    {
+
+        if (n < 0)
+            return 0;
+        if (dp[n] != -1)
+            return dp[n];
+
+        int n_2 = cal(dp, n / 2);
+        int n_3 = cal(dp, n / 3);
+        int n_4 = cal(dp, n / 4);
+
+        return dp[n] = max(n, n_2 + n_3 + n_4);
+    }
+    int maxSum(int n)
+    {
+        // code here.
+
+        vector<int> dp(n + 1, -1);
+
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3;
+        dp[4] = 4;
+        return cal(dp, n);
+    }
+};
