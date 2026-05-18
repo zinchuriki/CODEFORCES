@@ -12120,3 +12120,40 @@ public:
         return cal(dp, n);
     }
 };
+
+bool dfs(vector<vector<int>> &adj, vector<bool> &vis, int idx)
+{
+
+    int sz = adj.size() - 1;
+    if (idx == sz)
+        return true;
+
+    int n = adj[idx].size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        int next_idx = adj[idx][i];
+        if (!vis[next_idx])
+        {
+            vis[next_idx] = true;
+            if (dfs(adj, vis, next_idx))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+int solve(int A, vector<vector<int>> &B)
+{
+    vector<vector<int>> adj(A + 1);
+
+    int n = B.size();
+
+    for (int i = 0; i < n; ++i)
+        adj[B[i][0]].push_back(B[i][1]);
+
+    vector<bool> vis(A + 1, false);
+    vis[1] = true;
+    dfs(adj, vis, 1);
+}
