@@ -23,11 +23,12 @@ const join = function (arr1, arr2) {
   arr2.sort(sortById);
 
   const result = [];
-  let i = 0, j = 0;
+  let i = 0,
+    j = 0;
 
   while (i < arr1.length && j < arr2.length) {
     const comparison = compareIds(arr1[i].id, arr2[j].id);
-    
+
     if (comparison < 0) {
       result.push(arr1[i++]);
     } else if (comparison > 0) {
@@ -41,3 +42,26 @@ const join = function (arr1, arr2) {
 
   return result;
 };
+
+//Write your javascript code here
+
+const butn = document.querySelectorAll("button");
+let incm = 0;
+butn.addEventListener("click", () => {
+  let a = document.querySelectorAll("select");
+  let b = document.querySelector("#amount");
+  let c = document.querySelectorAll("#description");
+  let d = document.querySelectorAll("form");
+  let p = document.querySelectorAll("p");
+
+  if (b.value === "" || c.value === "") {
+    alert("sorry");
+    return;
+  }
+
+  if (a.value == "income") incm += b.value;
+  else incm -= b.value;
+  d.reset();
+
+  p.textContent = `Total Budget: $${incm}`;
+});
