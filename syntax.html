@@ -29,3 +29,56 @@
     </div>
   </body>
 </html>
+
+<!-- 19/05/2026 -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Sheet</title>
+  </head>
+  <body>
+    <div class="tableContainer">
+      <table>
+        <caption>
+          Student's Attendance Sheet
+        </caption>
+        <thead id="tHead"></thead>
+        <tbody id="tBody"></tbody>
+      </table>
+    </div>
+
+    <section>
+      <div class="container">
+        <label for="searchInput">Search Student</label>
+        <input
+          type="text"
+          type="text"
+          id="searchInput"
+          placeholder="Enter name or rollNo..."
+        />
+      </div>
+
+      <button id="btn" onclick="findStudent()">Search</button>
+      <!-- define button here -->
+    </section>
+
+    <div class="result">
+      <table>
+        <caption>
+          Student Details
+        </caption>
+        <thead>
+          <tr>
+            <th>RollNo</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Attendance (%)</th>
+          </tr>
+        </thead>
+        <tbody id="resultTBody"></tbody>
+      </table>
+    </div>
+  </body>
+</html>

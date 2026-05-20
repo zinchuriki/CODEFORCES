@@ -12157,3 +12157,52 @@ int solve(int A, vector<vector<int>> &B)
     vis[1] = true;
     dfs(adj, vis, 1);
 }
+
+class Solution
+{
+public:
+    vector<int> findThePrefixCommonArray(vector<int> &A, vector<int> &B)
+    {
+        unordered_map<int, int> hasha, hashb;
+
+        int n = A.size();
+        int cnt = 0;
+        vector<int> ans(n, 0);
+        for (int i = 0; i < n; ++i)
+        {
+            if (hashb.find(A[i]) != hashb.end())
+                cnt++;
+            hasha[A[i]]++;
+
+            if (hasha.find(B[i]) != hasha.end())
+                cnt++;
+            hashb[B[i]]++;
+            ans[i] = cnt;
+        }
+    }
+};
+
+class Solution
+{
+public:
+    bool isProduct(vector<int> &arr, long long target)
+    {
+        // code here
+        int n = arr.size();
+        unordered_map<long long, bool> hash;
+        for (int i = 0; i < n; ++i)
+        {
+            long long div = arr[i];
+            if (target % div == 0)
+            {
+                long long findd = target / div;
+                if (hash.find(findd) != hash.end())
+                    return true;
+            }
+
+            hash[div] = true;
+        }
+
+        return false;
+    }
+};
