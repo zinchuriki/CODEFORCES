@@ -12206,3 +12206,150 @@ public:
         return false;
     }
 };
+
+class Solution
+{
+public:
+    int longestCommonPrefix(vector<int> &arr1, vector<int> &arr2)
+    {
+        int n = arr1.size();
+        unordered_map<string, bool> hash;
+        for (int i = 0; i < n; ++i)
+        {
+            string a = to_string(arr1[i]);
+            int sz = a.size();
+            string temp = "";
+            for (int j = 0; j < sz; ++i)
+            {
+                temp += a[j];
+                hash[temp] = true;
+            }
+        }
+
+        int m = arr2.size();
+        int ans = 0;
+        for (int i = 0; i < m; ++i)
+        {
+            string a = to_string(arr2[i]);
+            int sz = a.size();
+            string temp = "";
+            for (int j = 0; j < sz; ++i)
+            {
+                temp += a[j];
+                if (hash.find(temp) != hash.end())
+                    ans = max(ans, j + 1);
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int travel(vector<vector<int>> &moveTime)
+    {
+        priority_queue<pair<int, pair<int, int>>,
+                       vector<pair<int, pair<int, int>>>,
+                       greater<pair<int, pair<int, int>>>>
+            pq;
+        int n = moveTime.size();
+        int m = moveTime[0].size();
+        vector<int> x = {1, 0, -1, 0};
+        vector<int> y = {0, 1, 0, -1};
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+        pq.push({0, {0, 0}});
+        vis[0][0] = true;
+
+        while (!pq.empty())
+        {
+
+            auto [dist, node] = pq.top();
+            pq.pop();
+
+            if (node == make_pair(n - 1, m - 1))
+                return dist;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                int xi = x[i] + node.first;
+                int yi = y[i] + node.second;
+                if (xi >= 0 && xi < n && yi >= 0 && yi < m)
+                {
+                    if (!vis[xi][yi])
+                    {
+                        int to_push(max(1 + dist, 1 + moveTime[xi][yi]));
+                        pq.push({to_push, {xi, yi}});
+                        vis[xi][yi] = true;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    int minTimeToReach(vector<vector<int>> &moveTime)
+    {
+
+        return travel(moveTime);
+    }
+};
+
+class Solution
+{
+public:
+    int travel(vector<vector<int>> &moveTime)
+    {
+        priority_queue<pair<int, pair<int, int>>,
+                       vector<pair<int, pair<int, int>>>,
+                       greater<pair<int, pair<int, int>>>>
+            pq;
+        int n = moveTime.size();
+        int m = moveTime[0].size();
+        vector<int> x = {1, 0, -1, 0};
+        vector<int> y = {0, 1, 0, -1};
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        pq.push({0, {0, 0}});
+        vis[0][0] = 2;
+
+        while (!pq.empty())
+        {
+
+            auto [dist, node] = pq.top();
+            pq.pop();
+
+            if (node == make_pair(n - 1, m - 1))
+                return dist;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                int xi = x[i] + node.first;
+                int yi = y[i] + node.second;
+                if (xi >= 0 && xi < n && yi >= 0 && yi < m)
+                {
+                    if (vis[xi][yi] == 0)
+                    {
+                        int to_add = 1;
+                        if (vis[node.first][node.second] == 1)
+                            to_add++;
+                        int to_push(max(to_add + dist, to_add + moveTime[xi][yi]));
+                        pq.push({to_push, {xi, yi}});
+                        vis[xi][yi] = to_add;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    int minTimeToReach(vector<vector<int>> &moveTime)
+    {
+
+        return travel(moveTime);
+    }
+};
