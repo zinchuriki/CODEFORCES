@@ -12353,3 +12353,60 @@ public:
         return travel(moveTime);
     }
 };
+
+vector<int> findAnagramsIndices(string str, string ptr, int n, int m)
+{
+
+    unordered_map<char, int> hash;
+    for (int i = 0; i < n; ++i)
+        hash[ptr[i]]++;
+
+    unordered_map<char, int> hash1;
+    int i = 0;
+    vector<int> ans;
+
+    while (i < n)
+    {
+        hash1[str[i]]++;
+        if (i >= m - 1)
+        {
+
+            if (hash1 == hash)
+                ans.push_back(i);
+
+            hash[str[i - m + 1]]--;
+            if (hash[str[i - m + 1]] <= 0)
+            {
+                hash.erase(str[i - m + 1]);
+            }
+        }
+
+        i++;
+    }
+
+    return ans;
+}
+
+vector<int> solve(vector<vector<int>> &A)
+{
+    priority_queue<int, vector<int>, greater<int>> pq;
+    int n = A.size();
+    int m = A[0].size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            pq.push(A[i][j]);
+        }
+    }
+    vector<int> ans;
+    while (!pq.empty())
+    {
+
+        ans.push_back(pq.top());
+        pq.pop();
+    }
+
+    return ans;
+}
