@@ -12410,3 +12410,27 @@ vector<int> solve(vector<vector<int>> &A)
 
     return ans;
 }
+
+class Solution
+{
+public:
+    int search(vector<int> &nums, int target)
+    {
+        int l = 0, r = nums.size();
+
+        while (l <= r)
+        {
+
+            int mid = l + (r - l) / 2;
+
+            if (nums[mid] > nums[r])
+            {
+                l = mid + 1;
+            }
+            else
+                r = mid;
+        }
+
+        return l;
+    }
+};

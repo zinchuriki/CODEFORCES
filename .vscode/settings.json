@@ -104,6 +104,7 @@
       "nomid",
       "primesum",
       "rmax"
-    ]
+    ],
+    "python.formatting.provider": "black"
   }
   
