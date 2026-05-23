@@ -12416,21 +12416,157 @@ class Solution
 public:
     int search(vector<int> &nums, int target)
     {
-        int l = 0, r = nums.size();
-
+        int n = nums.size();
+        int l = 0, r = n - 1;
         while (l <= r)
         {
 
             int mid = l + (r - l) / 2;
-
-            if (nums[mid] > nums[r])
+            if (nums[mid] == target)
+                return mid;
+            if (target > nums[mid])
             {
-                l = mid + 1;
+
+                if (nums[mid] > nums[r] || target <= nums[r])
+                    l = mid + 1;
+                else
+                    r = mid - 1;
             }
             else
-                r = mid;
+            {
+                if (target >= nums[l] || nums[l] > nums[mid])
+                    r = mid - 1;
+                else
+                    l = mid + 1;
+            }
         }
 
-        return l;
+        return -1;
     }
 };
+
+class Solution
+{
+public:
+    string removeOuterParentheses(string s)
+    {
+        string ans = "";
+
+        int n = s.size();
+        string temp = "";
+        int cnt = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            temp += s[i];
+            if (s[i] == '(')
+                cnt++;
+            else
+                cnt--;
+            if (cnt == 0)
+            {
+                for (int j = 1; j < temp.size() - 1; j++)
+                {
+                    ans += temp[j];
+                }
+                temp = "";
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int n, m;
+    int temp;
+    void dfs(vector<vector<bool>> &vis, vector<vector<int>> &grid, int i, int j)
+    {
+
+        if (i < 0 || j < 0 || i >= n || j <= m || vis[i][j] || grid[i][j] == 0)
+            return;
+
+        vis[i][j] = true;
+        temp++;
+
+        dfs(vis, grid, i + 1, j);
+        dfs(vis, grid, i, j - 1);
+        dfs(vis, grid, i - 1, j);
+        dfs(vis, grid, i, j + 1);
+    }
+
+    int cntOnes(vector<vector<int>> &grid)
+    {
+        n = grid.size();
+        m = grid[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, false));
+        int cnt = 0;
+        temp = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                if ((i == 0 || j == 0 || i == n - 1 || j == m - 1) && !vis[i][j] && grid[i][j] == 1)
+                {
+
+                    dfs(vis, grid, i, j);
+                }
+                cnt += grid[i][j];
+            }
+        }
+
+        return cnt - temp;
+    }
+};
+
+int solve(string A)
+{
+    int n = A.size();
+    int l = 0, r = n - 1;
+    int cnt = 0;
+    while (l < r)
+    {
+
+        if (A[l] != A[r])
+        {
+            if (A[l + 1] == A[r])
+            {
+                l++;
+                cnt++;
+            }
+
+            else if (A[r - 1] == A[l])
+            {
+                r--;
+                cnt++;
+            }
+            else
+                return 0;
+        }
+
+        if (cnt > 1)
+            return 0;
+    }
+
+    if (cnt == 0)
+    {
+        if (n & 1)
+            return 1;
+        return 0;
+    }
+
+    return 1;
+}
+
+
+vector<vector<int>> fahrenheitToCelsius(int s, int e, int w)
+{vector<vector<int>> ans;
+	for(int i=s; i<=e; i+=w){
+		int c=(i-32)*5/9;
+		ans.push_back({i,c});
+	}
+
+	return ans;
+	//type your code here
+}
