@@ -12559,14 +12559,157 @@ int solve(string A)
     return 1;
 }
 
-
 vector<vector<int>> fahrenheitToCelsius(int s, int e, int w)
-{vector<vector<int>> ans;
-	for(int i=s; i<=e; i+=w){
-		int c=(i-32)*5/9;
-		ans.push_back({i,c});
-	}
+{
+    vector<vector<int>> ans;
+    for (int i = s; i <= e; i += w)
+    {
+        int c = (i - 32) * 5 / 9;
+        ans.push_back({i, c});
+    }
 
-	return ans;
-	//type your code here
+    return ans;
+    // type your code here
 }
+
+class Solution
+{
+public:
+    int maxJumps(vector<int> &arr, int d)
+    {
+        int n = arr.size();
+        vector<int> dp(n, 1);
+        int ans = 1;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            int maxi = arr[i];
+            for (int j = i - 1; j >= min(0, i - d); --j)
+            {
+                if (arr[j] > maxi)
+                {
+
+                    maxi = arr[j];
+
+                    dp[i] = max(dp[i], 1 + dp[j]);
+                }
+            }
+            maxi = arr[i];
+            for (int j = i + 1; j <= min(n - 1, i + d); ++j)
+            {
+                if (arr[j] > maxi)
+                {
+
+                    maxi = arr[j];
+
+                    dp[i] = max(dp[i], 1 + dp[j]);
+                }
+            }
+            ans = max(ans, dp[i]);
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int numberOfSpecialChars(string word)
+    {
+        vector<int> vecl(26, 0);
+        vector<int> vecu(26, 0);
+
+        int n = word.size();
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+
+            char c = word[i];
+            if (c >= 'A')
+            {
+                char b = tolower(c);
+                if (vecl[b - 'a'] > 0)
+                    vecu[c - 'A'] = INT_MIN;
+                vecu[c - 'A']++;
+            }
+            else
+            {
+                char b = toupper(c);
+                if (vecu[b - 'A'] > 0)
+                    vecu[b - 'A'] = INT_MAX;
+
+                vecl[b - 'a']++;
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < 26; ++i)
+        {
+            if (vecu[i] == INT_MAX)
+                ans++;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> stringIndices(vector<string> &wordsContainer,
+                              vector<string> &wordsQuery)
+    {
+
+        vector<int> ans;
+        unordered_map<string, int> hash;
+
+        int n = wordsContainer.size();
+        int none;
+        int none_size = INT_MAX;
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            int m = wordsContainer.size();
+            string temp = "";
+            if (m < none_size)
+            {
+                m = none_size;
+                none = i;
+            }
+            for (int j = m - 1; j >= 0; --j)
+            {
+                temp += wordsContainer[i][j];
+                if (hash.find(temp) != hash.end())
+                {
+
+                    int idx = hash[temp];
+                    int h_size = wordsContainer[idx].size();
+
+                    if (h_size > i)
+                    {
+                        hash[temp] = i;
+                    }
+                }
+                else
+                    hash[temp] = i;
+            }
+        }
+
+        n = wordsQuery.size();
+
+        for (int i = 0; i < n; ++i)
+        {
+            int m = wordsQuery[i].size();
+            string temp = "";
+            int anss = none;
+            for (int j = m - 1; j >= 0; --j)
+            {
+                temp += wordsQuery[i][j];
+                if (hash.find(temp) != hash.end())
+                    anss = hash[temp];
+            }
+
+            ans.push_back(anss);
+        }
+        return ans;
+    }
+};
