@@ -12668,11 +12668,11 @@ public:
         for (int i = 0; i < n; ++i)
         {
 
-            int m = wordsContainer.size();
+            int m = wordsContainer[i].size();
             string temp = "";
             if (m < none_size)
             {
-                m = none_size;
+                none_size = m;
                 none = i;
             }
             for (int j = m - 1; j >= 0; --j)
@@ -12684,7 +12684,7 @@ public:
                     int idx = hash[temp];
                     int h_size = wordsContainer[idx].size();
 
-                    if (h_size > i)
+                    if (h_size > m)
                     {
                         hash[temp] = i;
                     }
