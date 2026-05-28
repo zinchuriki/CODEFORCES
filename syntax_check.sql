@@ -80,4 +80,15 @@ FROM IMDB i
     JOIN earning e ON e.Movie_id=i.Movie_id
 WHERE i.Title LIKE '%2012%' AND i.MetaCritic>60 AND e.Domestic>100000000
 
- 
+select a.candidate_id as candidate_id
+from Candidates a, Candidates b, Candidates c
+WHERE candidate_id=b.candidate_id AND b.candidate_id=c.candidate_id AND a.skill='Python' AND b.skill='Tableau' AND c.skill='Postgre SQL'
+
+
+
+select DISTINCT(p.sub_id) as post_id, (select COUNT( DISTINCT s.sub_id)
+    from Submissions s
+    WHERE s.parent_id=p.sub_id ) as number_of_comments
+from Submissions p
+WHERE parent_id IS NULL
+ORDER BY post_id
