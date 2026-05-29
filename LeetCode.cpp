@@ -12816,29 +12816,34 @@ class Solution
 {
 public:
     int n;
-    void cal(string &s, int prev, int idx, int &ans)
+    int cal(string &s, int prev, int idx, int &ans, vector<vector<int>> &dp)
     {
 
         if (idx >= n)
-        {
-            ans++;
-            return;
-        }
+
+            return 1;
+
+        if (dp[idx][prev] != -1)
+            return dp[idx][prev];
         int temp = 0;
+        int anss = 0;
         for (int i = idx; i < n; ++i)
         {
 
-            temp += s[idx] - '0';
+            temp += s[i] - '0';
             if (temp >= prev)
-                cal(s, temp, i + 1, ans);
+                anss += cal(s, temp, i + 1, ans, dp);
         }
+
+        return dp[idx][prev] = anss;
     }
 
     int validGroups(string &s)
     {
         n = s.size();
         int ans = 0;
-        cal(s, 0, 0, ans);
-        return ans;
+        vector<vector<int>> dp(n, vector<int>(9001, -1));
+        return cal(s, 0, 0, ans,dp);
+        
     }
 };
