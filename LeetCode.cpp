@@ -12811,3 +12811,34 @@ vector<vector<int>> getSafeState(vector<vector<int>> &bombGrid, int n, int m)
 
     return bombGrid;
 }
+
+class Solution
+{
+public:
+    int n;
+    void cal(string &s, int prev, int idx, int &ans)
+    {
+
+        if (idx >= n)
+        {
+            ans++;
+            return;
+        }
+        int temp = 0;
+        for (int i = idx; i < n; ++i)
+        {
+
+            temp += s[idx] - '0';
+            if (temp >= prev)
+                cal(s, temp, i + 1, ans);
+        }
+    }
+
+    int validGroups(string &s)
+    {
+        n = s.size();
+        int ans = 0;
+        cal(s, 0, 0, ans);
+        return ans;
+    }
+};
