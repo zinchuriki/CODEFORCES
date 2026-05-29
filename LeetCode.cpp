@@ -12713,3 +12713,101 @@ public:
         return ans;
     }
 };
+
+bool ans(vector<vector<int>> &bg)
+{
+    bool change = true;
+
+    int n = bg.size();
+    int m = bg[0].size();
+
+    vector<vector<bool>> vis(n, vector<bool>(m, true));
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            int temp = bg[i][j];
+
+            if (temp == 0)
+                continue;
+
+            // Vertical count
+            int cnt = 1;
+
+            int k = i - 1;
+            while (k >= 0 && bg[k][j] == temp)
+            {
+                cnt++;
+                k--;
+            }
+
+            k = i + 1;
+            while (k < n && bg[k][j] == temp)
+            {
+                cnt++;
+                k++;
+            }
+
+            if (cnt >= 4)
+            {
+                vis[i][j] = false;
+                change = false;
+                continue;
+            }
+
+            // Horizontal count
+            cnt = 1;
+
+            k = j - 1;
+            while (k >= 0 && bg[i][k] == temp)
+            {
+                cnt++;
+                k--;
+            }
+
+            k = j + 1;
+            while (k < m && bg[i][k] == temp)
+            {
+                cnt++;
+                k++;
+            }
+
+            if (cnt >= 4)
+            {
+                vis[i][j] = false;
+                change = false;
+            }
+        }
+    }
+
+    // Apply gravity
+    for (int col = 0; col < m; ++col)
+    {
+        int idx = n - 1;
+
+        for (int row = n - 1; row >= 0; --row)
+        {
+            if (vis[row][col])
+            {
+                bg[idx--][col] = bg[row][col];
+            }
+        }
+
+        while (idx >= 0)
+        {
+            bg[idx--][col] = 0;
+        }
+    }
+
+    return change;
+}
+
+vector<vector<int>> getSafeState(vector<vector<int>> &bombGrid, int n, int m)
+{
+    while (!ans(bombGrid))
+    {
+    }
+
+    return bombGrid;
+}
