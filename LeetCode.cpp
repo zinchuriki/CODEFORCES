@@ -12843,7 +12843,190 @@ public:
         n = s.size();
         int ans = 0;
         vector<vector<int>> dp(n, vector<int>(9001, -1));
-        return cal(s, 0, 0, ans,dp);
-        
+        return cal(s, 0, 0, ans, dp);
+    }
+};
+vector<int> printMatrix(vector<vector<int>> &mat, int n, int m)
+{
+    vector<int> ans;
+
+    int i = 0, j = 0;
+    int count = 0;
+    while (i < n && j < m)
+    {
+
+        if (count & 1)
+        {
+
+            while (j >= 0 && i < n)
+            {
+                ans.push_back(mat[i][j]);
+                j--;
+                i++;
+            }
+            if (i < n)
+            {
+
+                j = 0;
+            }
+            else
+            {
+                j += 2;
+                i = n - 1;
+            }
+
+            count = 0;
+        }
+        else
+        {
+
+            while (i >= 0 && j < m)
+            {
+
+                ans.push_back(mat[i][j]);
+                j++;
+                i--;
+            }
+            if (j < m)
+            {
+                i = 0;
+            }
+            else
+            {
+                i += 2;
+                j = m - 1;
+            }
+
+            count = 1;
+        }
+    }
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    class SegmentTree
+    {
+        vector<int> seg;
+        int n;
+
+    public:
+        SegmentTree(vector<int> &arr)
+        {
+            n = arr.size();
+            seg.resize(4 * n);
+            build(0, 0, n - 1, arr);
+        }
+
+        void build(int idx, int low, int high, vector<int> &arr)
+        {
+            if (low == high)
+            {
+                seg[idx] = arr[low];
+                return;
+            }
+
+            int mid = (low + high) / 2;
+
+            build(2 * idx + 1, low, mid, arr);
+            build(2 * idx + 2, mid + 1, high, arr);
+
+            seg[idx] = max(seg[2 * idx + 1], seg[2 * idx + 2]);
+        }
+
+        int query(int idx, int low, int high, int l, int r)
+        {
+            if (r < low || high < l)
+                return INT_MIN;
+
+            if (l <= low && high <= r)
+                return seg[idx];
+
+            int mid = (low + high) / 2;
+
+            return max(query(2 * idx + 1, low, mid, l, r),
+                       query(2 * idx + 2, mid + 1, high, l, r));
+        }
+
+        int rangeMax(int l, int r) { return query(0, 0, n - 1, l, r); }
+
+        void update(int idx, int low, int high, int pos, int val)
+        {
+            if (low == high)
+            {
+                seg[idx] = val;
+                return;
+            }
+
+            int mid = (low + high) / 2;
+
+            if (pos <= mid)
+                update(2 * idx + 1, low, mid, pos, val);
+            else
+                update(2 * idx + 2, mid + 1, high, pos, val);
+
+            seg[idx] = max(seg[2 * idx + 1], seg[2 * idx + 2]);
+        }
+
+        void pointUpdate(int pos, int val) { update(0, 0, n - 1, pos, val); }
+    };
+
+    vector<bool> getResults(vector<vector<int>> &queries)
+    {
+        int n = queries.size();
+        int mini = min(3 * n + 1, 50001);
+        vector<int> arr(mini, 0);
+        vector<bool> ans;
+        SegmentTree s(arr);
+        set<int> st;
+        st.insert(0);
+        for (int i = 0; i < n; ++i)
+        {
+            if (queries[i][0] == 1)
+            {
+                int x = queries[i][1];
+                st.insert(x);
+                auto it = st.find(x);
+                int minus = 0;
+
+                it--;
+                minus = *it;
+
+                it++;
+
+                s.pointUpdate(x, x - minus);
+                auto next_it = next(it);
+                if (next_it != st.end())
+                {
+                    int R = *next_it;
+                    s.pointUpdate(R, R - x);
+                }
+            }
+            else
+            {
+
+                int x = queries[i][1];
+                int sz = queries[i][2];
+                auto it = st.upper_bound(x);
+                it--;
+
+                int val = *it;
+                if (x - val >= sz)
+                    ans.push_back(true);
+                else
+                {
+
+                    int temp = s.rangeMax(0, val);
+                    if (temp >= sz)
+                        ans.push_back(true);
+                    else
+                        ans.push_back(false);
+                }
+            }
+        }
+
+        return ans;
     }
 };

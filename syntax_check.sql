@@ -78,7 +78,7 @@ ORDER BY employee_id;
 select i.Title as title , i.Rating as rating
 FROM IMDB i
     JOIN earning e ON e.Movie_id=i.Movie_id
-WHERE i.Title LIKE '%2012%' AND i.MetaCritic>60 AND e.Domestic>100000000
+WHERE i.Title LIKE '%2012%' AND i.MetaCritic>60 AND e.Domestic>100000000;
 
 select a.candidate_id as candidate_id
 from Candidates a, Candidates b, Candidates c
@@ -92,3 +92,44 @@ select DISTINCT(p.sub_id) as post_id, (select COUNT( DISTINCT s.sub_id)
 from Submissions p
 WHERE parent_id IS NULL
 ORDER BY post_id
+
+
+
+
+
+
+select mc.name as Category, AVG(amount) as AverageAmount, MAX(Amount) AS MaxAmount
+FROM Merchant_Category mc
+    JOIN Merchant m ON mc.id=m.id_merchant_category
+    JOIN Transaction t ON t.id_merchant=m.id
+GROUP BY mc.name
+HAVING MAX(Amount)>3*AVG(amount); 
+
+
+
+-- +-------------+--------+------+-----+---------+-------+
+-- | Field       | Type   | Null | Key | Default | Extra |
+-- +-------------+--------+------+-----+---------+-------+
+-- | id          | int    | YES  |     | NULL    |       |
+-- | date        | text   | YES  |     | NULL    |       |
+-- | amount      | double | YES  |     | NULL    |       |
+-- | card        | bigint | YES  |     | NULL    |       |
+-- | id_merchant | int    | YES  |     | NULL    |       |
+-- +-------------+--------+------+-----+---------+-------+
+
+
+-- +-------+------+------+-----+---------+-------+
+-- | Field | Type | Null | Key | Default | Extra |
+-- +-------+------+------+-----+---------+-------+
+-- | id    | int  | YES  |     | NULL    |       |
+-- | name  | text | YES  |     | NULL    |       |
+-- +-------+------+------+-----+---------+-------+
+
+
+-- +----------------------+------+------+-----+---------+-------+
+-- | Field                | Type | Null | Key | Default | Extra |
+-- +----------------------+------+------+-----+---------+-------+
+-- | id                   | int  | YES  |     | NULL    |       |
+-- | name                 | text | YES  |     | NULL    |       |
+-- | id_merchant_category | int  | YES  |     | NULL    |       |
+-- +----------------------+------+------+-----+---------+-------+
