@@ -13030,3 +13030,61 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int n;
+
+    int cal(vector<vector<vector<int>>> &dp, vector<vector<int>> &items, int budget,
+            int idx, vector<int> &pos)
+    {
+
+        if (idx >= n)
+            return 0;
+        int poss = pos[idx];
+        if (dp[idx][budget][poss] != -1)
+            return dp[idx][budget][poss];
+        int take = 0, dtake = 0;
+        int cost_idx = items[idx][1];
+
+        dtake = cal(dp, items, budget, idx + 1, pos);
+
+        if (budget >= cost_idx)
+        {
+            if (poss > 0)
+            {
+                take += poss;
+                pos[idx] = 0;
+            }
+
+            take += 1 + cal(dp, items, budget - cost_idx, idx, pos);
+        }
+
+        return dp[idx][budget][poss] = max(take, dtake);
+    }
+
+    int maximumSaleItems(vector<vector<int>> &items, int budget)
+    {
+        n = items.size();
+        vector<int> pos(n, 0);
+
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(budget + 1, vector<int>(n, -1)));
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = i + 1; j < n; ++j)
+            {
+
+                int a_i = items[i][0];
+                int a_j = items[j][0];
+                if (a_i % a_j == 0)
+                    pos[j]++;
+                if (a_j % a_i == 0)
+                    pos[i]++;
+            }
+        }
+
+        return cal(dp, items, budget, 0, pos);
+    }
+};
