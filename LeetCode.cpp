@@ -33,6 +33,18 @@ struct Node
         left = right = nullptr;
     }
 };
+
+class Node
+{
+public:
+    int data;
+    Node *next;
+    Node(int data)
+    {
+        this->data = data;
+        this->next = NULL;
+    }
+};
 // class Solution
 // {
 // public:
@@ -13088,3 +13100,51 @@ public:
         return cal(dp, items, budget, 0, pos);
     }
 };
+
+Node *delAddLastNode(Node *head)
+{
+    // Write your code here.
+    Node *hd = head;
+    Node *temp = head;
+    Node *prev;
+    while (temp->next != NULL)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = NULL;
+    temp->next = hd;
+    head = temp;
+    return head;
+}
+int n;
+double cal(vector<double> &prob, vector<vector<double>> &dp, int idx, int target, int cnt)
+{
+
+    if (idx >= n)
+    {
+        if (target == cnt)
+            return 1.0;
+        return 0;
+    }
+    if (dp[idx][cnt] != -1.0)
+        return dp[idx][cnt];
+    double take = 0.0, dtake = 1.0;
+    if (cnt < target)
+    {
+
+        take = prob[idx] * cal(prob, dp, idx + 1, target, cnt + 1);
+    }
+
+    dtake = (1.0 - prob[idx]) * cal(prob, dp, idx + 1, target, cnt);
+
+    return dp[idx][cnt] = take + dtake;
+}
+
+double tossStrangeCoins(vector<double> &prob, int target)
+{
+    n = prob.size();
+    vector<vector<double>> dp(n, vector<double>(n + 1, -1.0));
+
+    return cal(prob, dp, 0, target, 0);
+}
