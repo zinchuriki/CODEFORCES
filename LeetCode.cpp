@@ -13148,3 +13148,41 @@ double tossStrangeCoins(vector<double> &prob, int target)
 
     return cal(prob, dp, 0, target, 0);
 }
+
+class Solution
+{
+public:
+    int findMaxProduct(vector<int> &arr)
+    {
+        int pos = 1;
+        int neg = 1;
+        int mini = INT_MIN;
+        int maxi = 0;
+        int MOD = 1e9 + 7;
+        bool zero = false;
+        int n = arr.size();
+        for (int i = 0; i < n; ++i)
+        {
+            if (arr[i] < 0)
+                mini = max(mini, arr[i]);
+            if (arr[i] > 0)
+            {
+                pos = (pos * arr[i]) % MOD;
+            }
+            else if (arr[i] < 0)
+            {
+                neg = (neg * arr[i]) % MOD;
+            }
+            else
+                zero = true;
+
+            maxi = max(maxi, arr[i]);
+        }
+
+        if (neg < 0)
+        {
+            return ((neg / mini) * pos) % MOD;
+        }
+        return max(maxi, (neg * pos) % MOD);
+    }
+};

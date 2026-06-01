@@ -101,9 +101,7 @@ ORDER BY post_id
 select mc.name as Category, AVG(amount) as AverageAmount, MAX(Amount) AS MaxAmount
 FROM Merchant_Category mc
     JOIN Merchant m ON mc.id=m.id_merchant_category
-    JOIN Transaction t ON t.id_merchant=m.id
-GROUP BY mc.name
-HAVING MAX(Amount)>3*AVG(amount); 
+    JOIN [Transaction] t ON t.id_merchant=m.id
 
 
 
@@ -133,3 +131,20 @@ HAVING MAX(Amount)>3*AVG(amount);
 -- | name                 | text | YES  |     | NULL    |       |
 -- | id_merchant_category | int  | YES  |     | NULL    |       |
 -- +----------------------+------+------+-----+---------+-------+
+
+
+
+select ROUND(COALESCE( 1.0* (select COUNT(*) FROM  (SELECT  requester_id,accepter_id  FROM RequestAccepted GROUP BY requester_id,accepter_id) b)/NULLIF((select COUNT(*) FROM (select sender_id,send_to_id FROM FriendRequest GROUP BY sender_id,send_to_id)  a),0),0.00),2)  AS accept_rate;
+
+
+SELECT COUNT(*)
+FROM (SELECT DISTINCT requester_id, accepter_id
+    FROM RequestAccepted) AS unique_accepted_request
+
+SELECT COUNT(*)
+FROM (SELECT DISTINCT sender_id, send_to_id
+    FROM FriendRequest) AS total_request;
+
+ 
+
+ 
