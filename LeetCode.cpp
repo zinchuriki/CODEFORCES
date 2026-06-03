@@ -13186,3 +13186,169 @@ public:
         return max(maxi, (neg * pos) % MOD);
     }
 };
+
+class Solution
+{
+public:
+    int earliestFinishTime(vector<int> &landStartTime,
+                           vector<int> &landDuration,
+                           vector<int> &waterStartTime,
+                           vector<int> &waterDuration)
+    {
+
+        int n = landDuration.size(), m = waterDuration.size();
+
+        int min_start_l;
+
+        int min_total_l = INT_MAX;
+
+        int min_start_w;
+        int min_total_w = INT_MAX;
+        for (int i = 0; i < n; ++i)
+        {
+            int start = landStartTime[i];
+            int duration = landDuration[i];
+            int total = start + duration;
+            if (min_total_l > total)
+            {
+                min_start_l = start;
+                min_total_l = total;
+            }
+        }
+
+        int ans = INT_MAX;
+        for (int i = 0; i < m; ++i)
+        {
+
+            int duration = waterDuration[i];
+            int start = waterStartTime[i];
+            int total = start + duration;
+            int check_total = 0;
+
+            if (min_start_l <= start)
+            {
+
+                if (start <= min_total_l)
+                {
+                    ans = min(ans, min_total_l + duration);
+                }
+                else
+                {
+                    ans = min(ans, total);
+                }
+            }
+            if (min_total_w > total)
+            {
+                min_start_w = start;
+                min_total_w = total;
+            }
+        }
+        for (int i = 0; i < n; ++i)
+        {
+            int start = landStartTime[i];
+            int duration = landDuration[i];
+            int total = start + duration;
+
+            if (min_start_w <= start)
+            {
+
+                if (start <= min_total_w)
+                {
+                    ans = min(ans, min_total_w + duration);
+                }
+                else
+                {
+                    ans = min(ans, total);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    class SegmentTree
+    {
+
+        vector<unordered_map<int, int>> tree;
+        int n;
+
+    public:
+        SegmentTree(vector<int> &arr)
+        {
+
+            n = arr.size();
+
+            tree.resize(4 * n);
+
+            build(0, 0, n - 1, arr);
+        }
+
+        void build(int idx, int l, int r, vector<int> &arr)
+        {
+
+            if (l == r)
+            {
+                tree[idx][arr[l]]++;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            ;
+            build(2 * idx + 1, l, mid, arr);
+            build(2 * idx + 2, mid + 1, r, arr);
+
+            for (auto it = tree[2 * idx + 1].begin(); it != tree[2 * idx + 1].end(); ++it)
+
+                tree[idx][it->first] += it->second;
+
+            for (auto it = tree[2 * idx + 2].begin(); it != tree[2 * idx + 2].end(); ++it)
+
+                tree[idx][it->first] += it->second;
+        }
+
+        int query(int idx, int low, int high, int l, int r, int val)
+        {
+
+            if (l >= low && r <= high)
+            {
+                return tree[idx][val];
+            }
+
+            if (r < low || l > high)
+                return 0;
+
+            int mid = l + (r - l) / 2;
+
+            int left = query(2 * idx + 1, low, high, l, mid, val);
+            int right = query(2 * idx + 2, low, high, mid + 1, r, val);
+
+            return left + right;
+        }
+
+        int query(int low, int high, int val)
+        {
+            return query(0, low, high, 0, n - 1, val);
+        }
+    };
+
+    vector<int> freqInRange(vector<int> &arr, vector<vector<int>> &queries)
+    {
+        int m = queries.size();
+        vector<int> ans(m, 0);
+
+        SegmentTree s(arr);
+
+        for (int i = 0; i < m; ++i)
+        {
+            int l = queries[i][0];
+            int r = queries[i][1];
+            int x = queries[i][2];
+            ans[i] = s.query(l, r, x);
+        }
+
+        return ans;
+    }
+};
