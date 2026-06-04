@@ -13352,3 +13352,77 @@ public:
         return ans;
     }
 };
+
+class Solution {
+public:
+    int maxSubstring(string &s) {
+        int n = s.size();
+        
+        // Setup the first character
+        int prev = (s[0] == '0') ? 1 : -1;
+        int ans = prev;
+
+        for (int i = 1; i < n; ++i) {
+            
+            // Step 1: Update the current window sum (prev)
+            if (s[i] == '0') {
+                prev = max(prev + 1, 1);
+            } else {
+                prev = max(prev - 1, -1);
+            }
+            
+            // Step 2: Check if our current sum beat the all-time high score!
+            ans = max(ans, prev);
+        }
+
+        return ans;
+    }
+};
+#include <unordered_map>
+
+using namespace std;
+
+class Solution {
+public:
+    // Helper function to find the Greatest Common Divisor
+    int getGcd(int a, int b) {
+        if (b == 0) return a;
+        return getGcd(b, a % b);
+    }
+
+    int isPower(int A) {
+        // Base case
+        if (A == 1) return 1;
+
+        int a = A;
+        unordered_map<int, int> hash;
+        int temp = 2;
+        
+        // FIX 1: Only go up to the square root to avoid Time Limit Exceeded
+        while (temp * temp <= a) {
+            while (a % temp == 0) {
+                hash[temp]++;
+                a /= temp;
+            }
+            temp++;
+        }
+        
+        // If 'a' is still greater than 1, it is a prime number itself
+        if (a > 1) {
+            hash[a]++;
+        }
+
+        // FIX 2: Find the GCD of all the frequencies instead of min/max
+        int power_gcd = 0;
+        for (auto it = hash.begin(); it != hash.end(); ++it) {
+            power_gcd = getGcd(power_gcd, it->second);
+        }
+
+        // If the GCD of the powers is greater than 1, it is a valid answer!
+        if (power_gcd > 1) {
+            return 1;
+        }
+
+        return 0;
+    }
+};
