@@ -13353,24 +13353,30 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    int maxSubstring(string &s) {
+    int maxSubstring(string &s)
+    {
         int n = s.size();
-        
+
         // Setup the first character
         int prev = (s[0] == '0') ? 1 : -1;
         int ans = prev;
 
-        for (int i = 1; i < n; ++i) {
-            
+        for (int i = 1; i < n; ++i)
+        {
+
             // Step 1: Update the current window sum (prev)
-            if (s[i] == '0') {
+            if (s[i] == '0')
+            {
                 prev = max(prev + 1, 1);
-            } else {
+            }
+            else
+            {
                 prev = max(prev - 1, -1);
             }
-            
+
             // Step 2: Check if our current sum beat the all-time high score!
             ans = max(ans, prev);
         }
@@ -13382,47 +13388,232 @@ public:
 
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
     // Helper function to find the Greatest Common Divisor
-    int getGcd(int a, int b) {
-        if (b == 0) return a;
+    int getGcd(int a, int b)
+    {
+        if (b == 0)
+            return a;
         return getGcd(b, a % b);
     }
 
-    int isPower(int A) {
+    int isPower(int A)
+    {
         // Base case
-        if (A == 1) return 1;
+        if (A == 1)
+            return 1;
 
         int a = A;
         unordered_map<int, int> hash;
         int temp = 2;
-        
+
         // FIX 1: Only go up to the square root to avoid Time Limit Exceeded
-        while (temp * temp <= a) {
-            while (a % temp == 0) {
+        while (temp * temp <= a)
+        {
+            while (a % temp == 0)
+            {
                 hash[temp]++;
                 a /= temp;
             }
             temp++;
         }
-        
+
         // If 'a' is still greater than 1, it is a prime number itself
-        if (a > 1) {
+        if (a > 1)
+        {
             hash[a]++;
         }
 
         // FIX 2: Find the GCD of all the frequencies instead of min/max
         int power_gcd = 0;
-        for (auto it = hash.begin(); it != hash.end(); ++it) {
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
             power_gcd = getGcd(power_gcd, it->second);
         }
 
         // If the GCD of the powers is greater than 1, it is a valid answer!
-        if (power_gcd > 1) {
+        if (power_gcd > 1)
+        {
             return 1;
         }
 
         return 0;
+    }
+};
+
+class Solution
+{
+public:
+    string lexicographicallySmallest(string &s, int k)
+    {
+        // code here
+        int n = s.size();
+        if (!(n & (n - 1)))
+            k /= 2;
+        else
+            k *= 2;
+        int new_size = n - k;
+
+        if (n <= k)
+            return "-1";
+
+        string ans = "";
+        stack<char> st;
+        st.push(s[0]);
+        int st_size = 1;
+        for (int i = 1; i < n; ++i)
+        {
+            int left = n - i;
+            while (!st.empty() && st_size + left > new_size && st.top() > s[i])
+            {
+                st.pop();
+                st_size--;
+            }
+
+            if (st_size < new_size)
+                st.push(s[i]);
+        }
+
+        while (!st.empty())
+        {
+            ans += st.top();
+            st.pop();
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string removeKdigits(string num, int k)
+    {
+        int n = num.size();
+
+        int new_size = n - k;
+
+        if (n <= k)
+            return "-1";
+
+        string ans = "";
+        stack<int> st;
+        st.push(num[0]);
+        int st_size = 1;
+        for (int i = 1; i < n; ++i)
+        {
+            int left = n - i;
+            while (!st.empty() && st_size + left > new_size &&
+                   st.top() > num[i])
+            {
+                st.pop();
+                st_size--;
+            }
+            st_size++;
+            st.push(num[i]);
+        }
+
+        while (st_size > new_size)
+        {
+            st_size--;
+            st.pop();
+        }
+
+        while (!st.empty())
+        {
+            ans += st.top();
+            st.pop();
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+// class Solution
+// {
+// public:
+//     long long dp[20][2][11][11];
+
+//     long long solve(int position, int tight, int lastDigit, int secondLastDigit,
+//                     string &s)
+//     {
+
+//         int n = s.size();
+//         if (position >= n)
+//             return 0;
+
+//         if (dp[position][tight][lastDigit][secondLastDigit] != -1)
+//             return dp[position][tight][lastDigit][secondLastDigit];
+//         int limit =
+//             9;
+//         if (tight)
+//             limit = s[position] - '0';
+//         long long ans = 0;
+//         for (int i = 0; i <= limit; ++i)
+//         {
+//             int new_tight = 0;
+//             if (tight && i == limit)
+//                 new_tight = 1;
+//             if (lastDigit < 10 && secondLastDigit < 10)
+//             {
+//                 if (lastDigit > secondLastDigit && lastDigit > i)
+//                     ans++;
+//                 if (lastDigit < secondLastDigit && lastDigit < i)
+//                     ans++;
+//             }
+
+//             ans += solve(position + 1, new_tight, i, lastDigit, s);
+//         }
+//         return dp[position][tight][lastDigit][secondLastDigit] = ans;
+//     }
+
+//     long long totalWaviness(long long num1, long long num2)
+//     {
+//         string n1 = to_string(num1 - 1);
+//         string n2 = to_string(num2);
+
+//         memset(dp, -1, sizeof(dp));
+//         long long ans = solve(0, 1, 10, 10, n2) - solve(0, 1, 10, 10, n1);
+//         return ans;
+//     }
+// };
+
+class Solution {
+public:
+    long long countGood(vector<int>& nums, int k) {
+        long long ans = 0;
+        int n = nums.size();
+        long long cnt = 0;
+        int l = 0, r = 0;
+        unordered_map<int, int> hash;
+        
+        while (r < n) {
+            int r_num = nums[r];
+            
+            // 1. Add pairs formed by the new right element
+            cnt += hash[r_num];
+            // 2. IMMEDIATELY update the hash map so it stays in sync
+            hash[r_num]++;
+
+            // 3. Shrink the window from the left as long as we have enough pairs
+            while (cnt >= k) {
+                int l_num = nums[l]; // Capture fresh l_num inside the loop!
+                
+                // Decrement the map FIRST, then subtract the REMAINING copies from cnt
+                hash[l_num]--;
+                cnt -= hash[l_num]; 
+                
+                l++;
+            }
+            
+            // 4. If the window breaks (cnt < k), every starting index 
+            // from 0 up to (l - 1) formed a valid subarray with r!
+            ans += l; 
+            r++;
+        }
+        
+        return ans;
     }
 };
