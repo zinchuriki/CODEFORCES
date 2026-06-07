@@ -13580,40 +13580,124 @@ public:
 //     }
 // };
 
-class Solution {
+class Solution
+{
 public:
-    long long countGood(vector<int>& nums, int k) {
+    long long countGood(vector<int> &nums, int k)
+    {
         long long ans = 0;
         int n = nums.size();
         long long cnt = 0;
         int l = 0, r = 0;
         unordered_map<int, int> hash;
-        
-        while (r < n) {
+
+        while (r < n)
+        {
             int r_num = nums[r];
-            
+
             // 1. Add pairs formed by the new right element
             cnt += hash[r_num];
             // 2. IMMEDIATELY update the hash map so it stays in sync
             hash[r_num]++;
 
             // 3. Shrink the window from the left as long as we have enough pairs
-            while (cnt >= k) {
+            while (cnt >= k)
+            {
                 int l_num = nums[l]; // Capture fresh l_num inside the loop!
-                
+
                 // Decrement the map FIRST, then subtract the REMAINING copies from cnt
                 hash[l_num]--;
-                cnt -= hash[l_num]; 
-                
+                cnt -= hash[l_num];
+
                 l++;
             }
-            
-            // 4. If the window breaks (cnt < k), every starting index 
+
+            // 4. If the window breaks (cnt < k), every starting index
             // from 0 up to (l - 1) formed a valid subarray with r!
-            ans += l; 
+            ans += l;
             r++;
         }
-        
+
         return ans;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    TreeNode *createBinaryTree(vector<vector<int>> &descriptions)
+    {
+        unordered_map<int, TreeNode *> hash;
+        unordered_map<int, bool> is_child; // Renamed for clarity
+        int n = descriptions.size();
+        TreeNode *root = nullptr;
+
+        for (int i = 0; i < n; ++i)
+        {
+            // FIXED: Correctly grab the indices 0, 1, and 2
+            int parent = descriptions[i][0];
+            int child = descriptions[i][1];
+            int left = descriptions[i][2];
+
+            TreeNode *p;
+            if (hash.find(parent) == hash.end())
+            {
+                p = new TreeNode(parent);
+                hash[parent] = p;
+            }
+            else
+            {
+                p = hash[parent];
+            }
+
+            TreeNode *ch;
+            if (hash.find(child) == hash.end())
+            {
+                ch = new TreeNode(child);
+                hash[child] = ch;
+            }
+            else
+            {
+                ch = hash[child];
+            }
+
+            // Connect the nodes
+            if (left)
+            {
+                p->left = ch;
+            }
+            else
+            {
+                p->right = ch;
+            }
+
+            // Mark this node as a child
+            is_child[child] = true;
+        }
+
+        // Find the root: The only node in 'descriptions' that is NEVER a child
+        for (int i = 0; i < n; ++i)
+        {
+            int parent = descriptions[i][0];
+            // .count() checks if the key exists without accidentally creating it
+            if (is_child.count(parent) == 0)
+            {
+                root = hash[parent];
+                break;
+            }
+        }
+
+        return root;
     }
 };
