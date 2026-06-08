@@ -13701,3 +13701,37 @@ public:
         return root;
     }
 };
+
+
+
+class Solution {
+public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+        vector<int> result;
+        // Optional but good practice: reserve space to avoid memory reallocation
+        result.reserve(nums.size()); 
+
+        // 1. First pass: Add all elements strictly less than the pivot
+        for (int num : nums) {
+            if (num < pivot) {
+                result.push_back(num);
+            }
+        }
+
+        // 2. Second pass: Add all elements exactly equal to the pivot
+        for (int num : nums) {
+            if (num == pivot) {
+                result.push_back(num);
+            }
+        }
+
+        // 3. Third pass: Add all elements strictly greater than the pivot
+        for (int num : nums) {
+            if (num > pivot) {
+                result.push_back(num);
+            }
+        }
+
+        return result;
+    }
+};
