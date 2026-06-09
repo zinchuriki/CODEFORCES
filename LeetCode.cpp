@@ -13702,36 +13702,72 @@ public:
     }
 };
 
-
-
-class Solution {
+class Solution
+{
 public:
-    vector<int> pivotArray(vector<int>& nums, int pivot) {
+    vector<int> pivotArray(vector<int> &nums, int pivot)
+    {
         vector<int> result;
         // Optional but good practice: reserve space to avoid memory reallocation
-        result.reserve(nums.size()); 
+        result.reserve(nums.size());
 
         // 1. First pass: Add all elements strictly less than the pivot
-        for (int num : nums) {
-            if (num < pivot) {
+        for (int num : nums)
+        {
+            if (num < pivot)
+            {
                 result.push_back(num);
             }
         }
 
         // 2. Second pass: Add all elements exactly equal to the pivot
-        for (int num : nums) {
-            if (num == pivot) {
+        for (int num : nums)
+        {
+            if (num == pivot)
+            {
                 result.push_back(num);
             }
         }
 
         // 3. Third pass: Add all elements strictly greater than the pivot
-        for (int num : nums) {
-            if (num > pivot) {
+        for (int num : nums)
+        {
+            if (num > pivot)
+            {
                 result.push_back(num);
             }
         }
 
         return result;
+    }
+};
+
+class Solution {
+public:
+    bool canSeatAllPeople(int k, vector<int>& seats) {
+        int n = seats.size();
+
+        for (int i = 0; i < n; ++i) {
+            if (seats[i] == 0) {
+                bool prev = true, next = true;
+                
+                // Check if left seat is occupied
+                if (i - 1 >= 0 && seats[i - 1] == 1)
+                    prev = false;
+                
+                // Check if right seat is occupied
+                if (i + 1 < n && seats[i + 1] == 1)
+                    next = false;
+
+                // If both sides are empty and we still need to seat people
+                if (prev && next && k > 0) {
+                    seats[i] = 1; // Seat the person
+                    k--;
+                }
+            }
+        }
+        
+        // If k dropped to 0 (or below), we successfully seated everyone
+        return k <= 0;
     }
 };
