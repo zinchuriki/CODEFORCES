@@ -13742,32 +13742,73 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    bool canSeatAllPeople(int k, vector<int>& seats) {
+    bool canSeatAllPeople(int k, vector<int> &seats)
+    {
         int n = seats.size();
 
-        for (int i = 0; i < n; ++i) {
-            if (seats[i] == 0) {
+        for (int i = 0; i < n; ++i)
+        {
+            if (seats[i] == 0)
+            {
                 bool prev = true, next = true;
-                
+
                 // Check if left seat is occupied
                 if (i - 1 >= 0 && seats[i - 1] == 1)
                     prev = false;
-                
+
                 // Check if right seat is occupied
                 if (i + 1 < n && seats[i + 1] == 1)
                     next = false;
 
                 // If both sides are empty and we still need to seat people
-                if (prev && next && k > 0) {
+                if (prev && next && k > 0)
+                {
                     seats[i] = 1; // Seat the person
                     k--;
                 }
             }
         }
-        
+
         // If k dropped to 0 (or below), we successfully seated everyone
         return k <= 0;
+    }
+};
+
+class Solution
+{
+public:
+    void bs(vector<int> &arr, int &count, int l, int r, int maxr, int minl)
+    {
+
+        int mid = l + (r - l) / 2;
+
+        if (arr[mid] < maxr && arr[mid] > minl)
+            count++;
+
+        if (l == r)
+            return;
+
+        int nmaxr = min(maxr, arr[mid]);
+        int nminl = max(minl, arr[mid]);
+
+        if (nmaxr == INT_MAX)
+            nmaxr = arr[mid];
+        if (nminl == INT_MIN)
+            nminl = arr[mid];
+        bs(arr, count, l, mid - 1, nmaxr, minl);
+        bs(arr, count, mid + 1, r, maxr, nminl);
+    }
+
+    int binarySearchable(vector<int> &arr)
+    {
+        int count = 1;
+        int n = arr.size();
+        int mid = (n - 1) / 2;
+        bs(arr, count, 0, n - 1, INT_MAX, INT_MIN);
+
+        return count;
     }
 };
