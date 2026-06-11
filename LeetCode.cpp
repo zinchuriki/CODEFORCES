@@ -7,6 +7,14 @@ struct TreeNode
     int val;
     TreeNode *left;
     TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
@@ -13810,5 +13818,66 @@ public:
         bs(arr, count, 0, n - 1, INT_MAX, INT_MIN);
 
         return count;
+    }
+};
+class Solution
+{
+public:
+    long long modPow(long long a, long long b, long long mod)
+    {
+        long long ans = 1;
+        a %= mod;
+
+        while (b > 0)
+        {
+            if (b & 1)
+                ans = (ans * a) % mod;
+
+            a = (a * a) % mod;
+            b >>= 1;
+        }
+
+        return ans;
+    }
+
+    int dfs(vector<vector<int>> &adj, int cur, vector<bool> &vis)
+    {
+
+        int depth = -1;
+
+        int n = adj[cur].size();
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            if (!vis[adj[cur][i]])
+            {
+                vis[adj[cur][i]] = true;
+                depth = max(depth, dfs(adj, adj[cur][i], vis));
+            }
+        }
+
+        return 1 + depth;
+    }
+
+    int assignEdgeWeights(vector<vector<int>> &edges)
+    {
+        int n = edges.size();
+        vector<vector<int>> adj(n + 2);
+
+        for (int i = 0; i < n; ++i)
+        {
+            int n1 = edges[i][0];
+            int n2 = edges[i][1];
+
+            adj[n1].push_back(n2);
+            adj[n2].push_back(n1);
+        }
+
+        vector<bool> vis(n + 2, false);
+        vis[1] = true;
+        int depth = dfs(adj, 1, vis);
+
+        return modPow(2, depth - 1, 1e9 + 7);
     }
 };
