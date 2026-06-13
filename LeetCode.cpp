@@ -13881,3 +13881,47 @@ public:
         return modPow(2, depth - 1, 1e9 + 7);
     }
 };
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution
+{
+public:
+    TreeNode *a;
+    TreeNode *b;
+    TreeNode *ans(TreeNode *root)
+    {
+
+        if (root == NULL)
+            return NULL;
+
+        if (root == a || root == b)
+            return root;
+
+        TreeNode *left = ans(root->left);
+
+        TreeNode *right = ans(root->right);
+
+        if (left != NULL && right != NULL)
+            return root;
+
+        if (left != NULL)
+            return left;
+
+        return right;
+    }
+
+    TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+    {
+        a = p;
+        b = q;
+        return ans(root);
+    }
+};
