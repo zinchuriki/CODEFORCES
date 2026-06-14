@@ -13925,3 +13925,93 @@ public:
         return ans(root);
     }
 };
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution
+{
+public:
+    ListNode *reverseList(ListNode *head)
+    {
+
+        if (head->next == NULL)
+            return head;
+        ListNode *cur = head->next;
+        ListNode *prev = head;
+        while (cur != NULL)
+        {
+
+            ListNode *temp = cur->next;
+            cur->next = prev;
+            prev = prev->next;
+            cur = temp;
+        }
+
+        head->next = NULL;
+        head = prev;
+
+        return head;
+    }
+};
+
+class Solution
+{
+public:
+    int n;
+    int m;
+    bool check(int i, int j)
+    {
+
+        if (i < 0 || i >= n || j < 0 || j >= m)
+        {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    vector<int> exitPoint(vector<vector<int>> &mat)
+    {
+        // code here
+
+        n = mat.size();
+        m = mat[0].size();
+        int i = 0, j = 0;
+        vector<int> dirx = {0, 1, 0, -1};
+        vector<int> diry = {1, 0, -1, 0};
+        int cur = 0;
+        while (check(i, j))
+        {
+
+            if (mat[i][j])
+            {
+                cur++;
+                cur %= 4;
+                mat[i][j] = 0;
+            }
+
+            i += dirx[cur];
+            j += diry[cur];
+        }
+
+        if (i < 0)
+            i++;
+        if (i >= n)
+            i--;
+        if (j < 0)
+            j++;
+        if (j >= m)
+            j--;
+
+        return {i, j};
+    }
+};
