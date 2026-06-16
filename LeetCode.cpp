@@ -14024,7 +14024,7 @@ public:
         // Edge case: empty list or single node
         if (head == NULL || head->next == NULL)
             return NULL;
-        
+
         ListNode *fast = head;
         ListNode *slow = head;
         ListNode *prev = NULL;
@@ -14038,5 +14038,99 @@ public:
         prev->next = slow->next;
 
         return head;
+    }
+};
+
+class Solution
+{
+public:
+    int n;
+    int cal(vector<vector<int>> &dp, vector<int> &cost, int idx, int wt)
+    {
+
+        if (wt == 0)
+            return 0;
+
+        if (idx >= n)
+            return INT_MAX;
+        if (dp[idx][wt] != -1)
+            return dp[idx][wt];
+        int take = INT_MAX;
+        int dtake = INT_MIN;
+        int c_cost = cost[idx];
+        if (wt >= idx + 1)
+        {
+
+            int add = cal(dp, cost, idx + 1, wt - idx + 1);
+            if (add != INT_MAX)
+                take = c_cost + add;
+        }
+
+        dtake = cal(dp, cost, idx + 1, wt);
+
+        return dp[idx][wt] = min(take, dtake);
+    }
+
+    int minimumCost(vector<int> &cost, int w)
+    {
+
+        n = cost.size();
+        vector<vector<int>> dp(n, vector<int>(w + 1, -1));
+        int ans = cal(dp, cost, 0, w);
+        if (ans == INT_MAX)
+            return -1;
+
+        return ans;
+        // code here
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> constructList(vector<vector<int>> &queries)
+    {
+        // code here
+        int xord = 0;
+
+        int n = queries.size();
+        vector<int> ans;
+        int idx = -1;
+        priority_queue<pair<int, int>> pq;
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (queries[i][0])
+            {
+
+                pq.push({idx, queries[i][1]});
+            }
+            else
+            {
+
+                ans.push_back(queries[i][1]);
+                idx++;
+            }
+        }
+
+        int m = ans.size();
+
+        for (int i = 0; i < m; ++i)
+        {
+            while (!pq.empty())
+            {
+                auto [index, xo] = pq.top();
+                xord ^= xo;
+                if (index >= i)
+                    pq.pop();
+                else
+                    break;
+            }
+            ans[i] ^= xord;
+        }
+
+        sort(ans.begin(), ans.end());
+
+        return ans;
     }
 };
