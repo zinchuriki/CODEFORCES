@@ -14134,3 +14134,45 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int maxProduct(int n)
+    {
+        // code here
+        int cnt3 = n / 3;
+        int cnt2 = 0;
+
+        if (n == 2)
+            return 1;
+        if (n == 3)
+            return 2;
+        if (n == 4)
+            return 4;
+        if (n % 3 == 1)
+        {
+            cnt3--;
+            cnt2 += 2;
+        }
+        if (n % 3 == 2)
+        {
+            cnt2 += 1;
+        }
+
+        auto fastPow = [](long long base, int exp) {
+            long long res = 1;
+            while (exp > 0)
+            {
+                if (exp & 1)
+                    res *= base;
+                base *= base;
+                exp >>= 1;
+            }
+            return res;
+        };
+
+        long long result = fastPow(3, cnt3) * fastPow(2, cnt2);
+        return (int)result;
+    }
+};
