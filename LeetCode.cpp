@@ -14160,7 +14160,8 @@ public:
             cnt2 += 1;
         }
 
-        auto fastPow = [](long long base, int exp) {
+        auto fastPow = [](long long base, int exp)
+        {
             long long res = 1;
             while (exp > 0)
             {
@@ -14174,5 +14175,48 @@ public:
 
         long long result = fastPow(3, cnt3) * fastPow(2, cnt2);
         return (int)result;
+    }
+};
+
+vector<int> solve(TreeNode *A)
+{
+    unordered_map<int, int> hash;
+
+    queue<pair<int, TreeNode *>> q;
+
+    q.push({0, A});
+
+    while (!q.empty())
+    {
+
+        auto [level, node] = q.front();
+        q.pop();
+
+        hash[level] = node->val;
+        if (node->left != NULL)
+            q.push({level + 1, node->left});
+        if (node->right != NULL)
+            q.push({level + 1, node->right});
+    }
+
+    vector<int> ans;
+
+    for (auto it = hash.begin(); it != hash.end(); ++it)
+        ans.push_back(it->second);
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    double angleClock(int hour, int minutes)
+    {
+        double mins = 1.0 / 2.0;
+
+        double hd = mins * minutes + (hour * 30) % 360;
+        double md = minutes * 6;
+
+        return min(abs(hd - md), 360 - abs(hd - md));
     }
 };
