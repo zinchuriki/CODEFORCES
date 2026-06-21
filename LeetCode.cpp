@@ -14220,3 +14220,148 @@ public:
         return min(abs(hd - md), 360 - abs(hd - md));
     }
 };
+
+class Solution
+{
+public:
+    int maxBuilding(int n, vector<vector<int>> &restrictions)
+    {
+        sort(restrictions.begin(), restrictions.end());
+
+        int n1 = restrictions.size();
+        if (n1 == 0)
+            return n - 1;
+        vector<int> res(n1, 0);
+        int prev_idx = 0;
+        int prev_limit = 0;
+
+        for (int i = 0; i < n1; ++i)
+        {
+
+            int index = restrictions[i][0] - 1;
+            int rs = restrictions[i][1];
+
+            int temp = min(rs, prev_limit + index - prev_idx);
+            prev_idx = index;
+            prev_limit = temp;
+            res[i] = temp;
+        }
+        prev_idx = restrictions[n1 - 1][0] - 1;
+        prev_limit = res[n1 - 1];
+        for (int i = n1 - 2; i >= 0; --i)
+        {
+
+            int index = restrictions[i][0] - 1;
+            int rs = res[i];
+
+            int temp = min(rs, prev_limit + abs(index - prev_idx));
+            prev_idx = index;
+            prev_limit = temp;
+            res[i] = temp;
+        }
+
+        prev_idx = 0;
+        prev_limit = 0;
+        int ans = 1;
+        for (int i = 0; i < n1; ++i)
+        {
+            int idxx = restrictions[i][0];
+            int max_idx = idxx - prev_idx;
+            int maxi = (prev_limit + res[i] + max_idx) / 2;
+            ans = max(ans, maxi);
+            prev_limit = res[i];
+            prev_idx = idxx;
+        }
+
+        ans = max(ans, prev_limit + n - 1 - prev_idx);
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int cal(vector<vector<pair<int, int>>> &adj, string &labels, int k, int n)
+    {
+        vector<vector<int>> min_wt(n, vector<int>(k, INT_MAX));
+        priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>,
+                       greater<tuple<int, int, int>>>
+            pq;
+        // weight,consecutive,node
+        pq.push({0, 1, 0});
+
+        while (!pq.empty())
+        {
+
+            auto [wt, cons, node] = pq.top();
+            pq.pop();
+
+            if (node == n - 1)
+                return wt;
+
+            for (pair<int, int> nodes : adj[node])
+            {
+                auto [nn, edge_wt] = nodes;
+
+                int new_cons = 1;
+                if (labels[node] == labels[nn])
+                {
+                    new_cons = cons + 1;
+                }
+
+                if (new_cons <= k && min_wt[nn][new_cons] > wt + edge_wt)
+                {
+                    min_wt[nn][new_cons] = wt + edge_wt;
+                    pq.push({min_wt[nn][new_cons], new_cons, nn});
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    int shortestPath(int n, vector<vector<int>> &edges, string labels, int k)
+    {
+
+        vector<vector<pair<int, int>>> adj(n);
+
+        for (const auto &edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int weight = edge[2];
+            adj[u].push_back({v, weight});
+        }
+
+        return cal(adj, labels, k, n);
+    }
+};
+
+vector<vector<int>> solve(int A)
+{
+    vector<vector<int>> ans;
+    vector<int> prev;
+    for (int i = 1; i <= min(A, 2); ++i)
+    {
+        prev.push_back(1);
+        ans.push_back(prev);
+    }
+
+    for (int i = 3; i <= A; ++i)
+    {
+
+        vector<int> temp;
+        temp.push_back(1);
+        int j = 0;
+        while (j < prev.size() - 1)
+        {
+            temp.push_back(prev[j] + prev[j + 1]);
+            j++;
+        }
+        temp.push_back(1);
+        ans.push_back(temp);
+
+        prev = temp;
+    }
+    return ans;
+}
