@@ -14387,3 +14387,64 @@ public:
         return ans;
     }
 };
+
+string addBinary(string A, string B)
+{
+
+    string ans = "";
+    int n = A.size();
+    int m = B.size();
+
+    int carry = 0;
+    int idx = min(n, m);
+    int i = n - 1, j = m - 1;
+
+    while (i >= 0 && j >= 0)
+    {
+
+        int cur = A[i] - '0' + B[j] - '0' + carry;
+        int next_carry = 0;
+        if (cur > 1)
+            next_carry = 1;
+        int cur_digit = cur % 2;
+
+        ans += to_string(cur_digit);
+        carry = next_carry;
+        i--;
+        j--;
+    }
+
+    while (i >= 0)
+    {
+
+        int cur = A[i] - '0' + carry;
+        int next_carry = 0;
+        if (cur > 1)
+            next_carry = 1;
+        int cur_digit = cur % 2;
+        carry = next_carry;
+        i--;
+        ans += to_string(cur_digit);
+        carry = next_carry;
+    }
+
+    while (j >= 0)
+    {
+
+        int cur = B[j] - '0' + carry;
+        int next_carry = 0;
+        if (cur > 1)
+            next_carry = 1;
+        int cur_digit = cur % 2;
+        carry = next_carry;
+        ans += to_string(cur_digit);
+        carry = next_carry;
+        j--;
+    }
+    if (carry)
+        ans += to_string(carry);
+
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
