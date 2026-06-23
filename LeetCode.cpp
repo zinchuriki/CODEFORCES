@@ -14448,3 +14448,52 @@ string addBinary(string A, string B)
 
     return ans;
 }
+
+class Solution
+{
+public:
+    int zigZagArrays(int n, int l, int r)
+    {
+        int MOD = 1e9 + 7;
+        vector<vector<vector<long long>>> dp(
+            n + 1, vector<vector<long long>>(2, vector<long long>(r + 1, 0)));
+        int count = 1;
+        for (int i = l; i <= r; ++i)
+        {
+            dp[1][0][i] = count;
+            dp[1][1][i] = count;
+            count++;
+        }
+
+        int ans = 0;
+
+        for (int i = 2; i <= n; ++i)
+        {
+
+            for (int dir = 0; dir <= 1; ++dir)
+            {
+
+                for (int x = l; x <= r; ++x)
+                {
+
+                    if (dir == 1)
+                    {
+
+                        dp[i][1][x] =
+                            (dp[i - 1][0][r] - dp[i - 1][0][x] + dp[i][1][x - 1] + MOD) % MOD;
+                    }
+
+                    if (dir == 0)
+                    {
+
+                        dp[i][0][x] = (dp[i - 1][1][x - 1] +
+                                       dp[i][0][x - 1] + MOD) %
+                                      MOD;
+                    }
+                }
+            }
+        }
+
+        return (dp[n][0][r] + dp[n][1][r]) % MOD;
+    }
+};
