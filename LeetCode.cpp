@@ -14562,79 +14562,26 @@ vector<int> getRow(int A)
     return {};
 }
 
-class Solution
+int cal(int n, vector<int> &dp)
 {
-public:
-    int m, n;
-    void cal(vector<vector<int>> &mat, vector<vector<pair<int, int>>> &parent)
+    if (n <= 1)
+        return 1;
+    if (dp[n] != -1)
+        return dp[n];
+
+    int ans = 0;
+    for (int i = 1; i <= n; ++i)
     {
-
-        vector<vector<int>> vis(n, vector<int>(m, INT_MAX));
-
-        priority_queue<
-            tuple<int, int, int>,
-            vector<tuple<int, int, int>>,
-            greater<tuple<int, int, int>>>
-            pq;
-        pq.push({0, 0, 0});
-
-        while (!pq.empty())
-        {
-
-            auto [dist, row, col] = pq.top();
-            pq.pop();
-
-            if (row == n - 1 && col == m - 1)
-                return;
-
-            int sz = mat[row][col];
-
-            for (int i = 1; i <= sz; ++i)
-            {
-                if (col + i >= m)
-                    break;
-                int cur_dist = vis[row][col + i];
-                if (dist + 1 < cur_dist)
-                {
-                    pq.push({dist + 1, row, col + i});
-                    vis[row][col + i] = dist + 1;
-                    parent[row][col + i] = {row, col};
-                }
-            }
-
-            for (int i = 1; i <= sz; ++i)
-            {
-                if (row + i >= m)
-                    break;
-                int cur_dist = vis[row + i][col];
-                if (dist + 1 < cur_dist)
-                {
-                    pq.push({dist + 1, row + i, col});
-                    vis[row + i][col] = dist + 1;
-                    parent[row + i][col] = {row, col};
-                }
-            }
-        }
+        int left = cal(i - 1, dp);
+        int right = cal(n - i, dp);
+        ans += left * right;
     }
 
-    vector<vector<int>> shortestDist(vector<vector<int>> &mat)
-    {
-        // code here
-        n = mat.size();
-        m = mat[0].size();
+    return dp[n] = ans;
+}
 
-        vector<vector<pair<int, int>>> parent(n, vector<pair<int, int>>(m, {-1, -1}));
-        cal(mat, vis);
-        vector<vector<int>> ans(n, vector<int>(m, 0));
-        pair<int, int> p = {n - 1, m - 1} if (parent[n - 1][m - 1] == {-1, -1}) return {{-1}};
-        while (true)
-        {
-            auto [i, j] = p;
-            ans[i][j] = 1;
-            if (i == 0 && j == 0)
-                break;
-            p = parent[i][j];
-        }
-        return ans;
-    }
-};
+int numTrees(int A)
+{
+    vector<int> dp(A + 1, -1);
+    return cal(A, dp);
+}
