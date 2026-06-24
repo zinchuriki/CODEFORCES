@@ -14497,3 +14497,144 @@ public:
         return (dp[n][0][r] + dp[n][1][r]) % MOD;
     }
 };
+
+class Solution
+{
+public:
+    int maxPeopleDefeated(int p)
+    {
+        // Code Here
+
+        int l = 1,
+            r = 966;
+        int ans = 1;
+        while (l <= r)
+        {
+
+            int mid = l + (r - l) / 2;
+
+            int cal = (mid) * (mid + 1) * (2 * mid + 1) / 6;
+            if (cal <= p)
+            {
+                ans = mid;
+                l++;
+            }
+            else
+                r--;
+        }
+
+        return ans;
+    }
+};
+
+vector<int> getRow(int A)
+{
+
+    vector<int> prev;
+
+    for (int i = 0; i <= min(A, 1); ++i)
+    {
+        prev.push_back(1);
+        if (A == i)
+            return prev;
+    }
+
+    while (true)
+    {
+
+        vector<int> temp;
+        temp.push_back(1);
+        int j = 0;
+        int n = prev.size();
+        while (j < n - 1)
+        {
+            temp.push_back(prev[j] + prev[j + 1]);
+            j++;
+        }
+        temp.push_back(1);
+        int sz = temp.size();
+        if (sz == A + 1)
+            return temp;
+
+        prev = temp;
+    }
+
+    return {};
+}
+
+class Solution
+{
+public:
+    int m, n;
+    void cal(vector<vector<int>> &mat, vector<vector<pair<int, int>>> &parent)
+    {
+
+        vector<vector<int>> vis(n, vector<int>(m, INT_MAX));
+
+        priority_queue<
+            tuple<int, int, int>,
+            vector<tuple<int, int, int>>,
+            greater<tuple<int, int, int>>>
+            pq;
+        pq.push({0, 0, 0});
+
+        while (!pq.empty())
+        {
+
+            auto [dist, row, col] = pq.top();
+            pq.pop();
+
+            if (row == n - 1 && col == m - 1)
+                return;
+
+            int sz = mat[row][col];
+
+            for (int i = 1; i <= sz; ++i)
+            {
+                if (col + i >= m)
+                    break;
+                int cur_dist = vis[row][col + i];
+                if (dist + 1 < cur_dist)
+                {
+                    pq.push({dist + 1, row, col + i});
+                    vis[row][col + i] = dist + 1;
+                    parent[row][col + i] = {row, col};
+                }
+            }
+
+            for (int i = 1; i <= sz; ++i)
+            {
+                if (row + i >= m)
+                    break;
+                int cur_dist = vis[row + i][col];
+                if (dist + 1 < cur_dist)
+                {
+                    pq.push({dist + 1, row + i, col});
+                    vis[row + i][col] = dist + 1;
+                    parent[row + i][col] = {row, col};
+                }
+            }
+        }
+    }
+
+    vector<vector<int>> shortestDist(vector<vector<int>> &mat)
+    {
+        // code here
+        n = mat.size();
+        m = mat[0].size();
+
+        vector<vector<pair<int, int>>> parent(n, vector<pair<int, int>>(m, {-1, -1}));
+        cal(mat, vis);
+        vector<vector<int>> ans(n, vector<int>(m, 0));
+        pair<int, int> p = {n - 1, m - 1} if (parent[n - 1][m - 1] == {-1, -1}) return {{-1}};
+        while (true)
+        {
+            auto [i, j] = p;
+            ans[i][j] = 1;
+            if (i == 0 && j == 0)
+                break;
+            p = parent[i][j];
+        }
+        return ans;
+    }
+};
