@@ -14585,3 +14585,198 @@ int numTrees(int A)
     vector<int> dp(A + 1, -1);
     return cal(A, dp);
 }
+
+class Solution
+{
+public:
+    vector<int> ans;
+    void cal(int next, int n, int num)
+    {
+
+        if (n == 0)
+        {
+            ans.push_back(num);
+            return;
+        }
+
+        for (int i = next; i <= 9 - n + 1; ++i)
+        {
+            int n_num = num * 10 + i;
+            int n_next = i + 1;
+            cal(n_next, n - 1, n_num);
+        }
+    }
+
+    vector<int> increasingNumbers(int n)
+    {
+        if (n > 9)
+            return {};
+
+        if (n == 1)
+        {
+            for (int i = 0; i <= 9; ++i)
+            {
+                ans.push_back(i);
+            }
+            return ans;
+        }
+
+        cal(1, n, 0);
+        return ans;
+    }
+};
+
+vector<int> prevSmaller(vector<int> &A)
+{
+    int n = A.size();
+    if (n == 0)
+        return {};
+
+    vector<int> ans;
+    ans.reserve(n);
+    // first element has no previous smaller
+    ans.push_back(-1);
+
+    stack<int> st; // store indices
+    st.push(0);
+    for (int i = 1; i < n; ++i)
+    {
+        int cur = A[i];
+        while (!st.empty() && cur <= A[st.top()])
+        {
+            st.pop();
+        }
+        if (!st.empty())
+            ans.push_back(A[st.top()]);
+        else
+            ans.push_back(-1);
+        st.push(i);
+    }
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    int LOG = 17;
+    vector<vector<int>> up;
+    vector<int> depth;
+    vector<vector<int>> adj;
+    int MOD = 1e9 + 7;
+
+    int exp(int a)
+    {
+        int res = 1;
+        int temp = 2;
+
+        while (a > 0)
+        {
+            if (a & 1)
+            {
+                res = (int)((1LL * res * temp) % MOD);
+            }
+            temp = (int)((1LL * temp * temp) % MOD);
+            a /= 2;
+        }
+
+        return res;
+    }
+
+    void dfs(int parent, int child)
+    {
+        up[child][0] = parent;
+        for (int i = 1; i <= LOG; ++i)
+        {
+            if (up[child][i - 1] != -1)
+            {
+                up[child][i] = up[up[child][i - 1]][i - 1];
+            }
+            else
+            {
+                up[child][i] = -1;
+            }
+        }
+
+        for (int next_child : adj[child])
+        {
+            if (next_child != parent)
+            {
+                depth[next_child] = depth[child] + 1;
+                dfs(child, next_child);
+            }
+        }
+    }
+
+    int kthAncestor(int a, int k)
+    {
+        for (int i = 0; i <= LOG && a != -1; ++i)
+        {
+            if (k & (1 << i))
+            {
+                a = up[a][i];
+            }
+        }
+
+        return a;
+    }
+
+    int lca(int u, int v)
+    {
+        if (depth[u] < depth[v])
+            swap(u, v);
+
+        int depth_diff = depth[u] - depth[v];
+        u = kthAncestor(u, depth_diff);
+
+        if (v == u)
+            return u;
+
+        for (int i = LOG; i >= 0; --i)
+        {
+            if (up[u][i] != up[v][i])
+            {
+                u = up[u][i];
+                v = up[v][i];
+            }
+        }
+
+        return up[u][0];
+    }
+
+    vector<int> assignEdgeWeights(vector<vector<int>> &edges,
+                                  vector<vector<int>> &queries)
+    {
+        int n = edges.size() + 1;
+        LOG = 0;
+        while ((1 << LOG) <= n)
+        {
+            ++LOG;
+        }
+        if (LOG > 0)
+            --LOG;
+
+        adj.assign(n, {});
+        up.assign(n, vector<int>(LOG + 1, -1));
+        depth.assign(n, 0);
+
+        for (const auto &edge : edges)
+        {
+            int c1 = edge[0];
+            int c2 = edge[1];
+            adj[c1 - 1].push_back(c2 - 1);
+            adj[c2 - 1].push_back(c1 - 1);
+        }
+
+        vector<int> ans;
+        dfs(-1, 0);
+        for (const auto &query : queries)
+        {
+            int n1 = query[0] - 1;
+            int m1 = query[1] - 1;
+            int dist = depth[n1] + depth[m1] - 2 * depth[lca(n1, m1)];
+            ans.push_back(exp(dist - 1));
+        }
+        return ans;
+    }
+};
