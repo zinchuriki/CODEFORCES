@@ -14780,3 +14780,37 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    long long countMajoritySubarrays(vector<int> &nums, int target)
+    {
+        long long ans = 0;
+        int n = nums.size();
+        vector<int> pref(n + 1, 0);
+        int cnt = 0;
+        for (int i = 1; i <= n; ++i)
+        {
+            if (nums[i - 1] == target)
+                cnt++;
+            else
+                cnt--;
+            pref[i] = cnt;
+        }
+
+        unordered_map<int, int> hash;
+        unordered_map<int, int> hash1;
+        for (int i = 0; i <= n; ++i)
+        {
+            int cur = pref[i];
+            hash1[cur]++;
+            hash[cur]++;
+            hash[cur + 1] = hash[cur] + hash1[cur + 1];
+            if (hash.find(cur - 1) != hash.end())
+                ans += hash[cur - 1];
+        }
+
+        return ans;
+    }
+};
