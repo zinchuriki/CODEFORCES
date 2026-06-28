@@ -14814,3 +14814,74 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int isPerfectSquare(long long n)
+    {
+
+        if (n < 0)
+            return 0;
+
+        long long root = sqrt(n);
+
+        if (root * root == n)
+            return root;
+        return 0;
+    }
+    int maximumLength(vector<int> &nums)
+    {
+        int n = nums.size();
+        unordered_map<int, int> hash;
+        sort(nums.begin(), nums.end());
+        int ans = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            int cur = nums[i];
+            hash[cur]++;
+            int temp = 1;
+            while (cur > 1)
+            {
+                cur = isPerfectSquare(cur);
+                if (cur)
+                {
+
+                    if (hash[cur] > 1)
+                        temp += 2;
+                }
+                else
+                    break;
+            }
+            ans = max(ans, temp);
+        }
+
+        return max(ans, hash[1] - !(hash[1] % 2));
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ListNode *detectCycle(ListNode *A)
+{
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    ListNode *slow = A->next, *fast = A->next->next;
+    while (slow != fast)
+    {
+        if (slow == fast)
+            return slow->next;
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    return NULL;
+}
