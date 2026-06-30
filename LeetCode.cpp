@@ -14885,3 +14885,33 @@ ListNode *detectCycle(ListNode *A)
 
     return NULL;
 }
+
+class Solution
+{
+public:
+    int maxDotProduct(vector<int> &a, vector<int> &b)
+    {
+        int n = a.size();
+        int m = b.size();
+        if (n == 0 || m == 0)
+            return 0;
+
+        const long long NEG_INF = LLONG_MIN / 4;
+        vector<vector<long long>> dp(n + 1, vector<long long>(m + 1, NEG_INF));
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+            for (int j = m - 1; j >= 0; --j)
+            {
+                long long prod = 1LL * a[i] * b[j];
+                long long take = prod;
+                if (i + 1 < n && j + 1 < m)
+                    take = max(take, prod + dp[i + 1][j + 1]);
+
+                dp[i][j] = max({take, dp[i + 1][j], dp[i][j + 1]});
+            }
+        }
+
+        return static_cast<int>(dp[0][0]);
+    }
+};
