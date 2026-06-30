@@ -14889,29 +14889,64 @@ ListNode *detectCycle(ListNode *A)
 class Solution
 {
 public:
-    int maxDotProduct(vector<int> &a, vector<int> &b)
+    int numberOfSubstrings(string s)
+    {
+        int n = s.size();
+        int l = 0, r = 0;
+        vector<int> vec(3, 0);
+        int ans = 0;
+
+        while (r < n && l < n)
+        {
+            char cur = s[r];
+            vec[cur - 'a']++;
+            while (vec[s[l] - 'a'] > 1)
+            {
+
+                vec[s[l] - 'a']--;
+                l++;
+            }
+
+            if (vec[0] > 0 && vec[1] > 0 && vec[2] > 0)
+                ans += l + 1;
+            r++;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minInsAndDel(vector<int> &a, vector<int> &b)
     {
         int n = a.size();
         int m = b.size();
-        if (n == 0 || m == 0)
-            return 0;
+        if (n == 0)
+            return m;
+        if (m == 0)
+            return n;
 
-        const long long NEG_INF = LLONG_MIN / 4;
-        vector<vector<long long>> dp(n + 1, vector<long long>(m + 1, NEG_INF));
+        vector<int> cur(m + 1, 0), prev(m + 1, 0);
 
-        for (int i = n - 1; i >= 0; --i)
+        for (int i = 1; i <= n; ++i)
         {
-            for (int j = m - 1; j >= 0; --j)
+            for (int j = 1; j <= m; ++j)
             {
-                long long prod = 1LL * a[i] * b[j];
-                long long take = prod;
-                if (i + 1 < n && j + 1 < m)
-                    take = max(take, prod + dp[i + 1][j + 1]);
-
-                dp[i][j] = max({take, dp[i + 1][j], dp[i][j + 1]});
+                if (a[i - 1] == b[j - 1])
+                {
+                    cur[j] = 1 + prev[j - 1];
+                }
+                else
+                {
+                    cur[j] = max(cur[j - 1], prev[j]);
+                }
             }
+            prev = cur;
         }
 
-        return static_cast<int>(dp[0][0]);
+        int lcs = cur[m];
+        return n + m - 2 * lcs;
     }
 };
