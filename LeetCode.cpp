@@ -9653,6 +9653,7 @@ public:
 class Solution
 {
 public:
+   
     int countSubmatrices(vector<vector<int>> &grid, int k)
     {
         int n = grid.size();
@@ -13497,6 +13498,10 @@ public:
 class Solution
 {
 public:
+    /// @brief 
+    /// @param num 
+    /// @param k 
+    /// @return 
     string removeKdigits(string num, int k)
     {
         int n = num.size();
@@ -14948,5 +14953,27 @@ public:
 
         int lcs = cur[m];
         return n + m - 2 * lcs;
+    }
+};
+
+class Solution
+{
+public:
+    bool divisibleByK(vector<int> &arr, int k)
+    {
+        // code here
+        int n = arr.size();
+        unordered_map<int, bool> hash;
+        int sum = 0;
+        hash[0] = true;
+        for (int i = 0; i < n; ++i)
+        {
+            sum += arr[i];
+            if (hash.find(sum % k) != hash.end())
+                return true;
+            hash[sum % k] = true;
+        }
+
+        return false;
     }
 };
