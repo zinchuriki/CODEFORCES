@@ -9653,7 +9653,6 @@ public:
 class Solution
 {
 public:
-   
     int countSubmatrices(vector<vector<int>> &grid, int k)
     {
         int n = grid.size();
@@ -13498,10 +13497,10 @@ public:
 class Solution
 {
 public:
-    /// @brief 
-    /// @param num 
-    /// @param k 
-    /// @return 
+    /// @brief
+    /// @param num
+    /// @param k
+    /// @return
     string removeKdigits(string num, int k)
     {
         int n = num.size();
@@ -14956,24 +14955,96 @@ public:
     }
 };
 
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
 class Solution
 {
 public:
-    bool divisibleByK(vector<int> &arr, int k)
+    int findMaxPathScore(vector<vector<int>> &edges, vector<bool> &online, long long k)
     {
-        // code here
-        int n = arr.size();
-        unordered_map<int, bool> hash;
-        int sum = 0;
-        hash[0] = true;
-        for (int i = 0; i < n; ++i)
+        int n = online.size();
+
+        // Build the adjacency list: {neighbor, edge_cost}
+        vector<vector<pair<int, long long>>> adj(n);
+        int max_edge = 0;
+
+        for (const auto &edge : edges)
         {
-            sum += arr[i];
-            if (hash.find(sum % k) != hash.end())
-                return true;
-            hash[sum % k] = true;
+            int u = edge[0];
+            int v = edge[1];
+            long long cost = edge[2];
+            adj[u].push_back({v, cost});
+            max_edge = max(max_edge, (int)cost); // Track highest possible score
         }
 
-        return false;
+        // Helper function: Can we reach the end with total cost <= k
+        // using ONLY edges that have a cost >= min_allowed_score?
+        auto canReachWithScore = [&](int min_allowed_score)
+        {
+            // Distance array initialized to a very large number
+            vector<long long> dist(n, 2e18);
+            // Min-Heap for Dijkstra: {current_path_sum, current_node}
+            priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> pq;
+
+            dist[0] = 0;
+            pq.push({0, 0});
+
+            while (!pq.empty())
+            {
+                auto [curr_cost, u] = pq.top();
+                pq.pop();
+
+                // If we found a worse path to a processed node, ignore it
+                if (curr_cost > dist[u])
+                    continue;
+
+                // If we reached the end and it's within our k limit
+                if (u == n - 1)
+                    return dist[u] <= k;
+
+                for (auto &[v, weight] : adj[u])
+                {
+                    // Ignore offline nodes and edges that are too small
+                    if (!online[v])
+                        continue;
+                    if (weight < min_allowed_score)
+                        continue;
+
+                    // Standard Dijkstra relaxation
+                    if (dist[u] + weight < dist[v])
+                    {
+                        dist[v] = dist[u] + weight;
+                        pq.push({dist[v], v});
+                    }
+                }
+            }
+            return false;
+        };
+
+        // Binary Search the answer!
+        int low = 0;
+        int high = max_edge;
+        int best_score = -1;
+
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+
+            if (canReachWithScore(mid))
+            {
+                best_score = mid; // Valid! Try to find a higher score
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1; // Invalid! We guessed too high
+            }
+        }
+
+        return best_score;
     }
 };
