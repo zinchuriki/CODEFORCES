@@ -15008,7 +15008,7 @@ public:
 
                 for (auto &[v, weight] : adj[u])
                 {
-                    // Ignore offline nodes and edges that are too small
+                   
                     if (!online[v])
                         continue;
                     if (weight < min_allowed_score)
