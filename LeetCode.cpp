@@ -15008,7 +15008,7 @@ public:
 
                 for (auto &[v, weight] : adj[u])
                 {
-                   
+
                     if (!online[v])
                         continue;
                     if (weight < min_allowed_score)
@@ -15046,5 +15046,63 @@ public:
         }
 
         return best_score;
+    }
+};
+
+class Solution
+{
+public:
+    int n, m;
+    vector<int> vec;
+    int MOD = 1e9 + 7;
+    int maxi = 0;
+    pair<int, int> track(vector<vector<pair<int, int>>> &dp,
+                         vector<string> &board, int i, int j)
+    {
+        if (i < 0 || i >= n || j < 0 || j >= m || board[i][j] == 'X')
+            return {INT_MIN, INT_MIN};
+        if (i == 0 && j == 0)
+        {
+            return {0, 1};
+        }
+
+        if (dp[i][j].first != -1)
+            return dp[i][j];
+
+        int temp = 0;
+        if (board[i][j] != 'E' && board[i][j] != 'S')
+            temp = board[i][j] - '0';
+
+        char cur = board[i][j];
+        board[i][j] = 'X';
+        pair<int, int> p1 = track(dp, board, i - 1, j);
+        pair<int, int> p2 = track(dp, board, i, j - 1);
+        pair<int, int> p3 = track(dp, board, i - 1, j - 1);
+        board[i][j] = cur;
+
+        int maxi = max(p1.first, max(p2.first, p3.first));
+        if (maxi == INT_MIN)
+            return dp[i][j] = {INT_MIN, INT_MIN};
+
+        long long cnt = 0;
+        if (p1.first == maxi)
+            cnt = (cnt + p1.second) % MOD;
+        if (p2.first == maxi)
+            cnt = (cnt + p2.second) % MOD;
+        if (p3.first == maxi)
+            cnt = (cnt + p3.second) % MOD;
+
+        return dp[i][j] = {maxi + temp, (int)cnt};
+    }
+
+    vector<int> pathsWithMaxScore(vector<string> &board)
+    {
+        n = board.size();
+        m = board[0].size();
+        vector<vector<pair<int, int>>> dp(n, vector<pair<int, int>>(m, {-1, -1}));
+        auto [a, b] = track(dp, board, n - 1, m - 1);
+        if (a == INT_MIN)
+            return {0, 0};
+        return {a, b};
     }
 };
