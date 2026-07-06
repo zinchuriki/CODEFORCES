@@ -15106,3 +15106,77 @@ public:
         return {a, b};
     }
 };
+
+class Solution
+{
+public:
+    int removeCoveredIntervals(vector<vector<int>> &intervals)
+    {
+        int n = intervals.size();
+        sort(intervals.begin(), intervals.end(),
+             [](const vector<int> &a, const vector<int> &b)
+             {
+                 if (a[1] == b[1])
+                 {
+                     return a[0] > b[0];
+                 }
+
+                 return a[1] < b[1];
+             });
+        int ans = n;
+        pair<int, int> p = {
+            intervals[n - 1][0],
+            intervals[n - 1][1]};
+        for (int i = n - 2; i >= 0; --i)
+        {
+            int cur_x = intervals[i][0];
+            int cur_y = intervals[i][1];
+
+            auto [x, y] = p;
+            if (cur_x >= x && (cur_y <= y))
+                ans--;
+            else
+            {
+                p.first = cur_x;
+                p.second = cur_y;
+            }
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int maxPathSum(vector<int> &a, vector<int> &b)
+    {
+
+        int n = a.size();
+        int m = b.size();
+        int sum1 = 0;
+        unordered_map<int, int> hash;
+
+        for (int i = 0; i < n; ++i)
+        {
+            sum1 += a[i];
+            hash[a[i]] = sum1;
+        }
+        int prev2 = 0, prev1 = 0;
+        int sum2 = 0;
+        int ans = 0;
+        for (int i = 0; i < m; ++i)
+        {
+            sum2 += b[i];
+            if (hash[b[i]] >= 1)
+            {
+                ans += max(sum2, hash[b[i]] - prev1);
+                sum2 = 0;
+                prev1 = hash[b[i]];
+            }
+        }
+        ans += max(sum2, sum1 - prev1);
+
+        return ans;
+    }
+};
