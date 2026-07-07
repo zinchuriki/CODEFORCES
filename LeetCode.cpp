@@ -15180,3 +15180,30 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    long long sumAndMultiply(int n)
+    {
+
+        long long sum = 0;
+        long long x = 0;
+        long long mul = 1;
+        while (n > 0)
+        {
+
+            long long temp = n % 10;
+            sum += temp;
+            if (temp != 0)
+            {
+                temp *= mul;
+                x += temp;
+                mul *= 10;
+            }
+
+            n /= 10;
+        }
+        return x * sum;
+    }
+};
