@@ -15207,3 +15207,36 @@ public:
         return x * sum;
     }
 };
+
+class Solution
+{
+public:
+    int largestArea(int n, int m, vector<vector<int>> &arr)
+    {
+        // code here
+        vector<int> r, c;
+        int sz = arr.size();
+        if (sz == 0)
+            return n * m;
+        for (int i = 0; i < sz; ++i)
+        {
+            r.push_back(arr[i][0]);
+            c.push_back(arr[i][1]);
+        }
+        sort(r.begin(), r.end());
+        sort(c.begin(), c.end());
+        int rs = r.size();
+        int cs = c.size();
+        int row = max(r[0] - 1, n - r[sz - 1]);
+        int col = max(c[0] - 1, m - c[sz - 1]);
+        for (int i = 1; i < rs; ++i)
+        {
+            row = max(row, r[i] - r[i - 1] - 1);
+        }
+        for (int i = 1; i < cs; ++i)
+        {
+            col = max(col, c[i] - c[i - 1] - 1);
+        }
+        return row * col;
+    }
+};
