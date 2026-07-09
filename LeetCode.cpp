@@ -15240,3 +15240,87 @@ public:
         return row * col;
     }
 };
+
+class Solution
+{
+public:
+    class UF
+    {
+    public:
+        vector<int> parent;
+
+        UF(int n)
+        {
+            parent.resize(n);
+
+            for (int i = 0; i < n; ++i)
+                parent[i] = i;
+        }
+
+        int fup(int u)
+        {
+            if (u == parent[u])
+                return u;
+
+            return parent[u] = fup(parent[u]);
+        }
+
+        void u(int u, int v)
+        {
+            u = fup(u);
+            v = fup(v);
+            parent[v] = parent[u];
+        }
+    };
+    vector<bool>
+    pathExistenceQueries(int n, vector<int> &nums, int maxDiff,
+                         vector<vector<int>> &queries)
+    {
+
+        UF uf(n);
+        for (int i = 1; i < n; ++i)
+        {
+
+            int n1 = i - 1;
+            int n2 = i;
+            if (nums[n2] - nums[n1] <= maxDiff)
+                uf.u(n1, n2);
+        }
+        int m = queries.size();
+        vector<bool> ans(m, false);
+        for (int i = 0; i < m; ++i)
+        {
+            int n1 = queries[i][0];
+            int n2 = queries[i][1];
+            n1 = uf.fup(n1);
+            n2 = uf.fup(n2);
+
+            if (n1 == n2)
+                ans[i] = true;
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int countKdivPairs(vector<int> &arr, int k)
+    {
+        // code here
+        unordered_map<int, int> hash;
+        int ans = 0;
+        for (int num : arr)
+        {
+
+            int req = (k - num % k) % k;
+
+            if (hash.find(req) != hash.end())
+                ans += hash[req];
+
+            hash[num % k]++;
+        }
+
+        return ans;
+    }
+};
