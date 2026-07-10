@@ -15324,3 +15324,47 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int countOddFactors(long long n)
+    {
+        // Step 1: Strip away all even components (divide by 2 until it's odd)
+        while (n % 2 == 0)
+        {
+            n /= 2;
+        }
+
+        // Step 2: Now 'n' is purely odd. We just count its total factors!
+        int odd_factors = 0;
+
+        // We only need to loop up to the square root of n
+        for (long long i = 1; i * i <= n; ++i)
+        {
+            // If 'i' divides 'n' evenly
+            if (n % i == 0)
+            {
+                odd_factors++; // Count the first factor (i)
+
+                // Count the paired factor (n / i), but make sure we don't
+                // double-count if it's a perfect square (like 5 * 5 = 25)
+                if (i * i != n)
+                {
+                    odd_factors++;
+                }
+            }
+        }
+
+        return odd_factors;
+    }
+
+    int getCount(int n)
+    {
+        // code here
+        if (!(n & (n - 1)))
+            return 0;
+
+        return countOddFactors(n) - 1;
+    }
+};
