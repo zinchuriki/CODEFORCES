@@ -15368,3 +15368,34 @@ public:
         return countOddFactors(n) - 1;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> sequentialDigits(int low, int high)
+    {
+        string st = "123456789";
+        string ll = to_string(low);
+        string rr = to_string(high);
+
+        int l = ll.size();
+        int r = rr.size();
+        vector<int> ans;
+
+        while (l <= r)
+        {
+
+            for (int i = 0; i <= 9 - l; ++i)
+            {
+
+                int s = stoi(st.substr(i, l));
+
+                if (s >= low && s <= high)
+                    ans.push_back(s);
+            }
+            l++;
+        }
+
+        return ans;
+    }
+};
