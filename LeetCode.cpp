@@ -15440,3 +15440,39 @@ public:
         return cal(nums, 0, 0, 0);
     }
 };
+
+class Solution
+{
+public:
+    int bitonic(vector<int> &arr)
+    {
+        // code here
+        int n = arr.size();
+
+        vector<int> inc(n, 1), dec(n, 1);
+        int temp = 1;
+        for (int i = 1; i < n; ++i)
+        {
+            if (arr[i] >= arr[i - 1])
+                temp++;
+            else
+                temp = 1;
+            inc[i] = temp;
+        }
+        temp = 1;
+        int ans = max(1,inc[n-1]);
+        for (int i = n - 2; i >= 0; --i)
+        {
+            if (arr[i] >= arr[i + 1])
+            {
+                temp++;
+              
+            }
+            else
+                temp = 1;
+                  ans = max(ans, inc[i] + temp - 1);
+        }
+
+        return ans;
+    }
+};
