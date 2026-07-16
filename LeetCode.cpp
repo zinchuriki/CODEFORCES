@@ -15472,7 +15472,6 @@ public:
                 temp = 1;
                   ans = max(ans, inc[i] + temp - 1);
         }
-
         return ans;
     }
 };
