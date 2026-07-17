@@ -15460,18 +15460,119 @@ public:
             inc[i] = temp;
         }
         temp = 1;
-        int ans = max(1,inc[n-1]);
+        int ans = max(1, inc[n - 1]);
         for (int i = n - 2; i >= 0; --i)
         {
             if (arr[i] >= arr[i + 1])
             {
                 temp++;
-              
             }
             else
                 temp = 1;
-                  ans = max(ans, inc[i] + temp - 1);
+            ans = max(ans, inc[i] + temp - 1);
         }
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> gcdValues(vector<int> &nums, vector<long long> &queries)
+    {
+
+        map<int, long long, greater<int>> hash;
+
+        for (int n : nums)
+        {
+            for (int i = 1; i * i <= n; i++)
+            {
+                if (n % i == 0)
+                {
+                    hash[i]++;
+
+                    // FIX 2: You must include the other half of the factor
+                    // pair! If n is 12 and i is 2, we must also add 6 (which is
+                    // 12 / 2)
+                    if (i * i != n)
+                    {
+                        hash[n / i]++;
+                    }
+                }
+            }
+        }
+
+        // Step 2: Convert frequencies to total possible pairs
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            long long a = it->second;
+            it->second = a * (a - 1) / 2;
+        }
+
+        // Step 3: Inclusion-Exclusion (Subtracting the duplicates)
+        // This works perfectly now because 'greater<int>' guarantees we process
+        // 8 before 4, and 4 before 2.
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+            int current_key = it->first;
+            long long exact_pairs = it->second;
+
+            // FIX 3: Find the divisors of the current key to subtract from
+            for (int i = 1; i * i <= current_key; i++)
+            {
+                if (current_key % i == 0)
+                {
+
+                    // Subtract from the smaller factor
+                    if (i != current_key)
+                    {
+                        hash[i] -= exact_pairs;
+                    }
+
+                    // Subtract from the larger factor (the complement)
+                    int complement = current_key / i;
+                    if (complement != current_key && complement != i)
+                    {
+                        hash[complement] -= exact_pairs;
+                    }
+                }
+            }
+        }
+
+        vector<int> gcd_values;
+        vector<long long> prefix_sums;
+        long long current_sum = 0;
+
+        // 2. Iterate the map in REVERSE!
+        // .rbegin() starts at the smallest GCD because the map used
+        // greater<int>
+        for (auto it = hash.rbegin(); it != hash.rend(); ++it)
+        {
+            if (it->second >
+                0)
+            { // Only care about GCDs that actually have pairs
+                gcd_values.push_back(it->first);
+                current_sum += it->second;
+                prefix_sums.push_back(current_sum);
+            }
+        }
+
+        // 3. Process the queries using Binary Search
+        vector<int> answer;
+        for (long long q : queries)
+        {
+
+            // Find the first prefix sum strictly greater than the query index
+            auto it =
+                std::upper_bound(prefix_sums.begin(), prefix_sums.end(), q);
+
+            // Find the index of that prefix sum
+            int index = distance(prefix_sums.begin(), it);
+
+            // The answer is the GCD value located at that exact same index!
+            answer.push_back(gcd_values[index]);
+        }
+
+        return answer;
     }
 };
