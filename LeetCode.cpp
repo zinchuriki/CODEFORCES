@@ -15576,3 +15576,47 @@ public:
         return answer;
     }
 };
+
+// void connect(TreeLinkNode *A)
+// {
+//     if (A == NULL)
+//     {
+//         return;
+//     }
+
+//     std::queue<TreeLinkNode *> q;
+//     q.push(A);
+
+//     while (!q.empty())
+//     {
+//         int level_size = q.size();
+
+//         for (int i = 0; i < level_size; i++)
+//         {
+//             TreeLinkNode *current = q.front();
+//             q.pop();
+
+//             // If this is NOT the last node in the level,
+//             // point to the next node waiting at the front of the queue
+//             if (i < level_size - 1)
+//             {
+//                 current->next = q.front();
+//             }
+//             else
+//             {
+//                 // The last node in the level points to NULL
+//                 current->next = NULL;
+//             }
+
+//             // Push children to the queue for the next level
+//             if (current->left != NULL)
+//             {
+//                 q.push(current->left);
+//             }
+//             if (current->right != NULL)
+//             {
+//                 q.push(current->right);
+//             }
+//         }
+//     }
+// }
