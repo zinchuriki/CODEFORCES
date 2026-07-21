@@ -15620,3 +15620,49 @@ public:
 //         }
 //     }
 // }
+
+class Solution
+{
+public:
+    int maxActiveSectionsAfterTrade(string s)
+    {
+        int ones = 0;
+        vector<int> vec;
+        int cur = 0;
+        int n = s.length();
+
+        // 1. Parse string into segments and count total 1s
+        for (int idx = 0; idx < n; ++idx)
+        {
+            cur++;
+            // Push to vector when we hit a change or the end of the string
+            if (idx == n - 1 || s[idx] != s[idx + 1])
+            {
+                vec.push_back(cur);
+                cur = 0;
+            }
+            // Count total 1s correctly
+            if (s[idx] == '1')
+            {
+                ones++;
+            }
+        }
+
+        int max_delta = 0;
+        int m = vec.size();
+
+        // 2. Find the max delta from a valid trade
+        // If s starts with '0', the 1st '1' block is at index 1.
+        // If s starts with '1', the 1st '1' block bounded by '0's is at index 2.
+        int start = (s[0] == '0') ? 1 : 2;
+
+        // Step by 2 to only visit the '1' segments
+        for (int i = start; i < m - 1; i += 2)
+        {
+            // A valid '1' block at index i is surrounded by '0' blocks at i-1 and i+1
+            max_delta = max(max_delta, vec[i - 1] + vec[i + 1]);
+        }
+
+        return ones + max_delta;
+    }
+};
