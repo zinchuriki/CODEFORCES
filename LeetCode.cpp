@@ -15666,3 +15666,48 @@ public:
         return ones + max_delta;
     }
 };
+
+// int solve(TreeNode *A)
+// {
+//     if (A == NULL)
+//     {
+//         return 0;
+//     }
+
+//     std::queue<TreeNode *> q;
+//     q.push(A);
+
+//     // Initialize to a very small number to ensure any real sum overrides it
+//     int max_sum = -1e9;
+
+//     while (!q.empty())
+//     {
+//         int level_size = q.size();
+//         int current_level_sum = 0;
+
+//         // Loop through all the nodes in the current level
+//         for (int i = 0; i < level_size; i++)
+//         {
+//             TreeNode *current = q.front();
+//             q.pop();
+
+//             // Add the current node's value to the level sum
+//             current_level_sum += current->val;
+
+//             // Push the children into the queue for the next level
+//             if (current->left != NULL)
+//             {
+//                 q.push(current->left);
+//             }
+//             if (current->right != NULL)
+//             {
+//                 q.push(current->right);
+//             }
+//         }
+
+//         // Update max_sum if the current level's sum is strictly greater
+//         max_sum = std::max(max_sum, current_level_sum);
+//     }
+
+//     return max_sum;
+// }
