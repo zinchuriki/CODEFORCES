@@ -15711,3 +15711,30 @@ public:
 
 //     return max_sum;
 // }
+
+class Solution
+{
+public:
+    bool canRepresentBST(vector<int> &arr)
+    {
+
+        stack<int> st;
+        int limit = -1;
+        for (int node : arr)
+        {
+
+            while (!st.empty() && node > st.top())
+            {
+                limit = max(limit, st.top());
+                st.pop();
+            }
+
+            if (node < limit)
+                return false;
+
+            st.push(node);
+        }
+
+        return true;
+    }
+};
