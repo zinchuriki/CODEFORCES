@@ -15738,3 +15738,138 @@ public:
         return true;
     }
 };
+
+int subset(vector<int> &dp, vector<int> &A, int idx, int req)
+{
+    if (idx >= n)
+        return 0;
+    if (req == 0)
+        return dp[req] = 1;
+
+    int take = 0, dtake = 0;
+
+    if (req >= A[idx])
+    {
+        take = subset(dp, A, idx + 1, req - A[idx]);
+    }
+
+    dtake = subset(dp, A, idx + 1, req - A[idx]);
+
+    return dp[req] = max(take, dtake);
+}
+
+int solve(vector<int> &A, int B)
+{
+
+    vector<int> dp(B + 1, -1);
+
+    return subset(dp, A, 0, B);
+}
+
+class Solution
+{
+public:
+    int uniqueXorTriplets(vector<int> &nums)
+    {
+        int n = nums.size();
+
+        unordered_set<int> s, s1;
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = i; j < n; ++j)
+            {
+                s.insert(nums[i] ^ nums[j]);
+            }
+        }
+
+        for (int num : s)
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                s1.insert(num ^ nums[i]);
+            }
+        }
+
+        return (int)s1.size();
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> pathExistenceQueries(int n, vector<int> &nums, int maxDiff,
+                                     vector<vector<int>> &queries)
+    {
+        vector<int> nodes_pos(n);
+
+        for (int i = 0; i < n; ++i)
+            nodes_pos[i] = i;
+
+        sort(nodes_pos.begin(), nodes_pos.end(),
+             [&](int a, int b)
+             { return nums[a] < nums[b]; });
+        sort(nums.begin(), nums.end());
+        vector<int> pos(n);
+        for (int i = 0; i < n; ++i)
+        {
+            pos[nodes_pos[i]] = i;
+        }
+
+        vector<vector<int>> jump(n, vector<int>(21, -1));
+
+        for (int i = 0; i < n; ++i)
+        {
+
+            auto prev_it =
+                lower_bound(nums.begin(), nums.end(), nums[i] - maxDiff);
+            int furthest_left_idx = prev_it - nums.begin();
+            jump[i][0] = furthest_left_idx;
+        }
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+            for (int j = 1; j <= 20; ++j)
+            {
+                if (jump[i][j - 1] != -1)
+                    jump[i][j] = jump[jump[i][j - 1]][j - 1];
+            }
+        }
+        vector<int> ans;
+        for (auto q : queries)
+        {
+
+            int u = q[0];
+            int v = q[1];
+            if (u == v)
+            {
+                ans.push_back(0);
+                continue;
+            }
+
+            if (u > v)
+                swap(u, v);
+
+            int jumps = 0;
+            int curr = u;
+
+            for (int i = 20; i >= 0; --i)
+            {
+                if (jump[curr][i] != -1 && jump[curr][i] < v)
+                {
+                    curr = jump[curr][i];
+                    jumps += (1 << i);
+                }
+            }
+            if (jump[curr][0] >= v)
+            {
+                ans.push_back(jumps + 1);
+            }
+            else
+            {
+                ans.push_back(-1);
+            }
+            return ans;
+        }
+    }
+};
