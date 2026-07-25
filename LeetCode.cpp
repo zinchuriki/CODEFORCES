@@ -15873,3 +15873,60 @@ public:
         }
     }
 };
+
+class Solution {
+public:
+    int maximumSum(vector<vector<int>> &mat, int k) {
+        int n = mat.size();
+        vector<vector<int>> pref(n, vector<int>(n, 0));
+
+        // 1. Build the 2D Prefix Sum Array
+        for (int i = 0; i < n; ++i) {
+            int temp = 0;
+            for (int j = 0; j < n; ++j) {
+                temp += mat[i][j];
+                pref[i][j] = temp;
+
+                if (i > 0)
+                    pref[i][j] += pref[i - 1][j];
+            }
+        }
+        
+        int i1 = 0, i2 = k - 1;
+        int j1 = 0, j2 = k - 1;
+        
+        // FIX 1: Set ans to the smallest possible integer to handle negative sums
+        int ans = INT_MIN; 
+        
+        while (i2 < n && j2 < n) {
+            // FIX 2: Break down the subtraction logic for all edges
+            int current_sum = pref[i2][j2];
+            
+            if (i1 > 0) {
+                current_sum -= pref[i1 - 1][j2]; // Subtract top part
+            }
+            if (j1 > 0) {
+                current_sum -= pref[i2][j1 - 1]; // Subtract left part
+            }
+            if (i1 > 0 && j1 > 0) {
+                current_sum += pref[i1 - 1][j1 - 1]; // Add back the double-subtracted corner
+            }
+            
+            ans = max(ans, current_sum);
+            
+            // Move the window
+            j1++;
+            j2++;
+            
+            // Wrap around to the next row
+            if (j2 >= n) {
+                j1 = 0;
+                j2 = k - 1;
+                i1++;
+                i2++;
+            }
+        }
+
+        return ans;
+    }
+};
