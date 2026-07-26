@@ -15966,3 +15966,79 @@ public:
         return ans;
     }
 };
+
+#include <unordered_map>
+#include <string>
+
+using namespace std;
+
+string intToRoman(int A)
+{
+    unordered_map<int, string> hash;
+
+    hash[1] = "I";
+    hash[2] = "II";
+    hash[3] = "III";
+    hash[4] = "IV";
+    hash[5] = "V";
+    hash[6] = "VI";
+    hash[7] = "VII";
+    hash[8] = "VIII";
+    hash[9] = "IX";
+
+    hash[10] = "X";
+    hash[20] = "XX";
+    hash[30] = "XXX";
+    hash[40] = "XL";
+    hash[50] = "L";
+    hash[60] = "LX";
+    hash[70] = "LXX";
+    hash[80] = "LXXX";
+    hash[90] = "XC";
+
+    hash[100] = "C";
+    hash[200] = "CC";
+    hash[300] = "CCC";
+    hash[400] = "CD";
+    hash[500] = "D";
+    hash[600] = "DC";
+    hash[700] = "DCC";
+    hash[800] = "DCCC";
+    hash[900] = "CM";
+
+    // Fixed the typo here: Roman for 1000 is M!
+    hash[1000] = "M";
+    hash[2000] = "MM";
+    hash[3000] = "MMM";
+
+    string ans = "";
+    string s = to_string(A);
+    int n = s.size();
+
+    for (int i = 0; i < n; ++i)
+    {
+        int digit = s[i] - '0';
+
+        // Skip zeroes, because there is no zero in Roman numerals
+        if (digit == 0)
+        {
+            continue;
+        }
+
+        int zeroes = n - i - 1;
+
+        // Find the place value (1, 10, 100, or 1000)
+        int multiplier = 1;
+        for (int j = 0; j < zeroes; j++)
+        {
+            multiplier *= 10;
+        }
+
+        // Multiply the digit by its place value
+        int fdigit = digit * multiplier;
+
+        ans += hash[fdigit];
+    }
+
+    return ans;
+}
