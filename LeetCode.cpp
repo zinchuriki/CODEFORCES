@@ -15874,16 +15874,20 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    int maximumSum(vector<vector<int>> &mat, int k) {
+    int maximumSum(vector<vector<int>> &mat, int k)
+    {
         int n = mat.size();
         vector<vector<int>> pref(n, vector<int>(n, 0));
 
         // 1. Build the 2D Prefix Sum Array
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
+        {
             int temp = 0;
-            for (int j = 0; j < n; ++j) {
+            for (int j = 0; j < n; ++j)
+            {
                 temp += mat[i][j];
                 pref[i][j] = temp;
 
@@ -15891,35 +15895,40 @@ public:
                     pref[i][j] += pref[i - 1][j];
             }
         }
-        
+
         int i1 = 0, i2 = k - 1;
         int j1 = 0, j2 = k - 1;
-        
+
         // FIX 1: Set ans to the smallest possible integer to handle negative sums
-        int ans = INT_MIN; 
-        
-        while (i2 < n && j2 < n) {
+        int ans = INT_MIN;
+
+        while (i2 < n && j2 < n)
+        {
             // FIX 2: Break down the subtraction logic for all edges
             int current_sum = pref[i2][j2];
-            
-            if (i1 > 0) {
+
+            if (i1 > 0)
+            {
                 current_sum -= pref[i1 - 1][j2]; // Subtract top part
             }
-            if (j1 > 0) {
+            if (j1 > 0)
+            {
                 current_sum -= pref[i2][j1 - 1]; // Subtract left part
             }
-            if (i1 > 0 && j1 > 0) {
+            if (i1 > 0 && j1 > 0)
+            {
                 current_sum += pref[i1 - 1][j1 - 1]; // Add back the double-subtracted corner
             }
-            
+
             ans = max(ans, current_sum);
-            
+
             // Move the window
             j1++;
             j2++;
-            
+
             // Wrap around to the next row
-            if (j2 >= n) {
+            if (j2 >= n)
+            {
                 j1 = 0;
                 j2 = k - 1;
                 i1++;
@@ -15927,6 +15936,33 @@ public:
             }
         }
 
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<vector<int>> levelSort(vector<int> &arr)
+    {
+        // code here
+        int n = arr.size();
+        vector<vector<int>> ans;
+        int i = 0;
+        int temp1 = 1;
+        while (i < n)
+        {
+
+            int j = i;
+            vector<int> temp;
+            while (j < min(n, i + temp1))
+                temp.push_back(arr[j++]);
+
+            i = j;
+            sort(temp.begin(), temp.end());
+            ans.push_back(temp);
+            temp1 *= 2;
+        }
         return ans;
     }
 };
