@@ -16042,3 +16042,51 @@ string intToRoman(int A)
 
     return ans;
 }
+
+int nchoc(int A, vector<int> &B)
+{
+
+    priority_queue<int> pq;
+
+    for (int Bi : B)
+        pq.push(Bi);
+    long int ans = 0;
+    int MOD = 1e9 + 7;
+    while (!pq.empty() && A > 0)
+    {
+        auto a = pq.top();
+        ans = (ans + a) % MOD;
+        pq.pop();
+        pq.push(a / 2);
+    }
+
+    return ans;
+}
+
+class Solution
+{
+public:
+    int longestOnes(vector<int> &nums, int k)
+    {
+        int l = 0, r = 0;
+        int left = k;
+        int ans = 0;
+        int cnt = 0;
+        while (r < n && l < n)
+        {
+
+            while (left <= 0 && l <= r)
+            {
+                if (nums[l] == 0)
+                    left++;
+                l++;
+            }
+            if (nums[r] == 0)
+                left--;
+            ans = max(ans, r - l + 1);
+            r++;
+        }
+
+        return ans;
+    }
+};
