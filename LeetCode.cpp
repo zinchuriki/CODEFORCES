@@ -16090,3 +16090,66 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    string smallestPalindrome(string s)
+    {
+        int n = s.size();
+        string temp = s.substr(0, n / 2);
+        if (temp != "")
+            sort(temp.begin(), temp.end());
+        string ans = temp;
+
+        if (n & 1)
+            ans += s[n / 2];
+        if (temp != "")
+            reverse(temp.begin(), temp.end());
+        ans += temp;
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    vector<int> fact;
+    Solution()
+    {
+        fact.push_back(1);
+        int temp = 1;
+        for (int i = 1; i < n; ++i)
+        {
+            temp *= i;
+            fact.push_back(temp);
+        }
+    }
+
+    string getPermutation(int n, int k)
+    {
+        int cur = k;
+        string ans = "";
+        int a = 1;
+        vector<bool> vec(10, true);
+
+        for (int i = 1; i <= n; ++i)
+        {
+            int dl = n - i;
+            for (int j = 1; j <= 9; ++j)
+            {
+                if (vec[j])
+                {
+                    a = j;
+                    break;
+                }
+            }
+
+            a += k / fact[dl];
+            ans += to_string(a);
+            vec[a] = false;
+            k = k % fact[dl];
+        }
+        return ans;
+    }
+};
