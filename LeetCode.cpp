@@ -16153,3 +16153,140 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    long long INF = 1e6 + 1; // Anything bigger than max 'k' is just "infinity"
+
+    // Function to calculate nCr safely
+    long long nCr(int n, int r)
+    {
+        if (r > n - r)
+            r = n - r; // Optimization: C(n, r) == C(n, n-r)
+
+        long long ans = 1;
+        for (int i = 1; i <= r; i++)
+        {
+            ans = ans * (n - i + 1) / i;
+
+            // Stop early if it gets too big!
+            // This completely prevents integer overflow.
+            if (ans >= INF)
+            {
+                return INF;
+            }
+        }
+        return ans;
+    }
+
+    // Function to calculate total unique permutations
+    long long getPermutationCount(vector<int> &freq, int remaining_length)
+    {
+        long long total_perms = 1;
+
+        for (int f : freq)
+        {
+            if (f == 0)
+                continue;
+
+            total_perms *= nCr(remaining_length, f);
+
+            // Stop early if the multiplication gets too big
+            if (total_perms >= INF)
+            {
+                return INF;
+            }
+
+            remaining_length -=
+                f; // Subtract the placed characters for the next step
+        }
+
+        return total_perms;
+    }
+    string smallestPalindrome(string s, int k)
+    {
+
+        vector<int> vec(26, 0);
+        int n = s.size();
+
+        for (int i = 0; i < n / 2; ++i)
+            vec[s[i] - 'a']++;
+        string left_half = "";
+
+        // Outer loop: For every character position we need to fill
+        for (int i = 0; i < n / 2; ++i)
+        {
+
+            // Inner loop: Try characters sequentially from 'a' (0) to 'z' (25)
+            for (int c = 0; c < 26; ++c)
+            {
+                if (vec[c] == 0)
+                    continue; // Skip if we don't have this letter
+
+                vec[c]--; // Temporarily use this letter
+
+                // Calculate permutations for the remaining characters
+                long long unique_perms =
+                    getPermutationCount(vec, n / 2 - 1 - i);
+
+                if (k <= unique_perms)
+                {
+                    // JACKPOT! The k-th permutation starts with this letter.
+                    // We keep it decremented, add it to our string, and break
+                    // to the next position
+                    left_half += (char)('a' + c);
+                    break;
+                }
+                else
+                {
+                    // Not this letter. Subtract the permutations from k,
+                    // restore the letter count, and let the loop try the next
+                    // letter.
+                    k -= unique_perms;
+                    vec[c]++;
+                }
+            }
+        }
+        string ans = left_half;
+        if (n & 1)
+            ans += s[n / 2] + 1;
+        reverse(left_half.begin(), left_half.end());
+        ans += left_half;
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int minimumPushes(string word)
+    {
+        vector<int> vec(26, 0);
+        int n = word.size();
+
+        for (char c : word)
+            vec[c - 'a']++;
+
+        sort(vec.begin(), vec.end(), greater<int>());
+        int cnt = 1;
+        int ans = 0;
+        for (int i = 0; i < 26; ++i)
+        {
+            if (!vec[i])
+                break;
+            if (cnt <= 8)
+                ans += vec[i];
+            else if (cnt <= 16)
+                ans += 2 * vec[i];
+            else if (cnt <= 24)
+                ans += 3 * vec[i];
+            else
+                ans += 4 * vec[i];
+
+            cnt++;
+        }
+
+        return ans;
+    }
+};
