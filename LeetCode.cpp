@@ -16290,3 +16290,225 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    class SegmentTree
+    {
+    private:
+        vector<int> tree;
+        int n;
+
+        void build(const vector<int> &arr, int node, int start, int end)
+        {
+            if (start == end)
+            {
+
+                tree[node] = arr[start];
+                return;
+            }
+
+            int mid = start + (end - start) / 2;
+            int left_child = 2 * node + 1;
+            int right_child = 2 * node + 2;
+
+            build(arr, left_child, start, mid);
+            build(arr, right_child, mid + 1, end);
+
+            tree[node] = max(tree[left_child], tree[right_child]);
+        }
+
+        int query(int node, int start, int end, int L, int R)
+        {
+
+            if (R < start || end < L)
+            {
+                return INT_MIN;
+            }
+
+            if (L <= start && end <= R)
+            {
+                return tree[node];
+            }
+
+            int mid = start + (end - start) / 2;
+            int left_child = 2 * node + 1;
+            int right_child = 2 * node + 2;
+
+            int left_max = query(left_child, start, mid, L, R);
+            int right_max = query(right_child, mid + 1, end, L, R);
+
+            return max(left_max, right_max);
+        }
+
+        void update(int node, int start, int end, int idx, int val)
+        {
+            if (start == end)
+            {
+
+                tree[node] = val;
+                return;
+            }
+
+            int mid = start + (end - start) / 2;
+            int left_child = 2 * node + 1;
+            int right_child = 2 * node + 2;
+
+            // Decide whether to go left or right
+            if (start <= idx && idx <= mid)
+            {
+                update(left_child, start, mid, idx, val);
+            }
+            else
+            {
+                update(right_child, mid + 1, end, idx, val);
+            }
+
+            // After updating the child, update the current node
+            tree[node] = max(tree[left_child], tree[right_child]);
+        }
+
+    public:
+        // Constructor initializes and builds the tree
+        SegmentTree(const vector<int> &arr)
+        {
+            n = arr.size();
+            // The maximum size of a segment tree array is 4 * N
+            tree.assign(4 * n, 0);
+            if (n > 0)
+            {
+                build(arr, 0, 0, n - 1);
+            }
+        }
+
+        // Public method to get max in range [L, R]
+        int query(int L, int R) { return query(0, 0, n - 1, L, R); }
+
+        // Public method to update array at index 'idx' to 'val'
+        void update(int idx, int val) { update(0, 0, n - 1, idx, val); }
+    };
+    vector<int> maxActiveSectionsAfterTrade(string s,
+                                            vector<vector<int>> &queries)
+    {
+
+        vector<int> left;
+        vector<int> right;
+        vector<int> zer;
+        int n = s.size();
+        int l = -1;
+        int ones = 0;
+        int cnt = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] == '1')
+                ones++;
+            if (s[i] == '1' && cnt > 0)
+            {
+                right.push_back(i - 1);
+                zer.push_back(cnt);
+                cnt = 0;
+                l = -1;
+            }
+            if (s[i] == '0')
+            {
+                if (l == -1)
+                {
+                    left.push_back(i);
+                    l = i;
+                }
+                cnt++;
+            }
+        }
+        if (cnt)
+        {
+            right.push_back(n - 1);
+            zer.push_back(cnt);
+            cnt = 0;
+        }
+        int m = zer.size();
+        vector<int> rsum;
+        for (int i = 0; i < m - 1; ++i)
+            rsum.push_back(zer[i] + zer[i + 1]);
+
+        SegmentTree tree(rsum);
+        vector<int> ans;
+
+        for (auto &q : queries)
+        {
+
+            int l = q[0];
+            int r = q[1];
+            int case1 = 0, case2 = 0, case3 = 0;
+            auto it1 = lower_bound(right.begin(), right.end(), l) - right.begin();
+            auto it2 = upper_bound(left.begin(), left.end(), r) - left.begin() - 1;
+
+            // If there are no zero-segments inside the query at all
+            if (it1 > it2 || it1 == right.size() || it2 < 0)
+            {
+                ans.push_back(ones);
+                continue;
+            }
+
+            // Safely calculate the clipped lengths of the boundary segments
+            int len1 = min(r, right[it1]) - max(l, left[it1]) + 1;
+            int len2 = min(r, right[it2]) - max(l, left[it2]) + 1;
+
+            if (it1 == it2)
+            {
+                // CASE A: Only 1 zero-segment touches the query. No trade is possible.
+                ans.push_back(ones);
+            }
+            else if (it1 + 1 == it2)
+            {
+                // CASE B: Exactly 2 zero-segments touch the query. Merge them safely.
+                ans.push_back(ones + len1 + len2);
+            }
+            else
+            {
+                // CASE C: 3 or more zero-segments touch the query.
+                int case1 = len1 + zer[it1 + 1];
+                int case2 = len2 + zer[it2 - 1];
+                int case3 = 0;
+
+                // We need at least TWO fully internal zero-segments to query the tree
+                if (it2 - it1 >= 3)
+                {
+                    // Stop at it2 - 2 to ensure we don't accidentally include the clipped it2 segment
+                    case3 = tree.query(it1 + 1, it2 - 2);
+                }
+
+                ans.push_back(ones + max({case1, case2, case3}));
+            }
+        }
+        return ans;
+    }
+};
+
+string countAndSay(int A)
+{
+    string ans = "1";
+    while (A > 1)
+    {
+
+        int n = ans.size();
+        int cnt = 1;
+        string next_ans = "";
+        for (int i = 0; i < n - 1; ++i)
+        {
+            if (ans[i] == ans[i + 1])
+                cnt++;
+            else
+            {
+                next_ans += to_string(cnt) + to_string(ans[i]);
+                cnt = 1;
+            }
+        }
+        if (cnt)
+            next_ans += to_string(cnt) + to_string(ans[n - 1]);
+
+        A--;
+    }
+
+    return ans;
+}
