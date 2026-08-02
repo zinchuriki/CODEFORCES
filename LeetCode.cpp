@@ -16512,3 +16512,65 @@ string countAndSay(int A)
 
     return ans;
 }
+
+class Solution
+{
+public:
+    bool cal(int l, int r, vector<int> &nums, int sum1, int sum2, int turn)
+    {
+
+        if (l > r)
+        {
+            return sum1 >= sum2;
+        }
+        bool sum1l = false;
+        bool sum1r = false;
+        bool sum2l = false;
+        bool sum2r = false;
+        if (turn)
+        {
+            sum1l = cal(l + 1, r, nums, sum1 + nums[l], sum2, 0);
+            sum1r = cal(l, r - 1, nums, sum1 + nums[r], sum2, 0);
+        }
+        else
+        {
+
+            sum2l = cal(l + 1, r, nums, sum2, sum2 + nums[l], 1);
+            sum2r = cal(l, r - 1, nums, sum2, sum2 + nums[r], 1);
+            return sum2l && sum2r;
+        }
+
+        return sum1l | sum2l | sum1r | sum2r;
+    }
+
+    bool predictTheWinner(vector<int> &nums)
+    {
+        int n = nums.size();
+        return cal(0, n - 1, nums, 0, 0, 1);
+    }
+};
+
+vector<vector<int>> prettyPrint(int A)
+{
+    int i = 0;
+    int n = 2 * A - 1;
+    int temp = A;
+    vector<vector<int>> vec(n, vector<int>(n, 0));
+    while (temp > 0)
+    {
+
+        for (int j = i; j < n; ++j)
+        {
+            vec[i][j] = temp;
+            vec[n-1][j] = temp;
+            vec[j][n - 1] = temp;
+            vec[j][i] = temp;
+        }
+
+        temp--;
+        i++;
+        n--;
+    }
+
+    return vec;
+}
