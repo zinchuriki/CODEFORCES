@@ -16570,6 +16570,7 @@ vector<vector<int>> prettyPrint(int A)
         temp--;
         i++;
         n--;
+        vec[0][0];
     }
 
     return vec;
