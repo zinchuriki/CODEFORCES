@@ -16569,6 +16569,7 @@ vector<vector<int>> prettyPrint(int A)
 
         temp--;
         i++;
+        
         n--;
     }
 
