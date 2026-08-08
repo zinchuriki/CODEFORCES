@@ -16575,3 +16575,57 @@ vector<vector<int>> prettyPrint(int A)
 
     return vec;
 }
+
+
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> validSequence(string word1, string word2) {
+        int n = word1.length();
+        int m = word2.length();
+        
+        // dp[i] stores the length of the longest suffix of word2 
+        // that is a subsequence of word1[i...n-1]
+        vector<int> dp(n + 1, 0);
+        
+        // Step 1: Build the DP array backwards
+        for (int i = n - 1; i >= 0; --i) {
+            // Check if we matched the corresponding character from the end of word2
+            if (dp[i + 1] < m && word1[i] == word2[m - 1 - dp[i + 1]]) {
+                dp[i] = dp[i + 1] + 1;
+            } else {
+                dp[i] = dp[i + 1];
+            }
+        }
+        
+        vector<int> ans;
+        bool changed = false; // Tracks if we used our one allowed mismatch
+        int j = 0;            // Pointer for word2
+        
+        // Step 2: Greedily pick indices from left to right
+        for (int i = 0; i < n && j < m; ++i) {
+            if (word1[i] == word2[j]) {
+                // Perfect match
+                ans.push_back(i);
+                j++;
+            } else if (!changed && dp[i + 1] >= m - j - 1) {
+                // Mismatch, but we use our wildcard!
+                // dp[i+1] guarantees the rest of the word can be perfectly formed
+                ans.push_back(i);
+                j++;
+                changed = true;
+            }
+        }
+        
+        // Step 3: Check if we successfully formed word2
+        if (ans.size() == m) {
+            return ans;
+        }
+        
+        return {};
+    }
+};
