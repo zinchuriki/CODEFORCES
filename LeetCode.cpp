@@ -16704,6 +16704,7 @@ public:
         int sums = accumulate(stoneValue.begin(), stoneValue.end(), 0);
 
         // Start from index 0, and it is Alice's turn (true)
+        
         int a = solve(stoneValue, 0, true, dp, 1);
 
         return (a + sums) / 2;
