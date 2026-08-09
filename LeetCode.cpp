@@ -16562,57 +16562,66 @@ vector<vector<int>> prettyPrint(int A)
         for (int j = i; j < n; ++j)
         {
             vec[i][j] = temp;
-            vec[n-1][j] = temp;
+            vec[n - 1][j] = temp;
             vec[j][n - 1] = temp;
             vec[j][i] = temp;
         }
 
         temp--;
         i++;
-        
+
         n--;
     }
 
     return vec;
 }
 
-
 #include <vector>
 #include <string>
 
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
-    vector<int> validSequence(string word1, string word2) {
+    vector<int> validSequence(string word1, string word2)
+    {
         int n = word1.length();
         int m = word2.length();
-        
-        // dp[i] stores the length of the longest suffix of word2 
+
+        // dp[i] stores the length of the longest suffix of word2
         // that is a subsequence of word1[i...n-1]
         vector<int> dp(n + 1, 0);
-        
+
         // Step 1: Build the DP array backwards
-        for (int i = n - 1; i >= 0; --i) {
+        for (int i = n - 1; i >= 0; --i)
+        {
             // Check if we matched the corresponding character from the end of word2
-            if (dp[i + 1] < m && word1[i] == word2[m - 1 - dp[i + 1]]) {
+            if (dp[i + 1] < m && word1[i] == word2[m - 1 - dp[i + 1]])
+            {
                 dp[i] = dp[i + 1] + 1;
-            } else {
+            }
+            else
+            {
                 dp[i] = dp[i + 1];
             }
         }
-        
+
         vector<int> ans;
         bool changed = false; // Tracks if we used our one allowed mismatch
         int j = 0;            // Pointer for word2
-        
+
         // Step 2: Greedily pick indices from left to right
-        for (int i = 0; i < n && j < m; ++i) {
-            if (word1[i] == word2[j]) {
+        for (int i = 0; i < n && j < m; ++i)
+        {
+            if (word1[i] == word2[j])
+            {
                 // Perfect match
                 ans.push_back(i);
                 j++;
-            } else if (!changed && dp[i + 1] >= m - j - 1) {
+            }
+            else if (!changed && dp[i + 1] >= m - j - 1)
+            {
                 // Mismatch, but we use our wildcard!
                 // dp[i+1] guarantees the rest of the word can be perfectly formed
                 ans.push_back(i);
@@ -16620,12 +16629,83 @@ public:
                 changed = true;
             }
         }
-        
+
         // Step 3: Check if we successfully formed word2
-        if (ans.size() == m) {
+        if (ans.size() == m)
+        {
             return ans;
         }
-        
+
         return {};
+    }
+};
+
+class Solution
+{
+    int solve(vector<int> &stoneValue, int i, bool isAlice, vector<vector<vector<int>>> &dp, int M)
+    {
+        // Base case: No more stones left
+        if (i >= stoneValue.size())
+        {
+            return 0;
+        }
+
+        // Return cached result. 1e9 is our "uncomputed" flag.
+        if (dp[isAlice][i][M] != 1e9)
+        {
+            return dp[isAlice][i][M];
+        }
+
+        int stones_taken = 0;
+
+        if (isAlice)
+        {
+            int max_diff = -1e9;
+            // Alice wants to MAXIMIZE the global score difference
+            for (int k = 1; k <= 2 * M; ++k)
+            {
+                if (i + k - 1 < stoneValue.size())
+                {
+                    stones_taken += stoneValue[i + k - 1]; // Alice adds to the score
+                    int nm = max(M, k);
+                    int diff = stones_taken + solve(stoneValue, i + k, false, dp, nm);
+                    max_diff = max(max_diff, diff);
+                }
+            }
+            return dp[isAlice][i][M] = max_diff;
+        }
+        else
+        {
+            int min_diff = 1e9;
+            // Bob wants to MINIMIZE the global score difference
+            for (int k = 1; k <= 2 * M; ++k)
+            {
+                if (i + k - 1 < stoneValue.size())
+                {
+                    stones_taken += stoneValue[i + k - 1]; // Bob subtracts from the score
+                    int nm = max(M, k);
+                    int diff = -stones_taken + solve(stoneValue, i + k, true, dp, nm);
+                    min_diff = min(min_diff, diff);
+                }
+            }
+            return dp[isAlice][i][M] = min_diff;
+        }
+    }
+
+public:
+    int stoneGameII(vector<int> &stoneValue)
+    {
+        int n = stoneValue.size();
+
+        // 3D DP: [isAlice][index][M]
+        // M can grow up to n, so we make the third dimension size n + 1
+        vector<vector<vector<int>>> dp(2, vector<vector<int>>(n, vector<int>(n + 1, 1e9)));
+
+        int sums = accumulate(stoneValue.begin(), stoneValue.end(), 0);
+
+        // Start from index 0, and it is Alice's turn (true)
+        int a = solve(stoneValue, 0, true, dp, 1);
+
+        return (a + sums) / 2;
     }
 };
