@@ -16677,7 +16677,7 @@ class Solution
         else
         {
             int min_diff = 1e9;
-            // Bob wants to MINIMIZE the global score difference
+            
             for (int k = 1; k <= 2 * M; ++k)
             {
                 if (i + k - 1 < stoneValue.size())
@@ -16704,7 +16704,7 @@ public:
         int sums = accumulate(stoneValue.begin(), stoneValue.end(), 0);
 
         // Start from index 0, and it is Alice's turn (true)
-        
+
         int a = solve(stoneValue, 0, true, dp, 1);
 
         return (a + sums) / 2;
