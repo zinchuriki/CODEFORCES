@@ -16705,3 +16705,48 @@ public:
         return (a + sums) / 2;
     }
 };
+
+// The DFS helper function
+bool dfs(int node, int parent, vector<vector<int>>& adj, vector<bool>& visited) {
+    visited[node] = true;
+    
+    // Check all connected neighbors
+    for (int neighbor : adj[node]) {
+        // If we haven't visited this neighbor, go visit it!
+        if (!visited[neighbor]) {
+            if (dfs(neighbor, node, adj, visited)) {
+                return true;
+            }
+        } 
+        // If we HAVE visited it, and it's not the one we just came from... CYCLE!
+        else if (neighbor != parent) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+int Solution::solve(int A, vector<vector<int> > &B) {
+    // Step 1: Build the adjacency list
+    vector<vector<int>> adj(A + 1);
+    for (int i = 0; i < B.size(); i++) {
+        adj[B[i][0]].push_back(B[i][1]);
+        adj[B[i][1]].push_back(B[i][0]);
+    }
+    
+    vector<bool> visited(A + 1, false);
+    
+    // Step 2: The graph might be in disconnected pieces, 
+    // so we try starting a DFS from every unvisited node.
+    for (int i = 1; i <= A; i++) {
+        if (!visited[i]) {
+            // We pass -1 as the starting parent since the first node has no parent
+            if (dfs(i, -1, adj, visited)) {
+                return 1;
+            }
+        }
+    }
+    
+    return 0;
+}
