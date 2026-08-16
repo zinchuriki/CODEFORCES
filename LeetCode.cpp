@@ -16752,26 +16752,26 @@ public:
 //     return 0;
 // }
 
-class Solution {
-  public:
-    int kthSmallest(vector<int> &arr, int k) {
-        // 1. Create a Max Heap
-        priority_queue<int> pq;
+// class Solution {
+//   public:
+//     int kthSmallest(vector<int> &arr, int k) {
+//         // 1. Create a Max Heap
+//         priority_queue<int> pq;
         
-        // 2. Insert the first 'k' elements into the heap
-        for (int i = 0; i < k; i++) {
-            pq.push(arr[i]);
-        }
+//         // 2. Insert the first 'k' elements into the heap
+//         for (int i = 0; i < k; i++) {
+//             pq.push(arr[i]);
+//         }
         
-        // 3. For the remaining elements, keep only the smallest 'k' numbers in the heap
-        for (int i = k; i < arr.size(); i++) {
-            if (arr[i] < pq.top()) {
-                pq.pop();
-                pq.push(arr[i]);
-            }
-        }
+//         // 3. For the remaining elements, keep only the smallest 'k' numbers in the heap
+//         for (int i = k; i < arr.size(); i++) {
+//             if (arr[i] < pq.top()) {
+//                 pq.pop();
+//                 pq.push(arr[i]);
+//             }
+//         }
         
-        // 4. The top of the heap is the kth smallest element
-        return pq.top();
-    }
-};
+//         // 4. The top of the heap is the kth smallest element
+//         return pq.top();
+//     }
+// };
