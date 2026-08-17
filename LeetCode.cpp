@@ -16757,12 +16757,12 @@ public:
 //     int kthSmallest(vector<int> &arr, int k) {
 //         // 1. Create a Max Heap
 //         priority_queue<int> pq;
-        
+
 //         // 2. Insert the first 'k' elements into the heap
 //         for (int i = 0; i < k; i++) {
 //             pq.push(arr[i]);
 //         }
-        
+
 //         // 3. For the remaining elements, keep only the smallest 'k' numbers in the heap
 //         for (int i = k; i < arr.size(); i++) {
 //             if (arr[i] < pq.top()) {
@@ -16770,8 +16770,65 @@ public:
 //                 pq.push(arr[i]);
 //             }
 //         }
-        
+
 //         // 4. The top of the heap is the kth smallest element
 //         return pq.top();
 //     }
 // };
+
+class Solution
+{
+public:
+    int cal(vector<int>& pref, vector<int>& stv, vector<vector<int>> &dp, int l,
+            int r)
+    {
+
+        if (l < 0 || l >= n || r < 0 || r >= n)
+            return 0;
+
+        if (dp[l][r] != -1)
+            return dp[l][r];
+        int left = 0;
+        int ans = 0;
+        for (int i = l; i < r; ++i)
+        {
+
+            left += stv[i];
+            int right = pref[r] - pref[i];
+            if (left < right)
+            {
+                ans = max(ans, left + cal(pref, stv, dp, l, i));
+            }
+            else
+            {
+                if (left > right)
+                {
+                    ans = max(ans, right + cal(pref, stv, dp, i + 1, r));
+                }
+                else
+                {
+                    ans = max(ans, right + cal(pref, stv, dp, i + 1, r));
+                    ans = max(ans, left + cal(pref, stv, dp, l, i));
+                }
+            }
+        }
+
+        return dp[l][r] = ans;
+    }
+
+    int stoneGameV(vector<int> &stoneValue)
+    {
+
+        vector<int> pref;
+        int sum = 0;
+        int n = stoneValue.size();
+        for (int temp : stoneValue)
+        {
+            sum += temp;
+            pref.push_back(sum);
+        }
+
+        vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+        return cal(pref, stoneValue, dp, 0, n - 1);
+    }
+};
