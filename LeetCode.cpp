@@ -16779,7 +16779,7 @@ public:
 class Solution
 {
 public:
-    int cal(vector<int>& pref, vector<int>& stv, vector<vector<int>> &dp, int l,
+    int cal(vector<int> &pref, vector<int> &stv, vector<vector<int>> &dp, int l,
             int r)
     {
 
@@ -16830,5 +16830,48 @@ public:
 
         vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
         return cal(pref, stoneValue, dp, 0, n - 1);
+    }
+};
+
+class Solution
+{
+public:
+    int maxNumberOfFamilies(int n, vector<vector<int>> &reservedSeats)
+    {
+
+        int total = 2 * n;
+        int m = reservedSeats.size();
+
+        unordered_map<int, vector<int>> hash;
+
+        for (const auto &seat : reservedSeats)
+        {
+            int row = seat[0];
+            int col = seat[1];
+            hash[row].push_back(col);
+        }
+
+        for (auto it = hash.begin(); it != hash.end(); ++it)
+        {
+
+            vector<bool> pos(4, true);
+
+            for (auto col : it->second)
+            {
+
+                if (col >= 2 && col <= 5)
+                    pos[1] = false;
+                if (col >= 4 && col <= 7)
+                    pos[2] = false;
+                if (col >= 6 && col <= 9)
+                    pos[3] = false;
+            }
+            if (pos[1] || pos[2] || pos[3])
+                total++;
+            if (pos[1] && pos[2] && pos[3])
+                total++;
+        }
+
+        return total - 2 * (int)hash.size();
     }
 };
