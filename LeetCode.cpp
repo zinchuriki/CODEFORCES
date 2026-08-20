@@ -16875,3 +16875,23 @@ public:
         return total - 2 * (int)hash.size();
     }
 };
+
+class Solution {
+public:
+    vector<int> resultArray(vector<int>& nums) {
+
+        vector<int> ans;
+        vector<int> arr1, arr2;
+        for (int i = 2; i < n; ++i) {
+            if (arr1.back() > arr2.back())
+                arr1.push_back(nums[i]);
+            else
+                arr2.push_back(nums[i]);
+        }
+
+        for (int temp : arr2)
+            arr1.push_back(temp);
+
+        return arr1;
+    }
+};
