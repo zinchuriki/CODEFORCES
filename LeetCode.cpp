@@ -16876,13 +16876,16 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    vector<int> resultArray(vector<int>& nums) {
+    vector<int> resultArray(vector<int> &nums)
+    {
 
         vector<int> ans;
         vector<int> arr1, arr2;
-        for (int i = 2; i < n; ++i) {
+        for (int i = 2; i < n; ++i)
+        {
             if (arr1.back() > arr2.back())
                 arr1.push_back(nums[i]);
             else
@@ -16893,5 +16896,75 @@ public:
             arr1.push_back(temp);
 
         return arr1;
+    }
+};
+
+#include <numeric>
+#include <vector>
+
+using namespace std;
+
+class Solution
+{
+public:
+    long long lcm(long long a, long long b)
+    {
+        // Using built-in std::gcd since the custom one is removed
+        return (a / std::gcd(a, b)) * b;
+    }
+
+    void backtrack(int idx, long long current_lcm, int elements_picked, long long to_check, vector<int> &coins, long long &temp)
+    {
+        if (elements_picked > 0)
+        {
+            if (elements_picked % 2 == 1)
+            {
+                temp += to_check / current_lcm;
+            }
+            else
+            {
+                temp -= to_check / current_lcm;
+            }
+        }
+
+        for (int i = idx; i < coins.size(); ++i)
+        {
+            long long next_lcm = lcm(current_lcm, coins[i]);
+
+            if (next_lcm > to_check)
+                continue;
+
+            backtrack(i + 1, next_lcm, elements_picked + 1, to_check, coins, temp);
+        }
+    }
+
+    bool check(long long to_check, vector<int> &coins, int kk)
+    {
+        long long temp = 0;
+        backtrack(0, 1, 0, to_check, coins, temp);
+
+        return temp >= kk;
+    }
+
+    long long findKthSmallest(vector<int> &coins, int k)
+    {
+        long long l = 1, r = 5e10;
+        long long ans = 0;
+
+        while (l <= r)
+        {
+            long long mid = l + (r - l) / 2;
+            if (check(mid, coins, k))
+            {
+                ans = mid;
+                r = mid - 1;
+            }
+            else
+            {
+                l = mid + 1;
+            }
+        }
+
+        return ans;
     }
 };
