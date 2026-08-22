@@ -16899,11 +16899,6 @@ public:
     }
 };
 
-#include <numeric>
-#include <vector>
-
-using namespace std;
-
 class Solution
 {
 public:
@@ -16966,5 +16961,31 @@ public:
         }
 
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool checkDivisibility(int n)
+    {
+        int temp = n;
+        long long digit_sum = 0;
+        long long digit_product = 1;
+
+        // Extract digits one by one
+        while (temp > 0)
+        {
+            int digit = temp % 10;
+            digit_sum += digit;
+            digit_product *= digit;
+            temp /= 10;
+        }
+
+        // Calculate the total of the sum and product
+        long long total = digit_sum + digit_product;
+
+        // Check if n is divisible by the total
+        return n % total == 0;
     }
 };
