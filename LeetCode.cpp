@@ -16989,3 +16989,23 @@ public:
         return n % total == 0;
     }
 };
+
+class Solution
+{
+public:
+    bool isBinary(string &s)
+    {
+        // Loop through each character in the string
+        for (char ch : s)
+        {
+            // If the character is anything other than '0' or '1', return false
+            if (ch != '0' && ch != '1')
+            {
+                return false;
+            }
+        }
+
+        // If the loop finishes without finding invalid characters, it's binary!
+        return true;
+    }
+};
