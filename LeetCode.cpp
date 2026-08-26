@@ -17009,3 +17009,41 @@ public:
         return true;
     }
 };
+
+class Solution
+{
+public:
+    string uncommonChars(string &s1, string &s2)
+    {
+        // Two arrays to track which letters exist in each string
+        bool present1[26] = {false};
+        bool present2[26] = {false};
+
+        // Mark letters present in the first string
+        for (char ch : s1)
+        {
+            present1[ch - 'a'] = true;
+        }
+
+        // Mark letters present in the second string
+        for (char ch : s2)
+        {
+            present2[ch - 'a'] = true;
+        }
+
+        string result = "";
+
+        // Check all 26 letters of the alphabet
+        for (int i = 0; i < 26; i++)
+        {
+            // ^ is the XOR operator. It means "if one is true and the other is false"
+            if (present1[i] ^ present2[i])
+            {
+                // Convert the index back to a letter and add it to the result
+                result += (char)(i + 'a');
+            }
+        }
+
+        return result;
+    }
+};
