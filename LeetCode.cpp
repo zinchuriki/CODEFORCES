@@ -17047,3 +17047,81 @@ public:
         return result;
     }
 };
+
+class Solution
+{
+public:
+    string ans;
+    int n;
+
+    void solve(string &temp, string &target, int idx, bool found, vector<int> &vec)
+    {
+        // Base case: We formed a full-length string
+        if (temp.length() == n)
+        {
+            if (temp > target)
+            {
+                if (ans == "" || temp < ans)
+                    ans = temp;
+            }
+            return;
+        }
+
+        if (found)
+        {
+            // BUG FIX 3 & 4: Do not destroy the original vec or temp.
+            // Just simulate the rest of the string and record it!
+            string suffix = "";
+            for (int i = 0; i < 26; ++i)
+            {
+                if (vec[i] > 0)
+                {
+                    suffix += string(vec[i], i + 'a');
+                }
+            }
+
+            string candidate = temp + suffix;
+            if (ans == "" || candidate < ans)
+            {
+                ans = candidate;
+            }
+            return;
+        }
+        else
+        {
+            for (int i = target[idx] - 'a'; i < 26; ++i)
+            {
+                if (vec[i] > 0)
+                {
+                    // Do
+                    vec[i]--;
+                    temp += i + 'a';
+
+                    // BUG FIX 2: Create a separate boolean for the next state
+                    bool next_found = (i > target[idx] - 'a');
+
+                    // Recurse
+                    solve(temp, target, idx + 1, next_found, vec);
+
+                    // Undo (BUG FIX 1: You must restore vec[i]!)
+                    temp.pop_back();
+                    vec[i]++;
+                }
+            }
+        }
+    }
+
+    string lexGreaterPermutation(string s, string target)
+    {
+        ans = "";
+        n = s.size();
+        vector<int> vec(26, 0);
+        string temp = "";
+
+        for (char c : s)
+            vec[c - 'a']++;
+
+        solve(temp, target, 0, false, vec);
+        return ans;
+    }
+};
