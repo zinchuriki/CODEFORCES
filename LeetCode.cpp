@@ -17125,3 +17125,127 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    string ans = "";
+    int n;
+
+    // Returns true if the best answer has been found, stopping further search
+    bool solve(string &temp, string &target, int idx, bool found, vector<int> &vec, char odd_char)
+    {
+        // Base Case: First half is complete
+        if (idx == n / 2)
+        {
+            string full_pal = temp;
+
+            // Add middle character if the string length is odd
+            if (n % 2 != 0)
+            {
+                full_pal += odd_char;
+            }
+
+            // Mirror the first half to complete the palindrome
+            for (int i = temp.length() - 1; i >= 0; --i)
+            {
+                full_pal += temp[i];
+            }
+
+            // Because we only reach here if found == false, we must manually check
+            if (full_pal > target)
+            {
+                ans = full_pal;
+                return true; // We found the best answer, stop searching!
+            }
+            return false; // Not strictly greater, trigger backtrack
+        }
+
+        // Greedy Choice: We are already strictly greater than the prefix
+        if (found)
+        {
+            string candidate = temp;
+
+            // Greedily grab the remaining characters in alphabetical order
+            for (int i = 0; i < 26; ++i)
+            {
+                for (int count = 0; count < vec[i]; ++count)
+                {
+                    candidate += (i + 'a');
+                }
+            }
+
+            // Construct the full palindrome
+            string full_pal = candidate;
+            if (n % 2 != 0)
+            {
+                full_pal += odd_char;
+            }
+            for (int i = candidate.length() - 1; i >= 0; --i)
+            {
+                full_pal += candidate[i];
+            }
+
+            ans = full_pal;
+            return true; // We found the best answer, stop searching!
+        }
+
+        // Backtracking: We are still tied with the prefix
+        for (int i = target[idx] - 'a'; i < 26; ++i)
+        {
+            if (vec[i] > 0)
+            {
+                vec[i]--;
+                temp += (i + 'a');
+
+                // If the recursive call returns true, bubble the true up to stop everything
+                if (solve(temp, target, idx + 1, i > (target[idx] - 'a'), vec, odd_char))
+                {
+                    return true;
+                }
+
+                // Backtrack
+                temp.pop_back();
+                vec[i]++;
+            }
+        }
+
+        return false; // Searched all options here and found nothing
+    }
+
+    string lexPalindromicPermutation(string s, string target)
+    {
+        vector<int> freq(26, 0);
+        n = s.length();
+
+        for (char c : s)
+        {
+            freq[c - 'a']++;
+        }
+
+        int odd_count = 0;
+        char odd_char = 0;
+
+        // Palindrome check and preparing the frequencies for the first half
+        for (int i = 0; i < 26; ++i)
+        {
+            if (freq[i] % 2 != 0)
+            {
+                odd_count++;
+                odd_char = i + 'a';
+            }
+            freq[i] /= 2; // We only need half the characters for backtracking
+        }
+
+        // A palindrome can have at most 1 character with an odd frequency
+        if (odd_count > 1)
+        {
+            return "";
+        }
+
+        string temp = "";
+        solve(temp, target, 0, false, freq, odd_char);
+
+        return ans;
+    }
+};
