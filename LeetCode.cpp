@@ -17249,3 +17249,52 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> lexicographicallySmallestArray(vector<int> &nums, int limit)
+    {
+        int n = nums.size();
+
+        // 1. Sort a copy of the array
+        vector<int> sorted_nums = nums;
+        sort(sorted_nums.begin(), sorted_nums.end());
+
+        // Maps to act as our "DSU" grouping
+        unordered_map<int, int> num_to_group;
+        unordered_map<int, vector<int>> group_to_elements;
+
+        // 2. Group adjacent elements if they are within the limit
+        int curr_group = 0;
+        num_to_group[sorted_nums[0]] = curr_group;
+
+        for (int i = 1; i < n; ++i)
+        {
+            // If the gap is too big, start a new component
+            if (sorted_nums[i] - sorted_nums[i - 1] > limit)
+            {
+                curr_group++;
+            }
+            num_to_group[sorted_nums[i]] = curr_group;
+        }
+
+        // 3. Store elements in reverse order so we can use your pop_back trick
+        for (int i = n - 1; i >= 0; --i)
+        {
+            group_to_elements[num_to_group[sorted_nums[i]]].push_back(sorted_nums[i]);
+        }
+
+        // 4. Build the final array
+        vector<int> ans(n);
+        for (int i = 0; i < n; ++i)
+        {
+            int group = num_to_group[nums[i]];
+            // Grab the smallest available number for this position
+            ans[i] = group_to_elements[group].back();
+            group_to_elements[group].pop_back();
+        }
+
+        return ans;
+    }
+};
