@@ -17250,51 +17250,107 @@ public:
     }
 };
 
+// class Solution
+// {
+// public:
+//     vector<int> lexicographicallySmallestArray(vector<int> &nums, int limit)
+//     {
+//         int n = nums.size();
+
+//         // 1. Sort a copy of the array
+//         vector<int> sorted_nums = nums;
+//         sort(sorted_nums.begin(), sorted_nums.end());
+
+//         // Maps to act as our "DSU" grouping
+//         unordered_map<int, int> num_to_group;
+//         unordered_map<int, vector<int>> group_to_elements;
+
+//         // 2. Group adjacent elements if they are within the limit
+//         int curr_group = 0;
+//         num_to_group[sorted_nums[0]] = curr_group;
+
+//         for (int i = 1; i < n; ++i)
+//         {
+//             // If the gap is too big, start a new component
+//             if (sorted_nums[i] - sorted_nums[i - 1] > limit)
+//             {
+//                 curr_group++;
+//             }
+//             num_to_group[sorted_nums[i]] = curr_group;
+//         }
+
+//         // 3. Store elements in reverse order so we can use your pop_back trick
+//         for (int i = n - 1; i >= 0; --i)
+//         {
+//             group_to_elements[num_to_group[sorted_nums[i]]].push_back(sorted_nums[i]);
+//         }
+
+//         // 4. Build the final array
+//         vector<int> ans(n);
+//         for (int i = 0; i < n; ++i)
+//         {
+//             int group = num_to_group[nums[i]];
+//             // Grab the smallest available number for this position
+//             ans[i] = group_to_elements[group].back();
+//             group_to_elements[group].pop_back();
+//         }
+
+//         return ans;
+//     }
+// };
+
 class Solution
 {
 public:
-    vector<int> lexicographicallySmallestArray(vector<int> &nums, int limit)
+    vector<int> nodesBetweenCriticalPoints(ListNode *head)
     {
-        int n = nums.size();
+        int first_crit = -1;
+        int prev_crit = -1;
+        int min_dist = INT_MAX;
 
-        // 1. Sort a copy of the array
-        vector<int> sorted_nums = nums;
-        sort(sorted_nums.begin(), sorted_nums.end());
+        ListNode *prev = head;
+        ListNode *curr = head->next;
+        int index = 1; // Think of head as index 0, so curr is index 1
 
-        // Maps to act as our "DSU" grouping
-        unordered_map<int, int> num_to_group;
-        unordered_map<int, vector<int>> group_to_elements;
-
-        // 2. Group adjacent elements if they are within the limit
-        int curr_group = 0;
-        num_to_group[sorted_nums[0]] = curr_group;
-
-        for (int i = 1; i < n; ++i)
+        while (curr->next != nullptr)
         {
-            // If the gap is too big, start a new component
-            if (sorted_nums[i] - sorted_nums[i - 1] > limit)
+            ListNode *next = curr->next;
+
+            // Check if curr is a local maxima OR a local minima
+            if ((curr->val > prev->val && curr->val > next->val) ||
+                (curr->val < prev->val && curr->val < next->val))
             {
-                curr_group++;
+
+                if (first_crit == -1)
+                {
+                    // We just found our very first critical point
+                    first_crit = index;
+                }
+                else
+                {
+                    // We found another one! Check if it's the closest pair so far
+                    min_dist = min(min_dist, index - prev_crit);
+                }
+
+                // Update prev_crit for the next time we find a critical point
+                prev_crit = index;
             }
-            num_to_group[sorted_nums[i]] = curr_group;
+
+            // Step forward
+            prev = curr;
+            curr = next;
+            index++;
         }
 
-        // 3. Store elements in reverse order so we can use your pop_back trick
-        for (int i = n - 1; i >= 0; --i)
+        // If min_dist is still INT_MAX, we didn't find at least 2 critical points
+        if (min_dist == INT_MAX)
         {
-            group_to_elements[num_to_group[sorted_nums[i]]].push_back(sorted_nums[i]);
+            return {-1, -1};
         }
 
-        // 4. Build the final array
-        vector<int> ans(n);
-        for (int i = 0; i < n; ++i)
-        {
-            int group = num_to_group[nums[i]];
-            // Grab the smallest available number for this position
-            ans[i] = group_to_elements[group].back();
-            group_to_elements[group].pop_back();
-        }
+        // The max distance is the last one we found minus the first one we found
+        int max_dist = prev_crit - first_crit;
 
-        return ans;
+        return {min_dist, max_dist};
     }
 };
