@@ -17354,3 +17354,29 @@ public:
         return {min_dist, max_dist};
     }
 };
+
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt) {
+        while (tt--) {
+            int n, x, y;
+            // Read free space (N), 1GB files (X), and 2GB files (Y)
+            cin >> n >> x >> y;
+            
+            // Calculate total size and check against free space
+            if (x + (y * 2) <= n) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        }
+    }
+
+    return 0;
+}
