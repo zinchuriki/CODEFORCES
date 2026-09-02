@@ -17380,3 +17380,31 @@ int main() {
 
     return 0;
 }
+
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    long long a, b, c, x;
+    
+    // Read the cuboid's dimensions (A, B, C) and cube's edge (X)
+    if (cin >> a >> b >> c >> x) {
+        
+        // Calculate the volumes
+        long long cuboid_vol = a * b * c;
+        long long cube_vol = x * x * x;
+        
+        // Compare and print the result
+        if (cuboid_vol > cube_vol) {
+            cout << "Cuboid\n";
+        } else if (cube_vol > cuboid_vol) {
+            cout << "Cube\n";
+        } else {
+            cout << "Equal\n";
+        }
+    }
+
+    return 0;
+}
