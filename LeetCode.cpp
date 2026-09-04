@@ -17408,3 +17408,21 @@ int main() {
 
     return 0;
 }
+
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    // Read the number of neighborhoods already visited
+    if (cin >> n) {
+        // Calculate and print the remaining neighborhoods
+        cout << 100 - n << "\n";
+    }
+
+    return 0;
+}
