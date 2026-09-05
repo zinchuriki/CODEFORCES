@@ -17426,3 +17426,35 @@ int main() {
 
     return 0;
 }
+
+class Solution {
+  public:
+    int getCount(string s, int k) {
+        // A hash map to store the number of groups for each character
+        unordered_map<char, int> groups;
+        
+        // The first character always starts the first group
+        if (!s.empty()) {
+            groups[s[0]]++;
+        }
+        
+        // Loop through the rest of the string
+        for (int i = 1; i < s.length(); i++) {
+            // If it's different from the previous character, it's a new group!
+            if (s[i] != s[i - 1]) {
+                groups[s[i]]++;
+            }
+        }
+        
+        int result = 0;
+        
+        // Count how many characters have exactly 'k' groups
+        for (auto it : groups) {
+            if (it.second == k) {
+                result++;
+            }
+        }
+        
+        return result;
+    }
+};
