@@ -17458,3 +17458,29 @@ class Solution {
         return result;
     }
 };
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int x;
+    // Read the time taken (X)
+    if (cin >> x) {
+        
+        // Check the conditions and print the correct medal
+        if (x < 3) {
+            cout << "GOLD\n";
+        } else if (x < 6) { // We already know it's >= 3 if it reaches here
+            cout << "SILVER\n";
+        } else {
+            cout << "BRONZE\n";
+        }
+    }
+
+    return 0;
+}
