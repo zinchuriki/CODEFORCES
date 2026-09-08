@@ -17355,24 +17355,29 @@ public:
     }
 };
 
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
     // Read the number of test cases
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int n, x, y;
             // Read free space (N), 1GB files (X), and 2GB files (Y)
             cin >> n >> x >> y;
-            
+
             // Calculate total size and check against free space
-            if (x + (y * 2) <= n) {
+            if (x + (y * 2) <= n)
+            {
                 cout << "YES\n";
-            } else {
+            }
+            else
+            {
                 cout << "NO\n";
             }
         }
@@ -17381,27 +17386,33 @@ int main() {
     return 0;
 }
 
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     long long a, b, c, x;
-    
+
     // Read the cuboid's dimensions (A, B, C) and cube's edge (X)
-    if (cin >> a >> b >> c >> x) {
-        
+    if (cin >> a >> b >> c >> x)
+    {
+
         // Calculate the volumes
         long long cuboid_vol = a * b * c;
         long long cube_vol = x * x * x;
-        
+
         // Compare and print the result
-        if (cuboid_vol > cube_vol) {
+        if (cuboid_vol > cube_vol)
+        {
             cout << "Cuboid\n";
-        } else if (cube_vol > cuboid_vol) {
+        }
+        else if (cube_vol > cuboid_vol)
+        {
             cout << "Cube\n";
-        } else {
+        }
+        else
+        {
             cout << "Equal\n";
         }
     }
@@ -17409,17 +17420,18 @@ int main() {
     return 0;
 }
 
-
 using namespace std;
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int n;
     // Read the number of neighborhoods already visited
-    if (cin >> n) {
+    if (cin >> n)
+    {
         // Calculate and print the remaining neighborhoods
         cout << 100 - n << "\n";
     }
@@ -17427,34 +17439,41 @@ int main() {
     return 0;
 }
 
-class Solution {
-  public:
-    int getCount(string s, int k) {
+class Solution
+{
+public:
+    int getCount(string s, int k)
+    {
         // A hash map to store the number of groups for each character
         unordered_map<char, int> groups;
-        
+
         // The first character always starts the first group
-        if (!s.empty()) {
+        if (!s.empty())
+        {
             groups[s[0]]++;
         }
-        
+
         // Loop through the rest of the string
-        for (int i = 1; i < s.length(); i++) {
+        for (int i = 1; i < s.length(); i++)
+        {
             // If it's different from the previous character, it's a new group!
-            if (s[i] != s[i - 1]) {
+            if (s[i] != s[i - 1])
+            {
                 groups[s[i]]++;
             }
         }
-        
+
         int result = 0;
-        
+
         // Count how many characters have exactly 'k' groups
-        for (auto it : groups) {
-            if (it.second == k) {
+        for (auto it : groups)
+        {
+            if (it.second == k)
+            {
                 result++;
             }
         }
-        
+
         return result;
     }
 };
@@ -17463,22 +17482,73 @@ class Solution {
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int x;
     // Read the time taken (X)
-    if (cin >> x) {
-        
+    if (cin >> x)
+    {
+
         // Check the conditions and print the correct medal
-        if (x < 3) {
+        if (x < 3)
+        {
             cout << "GOLD\n";
-        } else if (x < 6) { // We already know it's >= 3 if it reaches here
+        }
+        else if (x < 6)
+        { // We already know it's >= 3 if it reaches here
             cout << "SILVER\n";
-        } else {
+        }
+        else
+        {
             cout << "BRONZE\n";
+        }
+    }
+
+    return 0;
+}
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int x, y;
+            // Read tastiness of one chocolate bar (x) and one candy piece (y)
+            cin >> x >> y;
+
+            // Calculate total tastiness for the packets
+            int choco_taste = 2 * x;
+            int candy_taste = 5 * y;
+
+            // Compare and print the result
+            if (choco_taste > candy_taste)
+            {
+                cout << "Chocolate\n";
+            }
+            else if (candy_taste > choco_taste)
+            {
+                cout << "Candy\n";
+            }
+            else
+            {
+                cout << "Either\n";
+            }
         }
     }
 
