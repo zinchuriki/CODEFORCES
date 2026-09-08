@@ -17511,11 +17511,6 @@ int main()
     return 0;
 }
 
-#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
-#include <bits/stdc++.h>
-
-using namespace std;
-
 int main()
 {
     // Make input and output fast
