@@ -17549,3 +17549,36 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    long long countCommas(long long n)
+    {
+        if (n < 1000)
+            return 0;
+        if (n == 1000)
+            return 1;
+        long long ans = 0;
+        long long temp = 1000000;
+        int idx = 1;
+        long long prev_temp = 1000;
+        for (int i = 1; i <= 15; ++i)
+        {
+
+            if (prev_temp >= n)
+                break;
+
+            ans += (min(temp, n) - prev_temp) * idx;
+            if (n == temp)
+                ans += idx + 1;
+            if (n < temp)
+                ans += idx;
+            idx++;
+
+            prev_temp = temp;
+            temp *= 1000;
+        }
+        return ans;
+    }
+};
