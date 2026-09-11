@@ -17582,3 +17582,52 @@ public:
         return ans;
     }
 };
+
+class Solution
+{
+public:
+    int fact(int a)
+    {
+        int temp = 1;
+        for (int i = 2; i <= a; ++i)
+            temp *= i;
+
+        return temp;
+    }
+    int totalNumbers(vector<int> &digits)
+    {
+
+        vector<int> vec(10, 0);
+
+        int cte = 0;
+        int n = digits.size();
+        for (int digit : digits)
+        {
+            vec[digit]++;
+            if (!(digit & 1))
+                cte++;
+        }
+
+        int div = 1;
+        for (int dig : vec)
+        {
+            div *= fact(dig);
+        }
+        int zs = vec[0];
+        int temp = 0;
+
+        temp = cte * (n - 1) * (n - 2);
+        temp /= div;
+        int zr = 0;
+        if (zs > 0)
+        {
+            zr = (cte - 1) * (n - 2);
+            div /= zs;
+            zr /= div;
+        }
+
+        temp = (temp - zr);
+
+        return temp;
+    }
+};
