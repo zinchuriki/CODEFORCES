@@ -17631,32 +17631,40 @@ public:
 //         return temp;
 //     }
 // };
-class Solution {
+class Solution
+{
 public:
-    int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) {
+    int largestOverlap(vector<vector<int>> &img1, vector<vector<int>> &img2)
+    {
         int n = img1.size();
         int max_overlap = 0;
-        
+
         // Loop through all possible vertical shifts
-        for (int row_offset = -(n - 1); row_offset < n; row_offset++) {
-            
+        for (int row_offset = -(n - 1); row_offset < n; row_offset++)
+        {
+
             // Loop through all possible horizontal shifts
-            for (int col_offset = -(n - 1); col_offset < n; col_offset++) {
-                
+            for (int col_offset = -(n - 1); col_offset < n; col_offset++)
+            {
+
                 int current_overlap = 0;
-                
+
                 // Now, check the overlap for this specific shift
-                for (int i = 0; i < n; i++) {
-                    for (int j = 0; j < n; j++) {
-                        
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+
                         // Calculate where this pixel lands in img2
                         int new_i = i + row_offset;
                         int new_j = j + col_offset;
-                        
+
                         // Check if it landed inside the boundaries
-                        if (new_i >= 0 && new_i < n && new_j >= 0 && new_j < n) {
+                        if (new_i >= 0 && new_i < n && new_j >= 0 && new_j < n)
+                        {
                             // If both are 1, it's an overlap!
-                            if (img1[i][j] == 1 && img2[new_i][new_j] == 1) {
+                            if (img1[i][j] == 1 && img2[new_i][new_j] == 1)
+                            {
                                 current_overlap++;
                             }
                         }
@@ -17666,7 +17674,40 @@ public:
                 max_overlap = max(max_overlap, current_overlap);
             }
         }
-        
+
         return max_overlap;
     }
 };
+
+// class Solution
+// {
+// public:
+//     // A helper function to do the traversal
+//     void traverse(Node *root, vector<int> &result)
+//     {
+//         // If the tree is empty or we hit a leaf's child, stop and go back
+//         if (root == nullptr)
+//         {
+//             return;
+//         }
+
+//         // 1. Left: Go down the left side
+//         traverse(root->left, result);
+
+//         // 2. Right: Go down the right side
+//         traverse(root->right, result);
+
+//         // 3. Node: Save the current node's data
+//         result.push_back(root->data);
+//     }
+
+//     vector<int> postOrder(Node *root)
+//     {
+//         vector<int> result;
+
+//         // Start the traversal from the very top root
+//         traverse(root, result);
+
+//         return result;
+//     }
+// };
