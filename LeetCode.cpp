@@ -17711,3 +17711,20 @@ public:
 //         return result;
 //     }
 // };
+
+class Solution {
+  public:
+    int binarySubstring(string& s) {
+        int count = 0;
+        
+        // 1. Count how many '1's are in the string
+        for (char ch : s) {
+            if (ch == '1') {
+                count++;
+            }
+        }
+        
+        // 2. Use the combination formula to find all possible pairs
+        return (count * (count - 1)) / 2;
+    }
+};
