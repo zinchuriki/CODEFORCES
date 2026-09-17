@@ -17728,3 +17728,25 @@ class Solution {
         return (count * (count - 1)) / 2;
     }
 };
+
+class Solution {
+public:
+    vector<vector<int>> freqSorted(vector<int>& arr) {
+        // map automatically sorts the keys in increasing order
+        map<int, int> freq;
+        
+        // Count the frequency of each element
+        for (int num : arr) {
+            freq[num]++;
+        }
+        
+        vector<vector<int>> result;
+        
+        // Iterate through the map and push {element, frequency} to result
+        for (auto it : freq) {
+            result.push_back({it.first, it.second});
+        }
+        
+        return result;
+    }
+};
