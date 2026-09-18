@@ -17712,41 +17712,178 @@ public:
 //     }
 // };
 
-class Solution {
-  public:
-    int binarySubstring(string& s) {
+class Solution
+{
+public:
+    int binarySubstring(string &s)
+    {
         int count = 0;
-        
+
         // 1. Count how many '1's are in the string
-        for (char ch : s) {
-            if (ch == '1') {
+        for (char ch : s)
+        {
+            if (ch == '1')
+            {
                 count++;
             }
         }
-        
+
         // 2. Use the combination formula to find all possible pairs
         return (count * (count - 1)) / 2;
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> freqSorted(vector<int>& arr) {
+    vector<vector<int>> freqSorted(vector<int> &arr)
+    {
         // map automatically sorts the keys in increasing order
         map<int, int> freq;
-        
+
         // Count the frequency of each element
-        for (int num : arr) {
+        for (int num : arr)
+        {
             freq[num]++;
         }
-        
+
         vector<vector<int>> result;
-        
+
         // Iterate through the map and push {element, frequency} to result
-        for (auto it : freq) {
+        for (auto it : freq)
+        {
             result.push_back({it.first, it.second});
         }
-        
+
         return result;
+    }
+};
+
+class Solution {
+public:
+    vector<string> maxNumOfSubstrings(string s) {
+        vector<int> first(26, -1);
+        vector<int> last(26, -1);
+        int n = s.size();
+        
+        for (int i = 0; i < n; ++i) {
+            int ch = s[i] - 'a';
+            if (first[ch] == -1) first[ch] = i;
+            last[ch] = i;
+        }
+
+        vector<pair<int, int>> vec;
+        for (int i = 0; i < 26; ++i) {
+            if (first[i] == -1) continue;
+            
+            int l = first[i];
+            int r = last[i];
+            bool is_valid = true;
+            
+            for (int j = l; j <= r; ++j) {
+                int ch = s[j] - 'a';
+                if (first[ch] < l) {
+                    is_valid = false;
+                    break;
+                }
+                r = max(r, last[ch]);
+            }
+            
+            if (is_valid) {
+                vec.push_back({l, r});
+            }
+        }
+
+        sort(vec.begin(), vec.end(),
+             [](const pair<int, int>& a, const pair<int, int>& b) {
+                 return (a.second - a.first) < (b.second - b.first);
+             });
+
+        vector<pair<int, int>> taken;
+        vector<string> ans;
+        
+        for (int i = 0; i < vec.size(); ++i) {
+            bool pos = true;
+            int f = vec[i].first;
+            int l = vec[i].second;
+            
+            for (auto [t_first, t_second] : taken) {
+                if (max(f, t_first) <= min(l, t_second)) {
+                    pos = false;
+                    break;
+                }
+            }
+
+            if (pos) {
+                taken.push_back({f, l});
+                ans.push_back(s.substr(f, l - f + 1));
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+class Solution {
+public:
+    int n, m;
+    
+    // Note: Return type is double or unsigned int in some LeetCode versions 
+    // to prevent large number overflow, but int works for most logic checks.
+    int solve(vector<vector<int>> &dp, string &s, string &t, int i, int j) {
+        if (j >= m) return 1;
+        if (i >= n) return 0; 
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        int t1 = solve(dp, s, t, i + 1, j);
+        int t3 = 0;
+        
+        if (s[i] == t[j]) {
+            t3 = solve(dp, s, t, i + 1, j + 1);
+        }
+
+        return dp[i][j] = t1 + t3;
+    }
+
+    int numDistinct(string s, string t) {
+        n = s.size();
+        m = t.size();
+        
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+        return solve(dp, s, t, 0, 0); 
+    }
+};
+
+
+class Solution {
+public:
+    int n, m;
+
+    int solve(vector<vector<int>> &dp, string &w1, string &w2, int i, int j) {
+        if (i >= n) return m - j;
+        if (j >= m) return n - i;
+
+        if (dp[i][j] != -1) return dp[i][j];
+        
+        if (w1[i] == w2[j]) {
+            return dp[i][j] = solve(dp, w1, w2, i + 1, j + 1);
+        }
+
+        int s1 = 1 + solve(dp, w1, w2, i, j + 1);       // Insert
+        int s2 = 1 + solve(dp, w1, w2, i + 1, j);       // Delete
+        int s3 = 1 + solve(dp, w1, w2, i + 1, j + 1);   // Replace
+
+        return dp[i][j] = min({s1, s2, s3});
+    }
+    
+    int minDistance(string word1, string word2) {
+        n = word1.size();
+        m = word2.size();
+        
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+        return solve(dp, word1, word2, 0, 0);
     }
 };
