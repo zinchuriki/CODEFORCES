@@ -17759,62 +17759,76 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    vector<string> maxNumOfSubstrings(string s) {
+    vector<string> maxNumOfSubstrings(string s)
+    {
         vector<int> first(26, -1);
         vector<int> last(26, -1);
         int n = s.size();
-        
-        for (int i = 0; i < n; ++i) {
+
+        for (int i = 0; i < n; ++i)
+        {
             int ch = s[i] - 'a';
-            if (first[ch] == -1) first[ch] = i;
+            if (first[ch] == -1)
+                first[ch] = i;
             last[ch] = i;
         }
 
         vector<pair<int, int>> vec;
-        for (int i = 0; i < 26; ++i) {
-            if (first[i] == -1) continue;
-            
+        for (int i = 0; i < 26; ++i)
+        {
+            if (first[i] == -1)
+                continue;
+
             int l = first[i];
             int r = last[i];
             bool is_valid = true;
-            
-            for (int j = l; j <= r; ++j) {
+
+            for (int j = l; j <= r; ++j)
+            {
                 int ch = s[j] - 'a';
-                if (first[ch] < l) {
+                if (first[ch] < l)
+                {
                     is_valid = false;
                     break;
                 }
                 r = max(r, last[ch]);
             }
-            
-            if (is_valid) {
+
+            if (is_valid)
+            {
                 vec.push_back({l, r});
             }
         }
 
         sort(vec.begin(), vec.end(),
-             [](const pair<int, int>& a, const pair<int, int>& b) {
+             [](const pair<int, int> &a, const pair<int, int> &b)
+             {
                  return (a.second - a.first) < (b.second - b.first);
              });
 
         vector<pair<int, int>> taken;
         vector<string> ans;
-        
-        for (int i = 0; i < vec.size(); ++i) {
+
+        for (int i = 0; i < vec.size(); ++i)
+        {
             bool pos = true;
             int f = vec[i].first;
             int l = vec[i].second;
-            
-            for (auto [t_first, t_second] : taken) {
-                if (max(f, t_first) <= min(l, t_second)) {
+
+            for (auto [t_first, t_second] : taken)
+            {
+                if (max(f, t_first) <= min(l, t_second))
+                {
                     pos = false;
                     break;
                 }
             }
 
-            if (pos) {
+            if (pos)
+            {
                 taken.push_back({f, l});
                 ans.push_back(s.substr(f, l - f + 1));
             }
@@ -17824,65 +17838,76 @@ public:
     }
 };
 
-
-
-class Solution {
+class Solution
+{
 public:
     int n, m;
-    
-    // Note: Return type is double or unsigned int in some LeetCode versions 
-    // to prevent large number overflow, but int works for most logic checks.
-    int solve(vector<vector<int>> &dp, string &s, string &t, int i, int j) {
-        if (j >= m) return 1;
-        if (i >= n) return 0; 
 
-        if (dp[i][j] != -1) return dp[i][j];
+    // Note: Return type is double or unsigned int in some LeetCode versions
+    // to prevent large number overflow, but int works for most logic checks.
+    int solve(vector<vector<int>> &dp, string &s, string &t, int i, int j)
+    {
+        if (j >= m)
+            return 1;
+        if (i >= n)
+            return 0;
+
+        if (dp[i][j] != -1)
+            return dp[i][j];
 
         int t1 = solve(dp, s, t, i + 1, j);
         int t3 = 0;
-        
-        if (s[i] == t[j]) {
+
+        if (s[i] == t[j])
+        {
             t3 = solve(dp, s, t, i + 1, j + 1);
         }
 
         return dp[i][j] = t1 + t3;
     }
 
-    int numDistinct(string s, string t) {
+    int numDistinct(string s, string t)
+    {
         n = s.size();
         m = t.size();
-        
+
         vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
-        return solve(dp, s, t, 0, 0); 
+        return solve(dp, s, t, 0, 0);
     }
 };
 
-
-class Solution {
+class Solution
+{
 public:
     int n, m;
 
-    int solve(vector<vector<int>> &dp, string &w1, string &w2, int i, int j) {
-        if (i >= n) return m - j;
-        if (j >= m) return n - i;
+    int solve(vector<vector<int>> &dp, string &w1, string &w2, int i, int j)
+    {
+        if (i >= n)
+            return m - j;
+        if (j >= m)
+            return n - i;
 
-        if (dp[i][j] != -1) return dp[i][j];
-        
-        if (w1[i] == w2[j]) {
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        if (w1[i] == w2[j])
+        {
             return dp[i][j] = solve(dp, w1, w2, i + 1, j + 1);
         }
 
-        int s1 = 1 + solve(dp, w1, w2, i, j + 1);       // Insert
-        int s2 = 1 + solve(dp, w1, w2, i + 1, j);       // Delete
-        int s3 = 1 + solve(dp, w1, w2, i + 1, j + 1);   // Replace
+        int s1 = 1 + solve(dp, w1, w2, i, j + 1);     // Insert
+        int s2 = 1 + solve(dp, w1, w2, i + 1, j);     // Delete
+        int s3 = 1 + solve(dp, w1, w2, i + 1, j + 1); // Replace
 
         return dp[i][j] = min({s1, s2, s3});
     }
-    
-    int minDistance(string word1, string word2) {
+
+    int minDistance(string word1, string word2)
+    {
         n = word1.size();
         m = word2.size();
-        
+
         vector<vector<int>> dp(n, vector<int>(m, -1));
         return solve(dp, word1, word2, 0, 0);
     }
