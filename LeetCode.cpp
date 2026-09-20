@@ -17912,3 +17912,36 @@ public:
         return solve(dp, word1, word2, 0, 0);
     }
 };
+
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt) {
+        while (tt--) {
+            int x;
+            // Read Chef's speed
+            cin >> x;
+            
+            // Check the speed and print the correct fine
+            if (x <= 70) {
+                cout << 0 << "\n";
+            } else if (x <= 100) {
+                cout << 500 << "\n";
+            } else {
+                cout << 2000 << "\n";
+            }
+        }
+    }
+
+    return 0;
+}
