@@ -17913,31 +17913,38 @@ public:
     }
 };
 
-
 #pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
     // Read the number of test cases
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int x;
             // Read Chef's speed
             cin >> x;
-            
+
             // Check the speed and print the correct fine
-            if (x <= 70) {
+            if (x <= 70)
+            {
                 cout << 0 << "\n";
-            } else if (x <= 100) {
+            }
+            else if (x <= 100)
+            {
                 cout << 500 << "\n";
-            } else {
+            }
+            else
+            {
                 cout << 2000 << "\n";
             }
         }
@@ -17945,3 +17952,57 @@ int main() {
 
     return 0;
 }
+
+class Solution
+{
+public:
+    long long solve(vector<vector<long long>> &dp, vector<int> &nums, int i,
+                    int r, int k)
+    {
+
+        if (i < 0)
+            return 0;
+
+        if (dp[i][r] != -1)
+            return dp[i][r];
+
+        long long val = nums[i];
+        int cur = nums[i] % k;
+        long long temp = 0;
+        if (cur == r)
+            temp++;
+        for (int j = 0; j < k; ++j)
+        {
+            int t = (cur * j) % k;
+            if (t == r)
+            {
+                temp += solve(dp, nums, i - 1, j, k);
+            }
+        }
+
+        return dp[i][r] = temp;
+    }
+
+    vector<long long> resultArray(vector<int> &nums, int k)
+    {
+        int n = nums.size();
+        vector<vector<long long>> dp(n, vector<long long>(k + 1, -1));
+        for (int i = 0; i < k; ++i)
+        {
+            solve(dp, nums, n - 1, i, k);
+        }
+
+        vector<long long> res(k, 0);
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < k; ++j)
+            {
+                if (dp[i][j] >= 0)
+                    res[j] += dp[i][j];
+            }
+        }
+
+        return res;
+    }
+};
