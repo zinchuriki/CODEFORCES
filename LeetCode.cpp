@@ -18006,3 +18006,140 @@ public:
         return res;
     }
 };
+
+class Solution
+{
+    // A struct to hold the state of each segment tree node
+    struct Node
+    {
+        int counts[5]; // Stores the frequency of each remainder (k <= 5)
+        int total_product;
+
+        Node()
+        {
+            fill(counts, counts + 5, 0);
+            total_product = 1;
+        }
+    };
+
+    int n, k;
+    vector<Node> tree;
+
+    // The core logic to combine two segment states (used in build, update, and query)
+    Node merge(const Node &left, const Node &right)
+    {
+        Node res;
+        res.total_product = (left.total_product * right.total_product) % k;
+
+        // 1. Add all prefix combinations from the left side
+        for (int i = 0; i < k; ++i)
+        {
+            res.counts[i] += left.counts[i];
+        }
+
+        // 2. Add prefix combinations from the right side, shifted by left's total product
+        for (int i = 0; i < k; ++i)
+        {
+            int new_rem = (left.total_product * i) % k;
+            res.counts[new_rem] += right.counts[i];
+        }
+
+        return res;
+    }
+
+    void build(int node, int l, int r, const vector<int> &nums)
+    {
+        if (l == r)
+        {
+            tree[node].counts[nums[l] % k] = 1;
+            tree[node].total_product = nums[l] % k;
+            return;
+        }
+
+        int mid = l + (r - l) / 2;
+        build(2 * node + 1, l, mid, nums);
+        build(2 * node + 2, mid + 1, r, nums);
+
+        tree[node] = merge(tree[2 * node + 1], tree[2 * node + 2]);
+    }
+
+    // O(log N) update function instead of rebuilding the whole tree
+    void update(int node, int l, int r, int pos, int val)
+    {
+        if (l == r)
+        {
+            // Reset counts for this leaf node before assigning the new value
+            fill(tree[node].counts, tree[node].counts + k, 0);
+            tree[node].counts[val % k] = 1;
+            tree[node].total_product = val % k;
+            return;
+        }
+
+        int mid = l + (r - l) / 2;
+        if (pos <= mid)
+        {
+            update(2 * node + 1, l, mid, pos, val);
+        }
+        else
+        {
+            update(2 * node + 2, mid + 1, r, pos, val);
+        }
+
+        // Recalculate this node using the updated children
+        tree[node] = merge(tree[2 * node + 1], tree[2 * node + 2]);
+    }
+
+    // Query now returns a 'Node' state so we can properly merge partial segments
+    Node query(int node, int l, int r, int ql, int qr)
+    {
+        // Exact match
+        if (ql <= l && r <= qr)
+        {
+            return tree[node];
+        }
+
+        int mid = l + (r - l) / 2;
+
+        // If the query only falls on one side, just go down that side
+        if (qr <= mid)
+            return query(2 * node + 1, l, mid, ql, qr);
+        if (ql > mid)
+            return query(2 * node + 2, mid + 1, r, ql, qr);
+
+        // If it splits across both, query both and merge the results
+        Node left_res = query(2 * node + 1, l, mid, ql, qr);
+        Node right_res = query(2 * node + 2, mid + 1, r, ql, qr);
+
+        return merge(left_res, right_res);
+    }
+
+public:
+    vector<int> resultArray(vector<int> &nums, int k_val, vector<vector<int>> &queries)
+    {
+        n = nums.size();
+        k = k_val;
+        tree.resize(4 * n);
+
+        // Build the tree exactly ONCE
+        build(0, 0, n - 1, nums);
+
+        vector<int> res;
+        res.reserve(queries.size());
+
+        for (const auto &q : queries)
+        {
+            int index = q[0], value = q[1], start = q[2], x = q[3];
+
+            // 1. Update the tree in O(log N) time
+            update(0, 0, n - 1, index, value);
+
+            // 2. Query the requested range
+            Node result_node = query(0, 0, n - 1, start, n - 1);
+
+            // 3. The result is just the count at the requested remainder 'x'
+            res.push_back(result_node.counts[x]);
+        }
+
+        return res;
+    }
+}; 
