@@ -18143,3 +18143,26 @@ public:
         return res;
     }
 }; 
+#include <iostream>
+#include <algorithm> // Needed for the min() function
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    // Read the number of customers (n) and cakes (m)
+    if (cin >> n >> m) {
+        
+        // Calculate leftover cakes after everyone gets 1
+        int leftover_cakes = m - n;
+        
+        // The answer is the smaller number between leftovers and total customers
+        cout << min(leftover_cakes, n) << "\n";
+    }
+
+    return 0;
+}
