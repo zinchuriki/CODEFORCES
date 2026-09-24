@@ -18166,3 +18166,21 @@ int main() {
 
     return 0;
 }
+
+
+class Solution {
+  public:
+    bool isEven(Node* head) {
+        int count = 0;
+        Node* current = head;
+        
+        // Walk through the list one node at a time
+        while (current != nullptr) {
+            count++;
+            current = current->next;
+        }
+        
+        // Return true if the final count is divisible by 2
+        return count % 2 == 0;
+    }
+};
