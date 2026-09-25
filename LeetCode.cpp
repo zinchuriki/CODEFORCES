@@ -18142,24 +18142,26 @@ public:
 
         return res;
     }
-}; 
+};
 #include <iostream>
 #include <algorithm> // Needed for the min() function
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int n, m;
     // Read the number of customers (n) and cakes (m)
-    if (cin >> n >> m) {
-        
+    if (cin >> n >> m)
+    {
+
         // Calculate leftover cakes after everyone gets 1
         int leftover_cakes = m - n;
-        
+
         // The answer is the smaller number between leftovers and total customers
         cout << min(leftover_cakes, n) << "\n";
     }
@@ -18167,20 +18169,38 @@ int main() {
     return 0;
 }
 
-
-class Solution {
-  public:
-    bool isEven(Node* head) {
+class Solution
+{
+public:
+    bool isEven(Node *head)
+    {
         int count = 0;
-        Node* current = head;
-        
+        Node *current = head;
+
         // Walk through the list one node at a time
-        while (current != nullptr) {
+        while (current != nullptr)
+        {
             count++;
             current = current->next;
         }
-        
+
         // Return true if the final count is divisible by 2
         return count % 2 == 0;
     }
 };
+
+// class Solution
+// {
+// public:
+//     int sumBT(Node *root)
+//     {
+//         // Base case: if the tree/node is empty, the sum is 0
+//         if (root == nullptr)
+//         {
+//             return 0;
+//         }
+
+//         // Add current node's data and recursively find sum of left and right subtrees
+//         return root->data + sumBT(root->left) + sumBT(root->right);
+//     }
+// };
