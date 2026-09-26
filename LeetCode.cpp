@@ -18204,3 +18204,38 @@ public:
 //         return root->data + sumBT(root->left) + sumBT(root->right);
 //     }
 // };
+
+// class Solution
+// {
+// public:
+//     vector<vector<int>> displayList(Node *head)
+//     {
+//         vector<int> forward;
+//         vector<int> backward;
+
+//         Node *current = head;
+//         Node *tail = nullptr;
+
+//         // 1. Forward Traversal
+//         while (current != nullptr)
+//         {
+//             forward.push_back(current->data);
+
+//             // Keep track of the node before moving forward
+//             // so we know exactly where the tail is when the loop ends.
+//             tail = current;
+//             current = current->next;
+//         }
+
+//         // 2. Backward Traversal
+//         current = tail;
+//         while (current != nullptr)
+//         {
+//             backward.push_back(current->data);
+//             current = current->prev;
+//         }
+
+//         // Return both arrays as a 2D vector
+//         return {forward, backward};
+//     }
+// };
