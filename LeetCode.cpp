@@ -18239,3 +18239,22 @@ public:
 //         return {forward, backward};
 //     }
 // };
+
+// class Solution
+// {
+// public:
+//     void printList(Node *head)
+//     {
+//         Node *current = head;
+
+//         // Walk through the list until the end
+//         while (current != nullptr)
+//         {
+//             // Print the data followed by a space
+//             cout << current->data << " ";
+
+//             // Move to the next node
+//             current = current->next;
+//         }
+//     }
+// };
