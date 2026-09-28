@@ -18258,3 +18258,22 @@ public:
 //         }
 //     }
 // };
+
+
+// class Solution {
+//   public:
+//     int countNonLeafNodes(Node* root) {
+//         // Step 1: If the tree or node is empty, return 0
+//         if (root == nullptr) {
+//             return 0;
+//         }
+        
+//         // Step 2: If it's a leaf node (no children), return 0
+//         if (root->left == nullptr && root->right == nullptr) {
+//             return 0;
+//         }
+        
+//         // Step 3: It's an internal node. Count it as 1 and check its children.
+//         return 1 + countNonLeafNodes(root->left) + countNonLeafNodes(root->right);
+//     }
+// };
