@@ -18277,3 +18277,25 @@ public:
 //         return 1 + countNonLeafNodes(root->left) + countNonLeafNodes(root->right);
 //     }
 // };
+
+
+// class Solution {
+//   public:
+//     int getLength(Node* head) {
+//         // Handle empty list (though constraints say n >= 1)
+//         if (head == nullptr) {
+//             return 0;
+//         }
+        
+//         int count = 1;
+//         Node* current = head->next;
+        
+//         // Traverse until we wrap around back to the head
+//         while (current != head) {
+//             count++;
+//             current = current->next;
+//         }
+        
+//         return count;
+//     }
+// };
