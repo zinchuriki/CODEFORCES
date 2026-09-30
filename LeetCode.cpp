@@ -18259,7 +18259,6 @@ public:
 //     }
 // };
 
-
 // class Solution {
 //   public:
 //     int countNonLeafNodes(Node* root) {
@@ -18267,17 +18266,16 @@ public:
 //         if (root == nullptr) {
 //             return 0;
 //         }
-        
+
 //         // Step 2: If it's a leaf node (no children), return 0
 //         if (root->left == nullptr && root->right == nullptr) {
 //             return 0;
 //         }
-        
+
 //         // Step 3: It's an internal node. Count it as 1 and check its children.
 //         return 1 + countNonLeafNodes(root->left) + countNonLeafNodes(root->right);
 //     }
 // };
-
 
 // class Solution {
 //   public:
@@ -18286,16 +18284,63 @@ public:
 //         if (head == nullptr) {
 //             return 0;
 //         }
-        
+
 //         int count = 1;
 //         Node* current = head->next;
-        
+
 //         // Traverse until we wrap around back to the head
 //         while (current != head) {
 //             count++;
 //             current = current->next;
 //         }
-        
+
 //         return count;
 //     }
 // };
+
+class Solution
+{
+public:
+    vector<int> maxDepthAfterSplit(string seq)
+    {
+
+        int c1 = 0;
+        int c2 = 0;
+
+        vector<int> ans;
+        for (char c : seq)
+        {
+
+            if (c == '(')
+            {
+
+                if (c1 <= c2)
+                {
+                    c1++;
+                    ans.push_back(0);
+                }
+                else
+                {
+                    c2++;
+                    ans.push_back(1);
+                }
+            }
+            else
+            {
+
+                if (c1 >= c2)
+                {
+                    c1--;
+                    ans.push_back(0);
+                }
+                else
+                {
+                    c2--;
+                    ans.push_back(1);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
