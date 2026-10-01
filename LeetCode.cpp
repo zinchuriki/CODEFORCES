@@ -18344,3 +18344,30 @@ public:
         return ans;
     }
 };
+
+#include <iostream>
+#include <algorithm> // needed for the min() function
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int b, h, c;
+    // Read the bread (B), ham (H), and cheese (C)
+    if (cin >> b >> h >> c) {
+        
+        // Find how many sandwiches the bread can make
+        int bread_sandwiches = b / 2;
+        
+        // Find how many sandwiches the fillings can make
+        int filling_sandwiches = h + c;
+        
+        // The answer is the smaller of the two limits
+        cout << min(bread_sandwiches, filling_sandwiches) << "\n";
+    }
+
+    return 0;
+}
