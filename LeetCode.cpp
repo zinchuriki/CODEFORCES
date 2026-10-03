@@ -18345,10 +18345,8 @@ public:
     }
 };
 
-#include <iostream>
-#include <algorithm> // needed for the min() function
 
-using namespace std;
+
 
 int main() {
     // Make input and output fast
@@ -18367,6 +18365,33 @@ int main() {
         
         // The answer is the smaller of the two limits
         cout << min(bread_sandwiches, filling_sandwiches) << "\n";
+    }
+
+    return 0;
+}
+
+
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt) {
+        while (tt--) {
+            int x;
+            // Read Chef's body temperature
+            cin >> x;
+            
+            // Check if temperature is greater than 98
+            if (x > 98) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        }
     }
 
     return 0;
