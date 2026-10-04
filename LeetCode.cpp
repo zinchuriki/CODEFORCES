@@ -18396,3 +18396,20 @@ int main() {
 
     return 0;
 }
+
+
+class Solution {
+  public:
+    Node* insertIntoEmpty(Node* last, int data) {
+        // Create the new node with the given data
+        Node* newNode = new Node(data);
+        
+        // Make it point to itself to form a circle
+        newNode->next = newNode;
+        
+        // Return the new node, which is now the only node in the list
+        return newNode;
+    }
+};
+
+
