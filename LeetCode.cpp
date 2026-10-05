@@ -18345,24 +18345,23 @@ public:
     }
 };
 
-
-
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int b, h, c;
     // Read the bread (B), ham (H), and cheese (C)
-    if (cin >> b >> h >> c) {
-        
+    if (cin >> b >> h >> c)
+    {
+
         // Find how many sandwiches the bread can make
         int bread_sandwiches = b / 2;
-        
+
         // Find how many sandwiches the fillings can make
         int filling_sandwiches = h + c;
-        
+
         // The answer is the smaller of the two limits
         cout << min(bread_sandwiches, filling_sandwiches) << "\n";
     }
@@ -18370,25 +18369,29 @@ int main() {
     return 0;
 }
 
-
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
     // Read the number of test cases
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int x;
             // Read Chef's body temperature
             cin >> x;
-            
+
             // Check if temperature is greater than 98
-            if (x > 98) {
+            if (x > 98)
+            {
                 cout << "YES\n";
-            } else {
+            }
+            else
+            {
                 cout << "NO\n";
             }
         }
@@ -18397,19 +18400,54 @@ int main() {
     return 0;
 }
 
-
-class Solution {
-  public:
-    Node* insertIntoEmpty(Node* last, int data) {
+class Solution
+{
+public:
+    Node *insertIntoEmpty(Node *last, int data)
+    {
         // Create the new node with the given data
-        Node* newNode = new Node(data);
-        
+        Node *newNode = new Node(data);
+
         // Make it point to itself to form a circle
         newNode->next = newNode;
-        
+
         // Return the new node, which is now the only node in the list
         return newNode;
     }
 };
 
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
 
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int x, y;
+            // Read current seats (X) and interested students (Y)
+            cin >> x >> y;
+
+            // If more students want the course than there are seats
+            if (y > x)
+            {
+                cout << y - x << "\n"; // Print the extra seats needed
+            }
+            else
+            {
+                cout << 0 << "\n"; // Otherwise, 0 extra seats are needed
+            }
+        }
+    }
+
+    return 0;
+}
