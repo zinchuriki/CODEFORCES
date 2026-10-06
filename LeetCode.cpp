@@ -18451,3 +18451,23 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int lastIndex(string &s)
+    {
+        // Loop backwards from the last index to 0
+        for (int i = s.length() - 1; i >= 0; i--)
+        {
+            // The first '1' we see is the last one in the string
+            if (s[i] == '1')
+            {
+                return i;
+            }
+        }
+
+        // If no '1' is found
+        return -1;
+    }
+};
