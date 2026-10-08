@@ -18467,3 +18467,26 @@ public:
         return -1;
     }
 };
+
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    // Read the total number of toffees
+    if (cin >> n) {
+        
+        // If it divides perfectly by 3, the imbalance is 0
+        if (n % 3 == 0) {
+            cout << 0 << "\n";
+        } 
+        // If there are leftovers, the imbalance is 1
+        else {
+            cout << 1 << "\n";
+        }
+    }
+
+    return 0;
+}
