@@ -18490,3 +18490,25 @@ public:
 
 //     return 0;
 // }
+
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt) {
+        while (tt--) {
+            int n;
+            // Read the number of hours (N)
+            cin >> n;
+            
+            // Multiply the hours by 2 and print the result
+            cout << n * 2 << "\n";
+        }
+    }
+
+    return 0;
+}
