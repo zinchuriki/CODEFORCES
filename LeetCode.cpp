@@ -18416,7 +18416,6 @@ public:
     }
 };
 
-
 int main()
 {
     // Make input and output fast
@@ -18468,7 +18467,6 @@ public:
     }
 };
 
-
 // int main() {
 //     // Make input and output fast
 //     ios::sync_with_stdio(false);
@@ -18477,11 +18475,11 @@ public:
 //     int n;
 //     // Read the total number of toffees
 //     if (cin >> n) {
-        
+
 //         // If it divides perfectly by 3, the imbalance is 0
 //         if (n % 3 == 0) {
 //             cout << 0 << "\n";
-//         } 
+//         }
 //         // If there are leftovers, the imbalance is 1
 //         else {
 //             cout << 1 << "\n";
@@ -18491,20 +18489,22 @@ public:
 //     return 0;
 // }
 
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
     // Read the number of test cases
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int n;
             // Read the number of hours (N)
             cin >> n;
-            
+
             // Multiply the hours by 2 and print the result
             cout << n * 2 << "\n";
         }
@@ -18512,3 +18512,37 @@ int main() {
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int kthDistinct(vector<int> &arr, int k)
+    {
+        unordered_map<int, int> freq;
+
+        // Step 1: Count how many times each number appears
+        for (int num : arr)
+        {
+            freq[num]++;
+        }
+
+        // Step 2: Walk through the array again to keep the original order
+        for (int num : arr)
+        {
+            // Check if the number appears exactly once
+            if (freq[num] == 1)
+            {
+                k--; // We found a distinct element, count it down
+
+                // If it's the k-th one, return it
+                if (k == 0)
+                {
+                    return num;
+                }
+            }
+        }
+
+        // If there are less than k distinct elements
+        return -1;
+    }
+};
