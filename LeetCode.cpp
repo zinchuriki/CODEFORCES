@@ -18546,3 +18546,26 @@ public:
         return -1;
     }
 };
+
+class Solution {
+  public:
+    int firstNonRepeating(vector<int>& arr) {
+        unordered_map<int, int> freq;
+        
+        // Step 1: Count how many times each number appears
+        for (int num : arr) {
+            freq[num]++;
+        }
+        
+        // Step 2: Walk through the array again to keep the original order
+        for (int num : arr) {
+            // Check if the number appears exactly once
+            if (freq[num] == 1) {
+                return num; // Found the first non-repeating element!
+            }
+        }
+        
+        // Step 3: If no unique element is found, return 0
+        return 0;
+    }
+};
