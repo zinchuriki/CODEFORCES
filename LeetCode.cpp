@@ -18569,3 +18569,47 @@ class Solution {
         return 0;
     }
 };
+
+class Solution {
+  public:
+    bool checkPath(int V, vector<vector<int>>& edges, int src, int dest) {
+        // If the start and end are the same, we're already there
+        if (src == dest) return true;
+        
+        // Step 1: Build the adjacency list
+        vector<vector<int>> adj(V);
+        for (auto& edge : edges) {
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]); // It's an undirected graph
+        }
+        
+        // Step 2: Set up BFS
+        queue<int> q;
+        vector<bool> visited(V, false); // Keep track of where we've been
+        
+        // Start exploring from the source
+        q.push(src);
+        visited[src] = true;
+        
+        while (!q.empty()) {
+            int curr = q.front();
+            q.pop();
+            
+            // If we found our destination
+            if (curr == dest) {
+                return true;
+            }
+            
+            // Check all neighbors of the current vertex
+            for (int neighbor : adj[curr]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true; // Mark as visited so we don't loop
+                    q.push(neighbor);         // Add to queue to explore later
+                }
+            }
+        }
+        
+        // Step 3: If we run out of connected vertices and didn't find dest
+        return false;
+    }
+};
