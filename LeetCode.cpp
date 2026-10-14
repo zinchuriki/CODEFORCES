@@ -18613,3 +18613,41 @@ class Solution {
         return false;
     }
 };
+
+class Solution {
+  public:
+    vector<int> commonElements(vector<int> &a, vector<int> &b, vector<int> &c) {
+        int i = 0, j = 0, k = 0;
+        vector<int> result;
+        
+        // Loop until we reach the end of any of the arrays
+        while (i < a.size() && j < b.size() && k < c.size()) {
+            
+            // If all three elements are the same
+            if (a[i] == b[j] && b[j] == c[k]) {
+                // Add to result only if it's the first element or not a duplicate
+                if (result.empty() || result.back() != a[i]) {
+                    result.push_back(a[i]);
+                }
+                // Move all pointers forward
+                i++;
+                j++;
+                k++;
+            }
+            // If a[i] is the smallest, move its pointer forward
+            else if (a[i] < b[j]) {
+                i++;
+            }
+            // If b[j] is the smallest, move its pointer forward
+            else if (b[j] < c[k]) {
+                j++;
+            }
+            // If c[k] is the smallest, move its pointer forward
+            else {
+                k++;
+            }
+        }
+        
+        return result;
+    }
+};
