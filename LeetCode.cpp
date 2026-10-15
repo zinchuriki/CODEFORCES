@@ -18570,84 +18570,84 @@ class Solution {
     }
 };
 
-class Solution {
-  public:
-    bool checkPath(int V, vector<vector<int>>& edges, int src, int dest) {
-        // If the start and end are the same, we're already there
-        if (src == dest) return true;
+// class Solution {
+//   public:
+//     bool checkPath(int V, vector<vector<int>>& edges, int src, int dest) {
+//         // If the start and end are the same, we're already there
+//         if (src == dest) return true;
         
-        // Step 1: Build the adjacency list
-        vector<vector<int>> adj(V);
-        for (auto& edge : edges) {
-            adj[edge[0]].push_back(edge[1]);
-            adj[edge[1]].push_back(edge[0]); // It's an undirected graph
-        }
+//         // Step 1: Build the adjacency list
+//         vector<vector<int>> adj(V);
+//         for (auto& edge : edges) {
+//             adj[edge[0]].push_back(edge[1]);
+//             adj[edge[1]].push_back(edge[0]); // It's an undirected graph
+//         }
         
-        // Step 2: Set up BFS
-        queue<int> q;
-        vector<bool> visited(V, false); // Keep track of where we've been
+//         // Step 2: Set up BFS
+//         queue<int> q;
+//         vector<bool> visited(V, false); // Keep track of where we've been
         
-        // Start exploring from the source
-        q.push(src);
-        visited[src] = true;
+//         // Start exploring from the source
+//         q.push(src);
+//         visited[src] = true;
         
-        while (!q.empty()) {
-            int curr = q.front();
-            q.pop();
+//         while (!q.empty()) {
+//             int curr = q.front();
+//             q.pop();
             
-            // If we found our destination
-            if (curr == dest) {
-                return true;
-            }
+//             // If we found our destination
+//             if (curr == dest) {
+//                 return true;
+//             }
             
-            // Check all neighbors of the current vertex
-            for (int neighbor : adj[curr]) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true; // Mark as visited so we don't loop
-                    q.push(neighbor);         // Add to queue to explore later
-                }
-            }
-        }
+//             // Check all neighbors of the current vertex
+//             for (int neighbor : adj[curr]) {
+//                 if (!visited[neighbor]) {
+//                     visited[neighbor] = true; // Mark as visited so we don't loop
+//                     q.push(neighbor);         // Add to queue to explore later
+//                 }
+//             }
+//         }
         
-        // Step 3: If we run out of connected vertices and didn't find dest
-        return false;
-    }
-};
+//         // Step 3: If we run out of connected vertices and didn't find dest
+//         return false;
+//     }
+// };
 
-class Solution {
-  public:
-    vector<int> commonElements(vector<int> &a, vector<int> &b, vector<int> &c) {
-        int i = 0, j = 0, k = 0;
-        vector<int> result;
+// class Solution {
+//   public:
+//     vector<int> commonElements(vector<int> &a, vector<int> &b, vector<int> &c) {
+//         int i = 0, j = 0, k = 0;
+//         vector<int> result;
         
-        // Loop until we reach the end of any of the arrays
-        while (i < a.size() && j < b.size() && k < c.size()) {
+//         // Loop until we reach the end of any of the arrays
+//         while (i < a.size() && j < b.size() && k < c.size()) {
             
-            // If all three elements are the same
-            if (a[i] == b[j] && b[j] == c[k]) {
-                // Add to result only if it's the first element or not a duplicate
-                if (result.empty() || result.back() != a[i]) {
-                    result.push_back(a[i]);
-                }
-                // Move all pointers forward
-                i++;
-                j++;
-                k++;
-            }
-            // If a[i] is the smallest, move its pointer forward
-            else if (a[i] < b[j]) {
-                i++;
-            }
-            // If b[j] is the smallest, move its pointer forward
-            else if (b[j] < c[k]) {
-                j++;
-            }
-            // If c[k] is the smallest, move its pointer forward
-            else {
-                k++;
-            }
-        }
+//             // If all three elements are the same
+//             if (a[i] == b[j] && b[j] == c[k]) {
+//                 // Add to result only if it's the first element or not a duplicate
+//                 if (result.empty() || result.back() != a[i]) {
+//                     result.push_back(a[i]);
+//                 }
+//                 // Move all pointers forward
+//                 i++;
+//                 j++;
+//                 k++;
+//             }
+//             // If a[i] is the smallest, move its pointer forward
+//             else if (a[i] < b[j]) {
+//                 i++;
+//             }
+//             // If b[j] is the smallest, move its pointer forward
+//             else if (b[j] < c[k]) {
+//                 j++;
+//             }
+//             // If c[k] is the smallest, move its pointer forward
+//             else {
+//                 k++;
+//             }
+//         }
         
-        return result;
-    }
-};
+//         return result;
+//     }
+// };
