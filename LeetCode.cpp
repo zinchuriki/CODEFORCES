@@ -18547,24 +18547,29 @@ public:
     }
 };
 
-class Solution {
-  public:
-    int firstNonRepeating(vector<int>& arr) {
+class Solution
+{
+public:
+    int firstNonRepeating(vector<int> &arr)
+    {
         unordered_map<int, int> freq;
-        
+
         // Step 1: Count how many times each number appears
-        for (int num : arr) {
+        for (int num : arr)
+        {
             freq[num]++;
         }
-        
+
         // Step 2: Walk through the array again to keep the original order
-        for (int num : arr) {
+        for (int num : arr)
+        {
             // Check if the number appears exactly once
-            if (freq[num] == 1) {
+            if (freq[num] == 1)
+            {
                 return num; // Found the first non-repeating element!
             }
         }
-        
+
         // Step 3: If no unique element is found, return 0
         return 0;
     }
@@ -18575,31 +18580,31 @@ class Solution {
 //     bool checkPath(int V, vector<vector<int>>& edges, int src, int dest) {
 //         // If the start and end are the same, we're already there
 //         if (src == dest) return true;
-        
+
 //         // Step 1: Build the adjacency list
 //         vector<vector<int>> adj(V);
 //         for (auto& edge : edges) {
 //             adj[edge[0]].push_back(edge[1]);
 //             adj[edge[1]].push_back(edge[0]); // It's an undirected graph
 //         }
-        
+
 //         // Step 2: Set up BFS
 //         queue<int> q;
 //         vector<bool> visited(V, false); // Keep track of where we've been
-        
+
 //         // Start exploring from the source
 //         q.push(src);
 //         visited[src] = true;
-        
+
 //         while (!q.empty()) {
 //             int curr = q.front();
 //             q.pop();
-            
+
 //             // If we found our destination
 //             if (curr == dest) {
 //                 return true;
 //             }
-            
+
 //             // Check all neighbors of the current vertex
 //             for (int neighbor : adj[curr]) {
 //                 if (!visited[neighbor]) {
@@ -18608,7 +18613,7 @@ class Solution {
 //                 }
 //             }
 //         }
-        
+
 //         // Step 3: If we run out of connected vertices and didn't find dest
 //         return false;
 //     }
@@ -18619,10 +18624,10 @@ class Solution {
 //     vector<int> commonElements(vector<int> &a, vector<int> &b, vector<int> &c) {
 //         int i = 0, j = 0, k = 0;
 //         vector<int> result;
-        
+
 //         // Loop until we reach the end of any of the arrays
 //         while (i < a.size() && j < b.size() && k < c.size()) {
-            
+
 //             // If all three elements are the same
 //             if (a[i] == b[j] && b[j] == c[k]) {
 //                 // Add to result only if it's the first element or not a duplicate
@@ -18647,7 +18652,36 @@ class Solution {
 //                 k++;
 //             }
 //         }
-        
+
 //         return result;
 //     }
 // };
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int x, y, z;
+            // Read initial population (X), people left (Y), and immigrants (Z)
+            cin >> x >> y >> z;
+
+            // Calculate and print the final population
+            cout << x - y + z << "\n";
+        }
+    }
+
+    return 0;
+}
