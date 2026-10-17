@@ -18657,31 +18657,31 @@ public:
 //     }
 // };
 
-#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
-#include <bits/stdc++.h>
+// #pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+// #include <bits/stdc++.h>
 
-using namespace std;
+// using namespace std;
 
-int main()
-{
-    // Make input and output fast
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+// int main()
+// {
+//     // Make input and output fast
+//     ios::sync_with_stdio(false);
+//     cin.tie(nullptr);
 
-    int tt;
-    // Read the number of test cases
-    if (cin >> tt)
-    {
-        while (tt--)
-        {
-            int x, y, z;
-            // Read initial population (X), people left (Y), and immigrants (Z)
-            cin >> x >> y >> z;
+//     int tt;
+//     // Read the number of test cases
+//     if (cin >> tt)
+//     {
+//         while (tt--)
+//         {
+//             int x, y, z;
+//             // Read initial population (X), people left (Y), and immigrants (Z)
+//             cin >> x >> y >> z;
 
-            // Calculate and print the final population
-            cout << x - y + z << "\n";
-        }
-    }
+//             // Calculate and print the final population
+//             cout << x - y + z << "\n";
+//         }
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
