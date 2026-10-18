@@ -18685,3 +18685,26 @@ public:
 
 //     return 0;
 // }
+
+
+// class Solution {
+//   public:
+//     bool hasPathSum(Node *root, int target) {
+//         // Base case: If the tree is empty, there is no path
+//         if (root == nullptr) {
+//             return false;
+//         }
+        
+//         // If we reach a leaf node, check if its value matches the remaining target
+//         if (root->left == nullptr && root->right == nullptr) {
+//             return target == root->data;
+//         }
+        
+//         // Subtract the current node's value from the target
+//         int remainingTarget = target - root->data;
+        
+//         // Recursively check the left and right subtrees
+//         return hasPathSum(root->left, remainingTarget) || 
+//                hasPathSum(root->right, remainingTarget);
+//     }
+// };
