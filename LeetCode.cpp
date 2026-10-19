@@ -18686,7 +18686,6 @@ public:
 //     return 0;
 // }
 
-
 // class Solution {
 //   public:
 //     bool hasPathSum(Node *root, int target) {
@@ -18694,17 +18693,47 @@ public:
 //         if (root == nullptr) {
 //             return false;
 //         }
-        
+
 //         // If we reach a leaf node, check if its value matches the remaining target
 //         if (root->left == nullptr && root->right == nullptr) {
 //             return target == root->data;
 //         }
-        
+
 //         // Subtract the current node's value from the target
 //         int remainingTarget = target - root->data;
-        
+
 //         // Recursively check the left and right subtrees
-//         return hasPathSum(root->left, remainingTarget) || 
+//         return hasPathSum(root->left, remainingTarget) ||
 //                hasPathSum(root->right, remainingTarget);
 //     }
 // };
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int a, b;
+    // Read Tyro's patience (A) and Dom's attempts (B)
+    if (cin >> a >> b)
+    {
+
+        // If Tyro's patience is within Dom's limit, Tyro makes it
+        if (a <= b)
+        {
+            cout << "Tyro\n";
+        }
+        // Otherwise, Dom gives up and makes it himself
+        else
+        {
+            cout << "Dom\n";
+        }
+    }
+
+    return 0;
+}
