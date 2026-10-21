@@ -18708,7 +18708,6 @@ public:
 //     }
 // };
 
-
 int main()
 {
     // Make input and output fast
@@ -18734,3 +18733,22 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int findSize(Node *head)
+    {
+        int count = 0;
+        Node *current = head;
+
+        // Traverse the list until the end
+        while (current != nullptr)
+        {
+            count++;
+            current = current->next;
+        }
+
+        return count;
+    }
+};
