@@ -18752,3 +18752,49 @@ public:
         return count;
     }
 };
+
+class Solution
+{
+public:
+    Node *deleteNode(Node *head, int x)
+    {
+        // If the list is empty
+        if (head == nullptr)
+        {
+            return nullptr;
+        }
+
+        // Case 1: If we need to delete the head node (position 1)
+        if (x == 1)
+        {
+            Node *temp = head;
+            head = head->next;
+            delete temp; // Free the memory
+            return head;
+        }
+
+        // Case 2: Traverse to the node just before the one to delete (position x-1)
+        Node *curr = head;
+        for (int i = 1; i < x - 1 && curr != nullptr; i++)
+        {
+            curr = curr->next;
+        }
+
+        // If x is greater than the number of nodes, do nothing
+        if (curr == nullptr || curr->next == nullptr)
+        {
+            return head;
+        }
+
+        // The node we want to delete is curr->next
+        Node *nodeToDelete = curr->next;
+
+        // Unlink the node from the list
+        curr->next = nodeToDelete->next;
+
+        // Free the memory
+        delete nodeToDelete;
+
+        return head;
+    }
+};
