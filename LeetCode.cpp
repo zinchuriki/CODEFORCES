@@ -18798,3 +18798,29 @@ public:
         return head;
     }
 };
+
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    // Read the number of test cases
+    if (cin >> t)
+    {
+        while (t--)
+        {
+            int a, b;
+            // Read Alice's score (A) and Bob's score (B)
+            cin >> a >> b;
+
+            // Find the highest score, and subtract it from 7
+            int highest_score = max(a, b);
+            cout << 7 - highest_score << "\n";
+        }
+    }
+
+    return 0;
+}
