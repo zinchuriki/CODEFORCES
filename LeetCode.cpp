@@ -18824,3 +18824,25 @@ int main()
 
     return 0;
 }
+
+
+class Solution {
+  public:
+    bool isCircular(Node *head) {
+        // An empty linked list is considered circular
+        if (head == nullptr) {
+            return true;
+        }
+        
+        // Start checking from the next node
+        Node *curr = head->next;
+        
+        // Traverse the list until we find the end or loop back to the head
+        while (curr != nullptr && curr != head) {
+            curr = curr->next;
+        }
+        
+        // If we reached the head, it's circular. If we reached nullptr, it's not.
+        return (curr == head);
+    }
+};
