@@ -18799,7 +18799,6 @@ public:
     }
 };
 
-
 int main()
 {
     // Make input and output fast
@@ -18825,24 +18824,145 @@ int main()
     return 0;
 }
 
-
-class Solution {
-  public:
-    bool isCircular(Node *head) {
+class Solution
+{
+public:
+    bool isCircular(Node *head)
+    {
         // An empty linked list is considered circular
-        if (head == nullptr) {
+        if (head == nullptr)
+        {
             return true;
         }
-        
+
         // Start checking from the next node
         Node *curr = head->next;
-        
+
         // Traverse the list until we find the end or loop back to the head
-        while (curr != nullptr && curr != head) {
+        while (curr != nullptr && curr != head)
+        {
             curr = curr->next;
         }
-        
+
         // If we reached the head, it's circular. If we reached nullptr, it's not.
         return (curr == head);
+    }
+};
+
+class Solution
+{
+public:
+    int calculateScore(int a, int b)
+    {
+        int c1 = 0, c2 = 0;
+
+        while (a > 0)
+        {
+
+            c1 += a % 2;
+            a /= 2;
+        }
+        while (b > 0)
+        {
+
+            c2 += b % 10;
+            b /= 2;
+        }
+
+        if (c1 >= c2)
+            return c1 * c2;
+
+        return c2 / c1;
+    }
+};
+
+class Solution
+{
+public:
+    long long maximizeSum(vector<int> &nums, int k)
+    {
+
+        vector<pair<int, int>> vec;
+
+        for (int num : nums)
+        {
+
+            string st = to_string(num);
+            sort(st.begin(), st.end());
+
+            int a = stoi(st);
+
+            vec.push_back({a, num});
+        }
+
+        sort(vec.begin(), vec.end());
+
+        int ans = 0;
+
+        int n = vec.size();
+        int idx = n - 1;
+        while (k > 0)
+        {
+
+            ans += vec[idx].first;
+            k--;
+        }
+        for (int i = 0; i < n - k; ++i)
+        {
+            ans += vec[idx].second;
+        }
+
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    bool check(unordered_map<int, int> &hash, vector<int> &vec)
+    {
+
+        int t = 1;
+
+        // for (auto it = hash.begin(); it != hash.end(); ++it) {
+
+        //     if (it->second != t)
+        //         return false;
+        //     t++;
+        // }
+
+        for (int num : vec)
+        {
+
+            if (hash[num] != t)
+                return false;
+
+            t++;
+        }
+
+        return true;
+    }
+
+    int countStaircase(vector<int> &nums)
+    {
+        int n = nums.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            unordered_map<int, int> hash;
+            vector<int> vec;
+            for (int j = i; j < n; ++j)
+            {
+
+                hash[nums[j]]++;
+                if (hash[nums[j]] == 1)
+                    vec.push_back(nums[j]);
+
+                if (check(hash, vec))
+                    ans++;
+            }
+        }
+
+        return ans;
     }
 };
