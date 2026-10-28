@@ -18967,26 +18967,54 @@ public:
     }
 };
 
-
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
     // Read the number of test cases
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int x1, y1, x2, y2;
             // Read the costs for Style 1 (x1, y1) and Style 2 (x2, y2)
             cin >> x1 >> y1 >> x2 >> y2;
-            
+
             // Calculate the total cost for each style
             int style1 = x1 + y1;
             int style2 = x2 + y2;
-            
+
             // Print the cheaper cost
             cout << min(style1, style2) << "\n";
+        }
+    }
+
+    return 0;
+}
+
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int x, p, q;
+            // Read fee (X), total passengers (P), and tickets (Q)
+            cin >> x >> p >> q;
+
+            // Calculate passengers without tickets and multiply by fee
+            int ticketless = p - q;
+            cout << ticketless * x << "\n";
         }
     }
 
