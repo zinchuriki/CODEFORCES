@@ -18995,7 +18995,6 @@ int main()
     return 0;
 }
 
-
 int main()
 {
     // Make input and output fast
@@ -19020,3 +19019,30 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int getNode(Node *head, int k)
+    {
+        int count = 1; // 1-based indexing
+        Node *curr = head;
+
+        // Traverse the linked list
+        while (curr != nullptr)
+        {
+            // If we reach the k-th node, return its data
+            if (count == k)
+            {
+                return curr->data;
+            }
+
+            // Move to the next node and increment our counter
+            count++;
+            curr = curr->next;
+        }
+
+        // If we exit the loop, the list has fewer than k nodes
+        return -1;
+    }
+};
