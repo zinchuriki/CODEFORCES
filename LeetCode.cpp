@@ -19046,3 +19046,33 @@ public:
         return -1;
     }
 };
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int x, y;
+    // Read the rest interval (X) and total distance (Y)
+    if (cin >> x >> y)
+    {
+
+        // If the finish line lands exactly on a rest point, subtract 1
+        if (y % x == 0)
+        {
+            cout << (y / x) - 1 << "\n";
+        }
+        // Otherwise, standard division gives the number of stops
+        else
+        {
+            cout << y / x << "\n";
+        }
+    }
+
+    return 0;
+}
