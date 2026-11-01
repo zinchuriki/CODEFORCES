@@ -19112,3 +19112,25 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int decimalValue(Node *head)
+    {
+        long long result = 0;
+        long long MOD = 1000000007;
+
+        Node *current = head;
+
+        // Traverse the linked list
+        while (current != nullptr)
+        {
+            // Multiply by 2 (shift left) and add the current bit
+            result = (result * 2 + current->data) % MOD;
+            current = current->next;
+        }
+
+        return result;
+    }
+};
