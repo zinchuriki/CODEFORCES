@@ -19135,10 +19135,6 @@ public:
     }
 };
 
-#include <iostream>
-
-using namespace std;
-
 int main() {
     // Make input and output fast
     ios::sync_with_stdio(false);
