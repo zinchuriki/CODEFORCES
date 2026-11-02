@@ -19134,3 +19134,23 @@ public:
         return result;
     }
 };
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, u;
+    // Read total users (N) and unsubscribed users (U)
+    if (cin >> n >> u) {
+        
+        // Print the remaining users who will receive the email
+        cout << n - u << "\n";
+    }
+
+    return 0;
+}
