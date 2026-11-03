@@ -19135,18 +19135,42 @@ public:
     }
 };
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int n, u;
     // Read total users (N) and unsubscribed users (U)
-    if (cin >> n >> u) {
-        
+    if (cin >> n >> u)
+    {
+
         // Print the remaining users who will receive the email
         cout << n - u << "\n";
     }
 
     return 0;
 }
+class Solution
+{
+public:
+    vector<int> findMissing(vector<int> &a, vector<int> &b)
+    {
+        // Insert all elements of array b into a hash set for O(1) lookups
+        unordered_set<int> b_elements(b.begin(), b.end());
+        vector<int> result;
+
+        // Loop through array a in order
+        for (int num : a)
+        {
+            // If the element from a is not found in b's set
+            if (b_elements.find(num) == b_elements.end())
+            {
+                result.push_back(num); // Add to our final answer
+            }
+        }
+
+        return result;
+    }
+};
