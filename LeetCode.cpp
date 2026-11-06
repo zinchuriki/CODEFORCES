@@ -19174,3 +19174,79 @@ public:
         return result;
     }
 };
+
+class Solution
+{
+public:
+    vector<int> countServers(int n, vector<vector<int>> &logs, int x,
+                             vector<int> &queries)
+    {
+
+        int m = queries.size();
+
+        vector<int> ans(m, n);
+
+        unordered_map<int, int> hash;
+        unordered_map<int, vector<int>> log;
+
+        int tm = 0;
+        for (const auto &v : logs)
+        {
+            auto server = v[0];
+            auto time = v[1];
+            tm = max(tm, time);
+
+            log[time].push_back(server);
+        }
+        vector<int> wdw(tm + 1);
+
+        int r = 0;
+        int cnt = 0;
+        for (int l = 0; l < tm; ++l)
+        {
+
+            while (r <= l + x)
+            {
+
+                auto it_r = log.find(r);
+                if (it_r != log.end())
+                {
+                    // it_r->second is the vector of servers at time 'r'
+                    for (auto nodes : it_r->second)
+                    {
+                        if (hash.find(nodes) == hash.end())
+                        {
+                            cnt++;
+                        }
+                        hash[nodes] = r;
+                    }
+                }
+                r++;
+            }
+            wdw[l] = cnt;
+
+            auto it_l = log.find(l);
+            if (it_l != log.end())
+            {
+                for (auto nodes : it_l->second)
+                {
+                    if (hash[nodes] == l)
+                    {
+                        cnt--;
+                        hash.erase(
+                            nodes); // Note: Make sure to erase 'nodes', not 'l'
+                    }
+                }
+            }
+        }
+        wdw[tm] = cnt;
+
+        for (int i = 0; i < m; ++i)
+        {
+            if (queries[i] - x > tm)
+                continue;
+            ans[i] = (n - wdw[queries[i] - x]);
+        }
+        return ans;
+    }
+};
