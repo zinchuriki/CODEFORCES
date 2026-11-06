@@ -19250,3 +19250,62 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> countServers(int n, vector<vector<int>>& logs, int x, vector<int>& queries) {
+        int q_size = queries.size();
+        vector<int> ans(q_size);
+        
+       
+        vector<pair<int, int>> sorted_queries(q_size);
+        for (int i = 0; i < q_size; ++i) {
+            sorted_queries[i] = {queries[i], i};
+        }
+        
+        
+        sort(logs.begin(), logs.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];
+        });
+        
+        sort(sorted_queries.begin(), sorted_queries.end());
+        
+        
+        vector<int> server_counts(n + 1, 0); 
+        int active_servers = 0;
+        
+        int left = 0, right = 0;
+        int num_logs = logs.size();
+        
+      
+        for (const auto& [time, original_idx] : sorted_queries) {
+            int start_time = max(0, time - x);
+            int end_time = time;
+            
+            while (right < num_logs && logs[right][1] <= end_time) {
+                int server_id = logs[right][0];
+                if (server_counts[server_id] == 0) {
+                    active_servers++;
+                }
+                server_counts[server_id]++;
+                right++;
+            }
+            
+           
+            while (left < num_logs && logs[left][1] < start_time) {
+                int server_id = logs[left][0];
+                server_counts[server_id]--;
+                if (server_counts[server_id] == 0) {
+                    active_servers--;
+                }
+                left++;
+            }
+            
+            // The number of zero-request servers is total servers minus active ones
+            ans[original_idx] = n - active_servers;
+        }
+        
+        return ans;
+    }
+};
