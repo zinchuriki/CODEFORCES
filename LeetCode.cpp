@@ -1,14 +1,5 @@
 #include <bits/stdc++.h>
-#include <format>
 using namespace std;
-
-struct TreeNode
-{
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
 
 struct TreeNode
 {
@@ -34,24 +25,12 @@ struct Node
     int data;
     Node *left;
     Node *right;
-
-    Node(int x)
-    {
-        data = x;
-        left = right = nullptr;
-    }
-};
-
-class Node
-{
-public:
-    int data;
     Node *next;
-    Node(int data)
-    {
-        this->data = data;
-        this->next = NULL;
-    }
+
+    Node(int x) : data(x), left(nullptr), right(nullptr), next(nullptr) {}
+    Node(int x, Node *next) : data(x), left(nullptr), right(nullptr), next(next) {}
+    Node(int x, Node *left, Node *right)
+        : data(x), left(left), right(right), next(nullptr) {}
 };
 // class Solution
 // {
@@ -19251,59 +19230,116 @@ public:
     }
 };
 
-
-class Solution {
+class Solution
+{
 public:
-    vector<int> countServers(int n, vector<vector<int>>& logs, int x, vector<int>& queries) {
+    vector<int> countServers(int n, vector<vector<int>> &logs, int x, vector<int> &queries)
+    {
         int q_size = queries.size();
         vector<int> ans(q_size);
-        
-       
+
         vector<pair<int, int>> sorted_queries(q_size);
-        for (int i = 0; i < q_size; ++i) {
+        for (int i = 0; i < q_size; ++i)
+        {
             sorted_queries[i] = {queries[i], i};
         }
-        
-        
-        sort(logs.begin(), logs.end(), [](const vector<int>& a, const vector<int>& b) {
-            return a[1] < b[1];
-        });
-        
+
+        sort(logs.begin(), logs.end(), [](const vector<int> &a, const vector<int> &b)
+             { return a[1] < b[1]; });
+
         sort(sorted_queries.begin(), sorted_queries.end());
-        
-        
-        vector<int> server_counts(n + 1, 0); 
+
+        vector<int> server_counts(n + 1, 0);
         int active_servers = 0;
-        
+
         int left = 0, right = 0;
         int num_logs = logs.size();
-        
-      
-        for (const auto& [time, original_idx] : sorted_queries) {
+
+        for (const auto &[time, original_idx] : sorted_queries)
+        {
             int start_time = max(0, time - x);
             int end_time = time;
-            
-            while (right < num_logs && logs[right][1] <= end_time) {
+
+            while (right < num_logs && logs[right][1] <= end_time)
+            {
                 int server_id = logs[right][0];
-                if (server_counts[server_id] == 0) {
+                if (server_counts[server_id] == 0)
+                {
                     active_servers++;
                 }
                 server_counts[server_id]++;
                 right++;
             }
-            
-           
-            while (left < num_logs && logs[left][1] < start_time) {
+
+            while (left < num_logs && logs[left][1] < start_time)
+            {
                 int server_id = logs[left][0];
                 server_counts[server_id]--;
-                if (server_counts[server_id] == 0) {
+                if (server_counts[server_id] == 0)
+                {
                     active_servers--;
                 }
                 left++;
             }
-            
+
             // The number of zero-request servers is total servers minus active ones
             ans[original_idx] = n - active_servers;
+        }
+
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>,
+                       greater<pair<int, int>>>
+            pq;
+
+        // FIXED: Changed the first element of the tuple to 'long long' to prevent time overflow
+        priority_queue<
+            tuple<long long, int, int>,
+            vector<tuple<long long, int, int>>,
+            greater<tuple<long long, int, int>>
+        > pq2;
+        
+        int n = servers.size();
+        for (int i = 0; i < n; ++i)
+            pq.push({servers[i], i});
+            
+        int m = tasks.size();
+        vector<int> ans(m);
+        
+        // FIXED: Changed cur_time to long long
+        long long cur_time = 0;
+        
+        for (int i = 0; i < m; ++i) {
+            // Fast-forward time to when the current task arrives
+            cur_time = max(cur_time, (long long)i);
+            
+            while (!pq2.empty()) {
+                auto [time, server, idx] = pq2.top();
+                if (time <= cur_time) {
+                    pq.push({server, idx});
+                    pq2.pop();
+                } else
+                    break;
+            }
+            
+            if (pq.empty()) {
+                auto [time, server, idx] = pq2.top();
+                pq.push({server, idx});
+                pq2.pop();
+                cur_time = time; // cur_time updates to the long long value safely
+            }
+            
+            auto [server, idx] = pq.top();
+            ans[i] = idx;
+            pq.pop();
+            
+            // The addition here is now safe from overflow
+            pq2.push({tasks[i] + cur_time, server, idx});
         }
         
         return ans;
