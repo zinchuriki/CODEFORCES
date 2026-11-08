@@ -19291,9 +19291,11 @@ public:
     }
 };
 
-class Solution {
+class Solution
+{
 public:
-    vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) {
+    vector<int> assignTasks(vector<int> &servers, vector<int> &tasks)
+    {
         priority_queue<pair<int, int>, vector<pair<int, int>>,
                        greater<pair<int, int>>>
             pq;
@@ -19302,47 +19304,78 @@ public:
         priority_queue<
             tuple<long long, int, int>,
             vector<tuple<long long, int, int>>,
-            greater<tuple<long long, int, int>>
-        > pq2;
-        
+            greater<tuple<long long, int, int>>>
+            pq2;
+
         int n = servers.size();
         for (int i = 0; i < n; ++i)
             pq.push({servers[i], i});
-            
+
         int m = tasks.size();
         vector<int> ans(m);
-        
+
         // FIXED: Changed cur_time to long long
         long long cur_time = 0;
-        
-        for (int i = 0; i < m; ++i) {
+
+        for (int i = 0; i < m; ++i)
+        {
             // Fast-forward time to when the current task arrives
             cur_time = max(cur_time, (long long)i);
-            
-            while (!pq2.empty()) {
+
+            while (!pq2.empty())
+            {
                 auto [time, server, idx] = pq2.top();
-                if (time <= cur_time) {
+                if (time <= cur_time)
+                {
                     pq.push({server, idx});
                     pq2.pop();
-                } else
+                }
+                else
                     break;
             }
-            
-            if (pq.empty()) {
+
+            if (pq.empty())
+            {
                 auto [time, server, idx] = pq2.top();
                 pq.push({server, idx});
                 pq2.pop();
                 cur_time = time; // cur_time updates to the long long value safely
             }
-            
+
             auto [server, idx] = pq.top();
             ans[i] = idx;
             pq.pop();
-            
+
             // The addition here is now safe from overflow
             pq2.push({tasks[i] + cur_time, server, idx});
         }
-        
+
         return ans;
     }
 };
+
+
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int s;
+            // Read the duration of the video in seconds (S)
+            cin >> s;
+
+            // Multiply by 24000 and print the result
+            cout << s * 24000 << "\n";
+        }
+    }
+
+    return 0;
+}
