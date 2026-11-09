@@ -19354,8 +19354,6 @@ public:
     }
 };
 
-
-
 int main()
 {
     // Make input and output fast
@@ -19379,3 +19377,78 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int n;
+
+    vector<int> busiestServers(int k, vector<int> &arrival, vector<int> &load)
+    {
+
+        vector<int> servers(k, -1);
+        set<int> st;
+        for (int i = 0; i < k; ++i)
+            st.insert(i);
+
+        int maxi = 0;
+        vector<int> ans;
+        unordered_map<int, int> cnt;
+
+        int cur_time = 1;
+        n = arrival.size();
+        priority_queue<pair<int, int>, vector<pair<int, int>>,
+                       greater<pair<int, int>>>
+            pq;
+        for (int i = 0; i < n; ++i)
+        {
+
+            int req_server = i % k;
+            int load_time = load[i];
+            int arrival_time = arrival[i];
+            cur_time = max(cur_time, arrival_time);
+            while (!pq.empty())
+            {
+
+                auto [time, server] = pq.top();
+                if (time <= cur_time)
+                    st.insert(server);
+                else
+                    break;
+                pq.pop();
+            }
+            if (st.empty())
+                continue;
+            auto bigger = st.lower_bound(req_server);
+
+            if (bigger != st.end())
+            {
+                int val_bigger = *bigger;
+                cnt[val_bigger]++;
+
+                maxi = max(maxi, cnt[val_bigger]);
+
+                pq.push({cur_time + load_time, val_bigger});
+                st.erase(bigger);
+            }
+            else
+            {
+                int first = *st.begin();
+                cnt[first]++;
+
+                maxi = max(maxi, cnt[first]);
+                st.erase(st.begin());
+                pq.push({cur_time + load_time, first});
+            }
+        }
+
+        for (auto it = cnt.begin(); it != cnt.end(); ++it)
+        {
+
+            if (it->second == maxi)
+                ans.push_back(it->first);
+        }
+
+        return ans;
+    }
+};
