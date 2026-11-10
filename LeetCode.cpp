@@ -19452,3 +19452,41 @@ public:
         return ans;
     }
 };
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int p, d, k, b;
+            // Read base price (P), daily increase (D), days left (K), and budget (B)
+            cin >> p >> d >> k >> b;
+
+            // Calculate final cost and compare with budget
+            int final_cost = p + (d * k);
+
+            if (final_cost <= b)
+            {
+                cout << "YES\n";
+            }
+            else
+            {
+                cout << "NO\n";
+            }
+        }
+    }
+
+    return 0;
+}
