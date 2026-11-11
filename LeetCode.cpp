@@ -19490,3 +19490,34 @@ int main()
 
     return 0;
 }
+
+class Solution {
+  public:
+    int compare(Node *head1, Node *head2) {
+        // Traverse both lists while neither is empty
+        while (head1 != nullptr && head2 != nullptr) {
+            if (head1->data > head2->data) {
+                return 1;
+            } else if (head1->data < head2->data) {
+                return -1;
+            }
+            
+            // Move to the next characters if they are equal
+            head1 = head1->next;
+            head2 = head2->next;
+        }
+        
+        // If list 1 is longer, it is lexicographically greater
+        if (head1 != nullptr) {
+            return 1;
+        }
+        
+        // If list 2 is longer, it is lexicographically greater
+        if (head2 != nullptr) {
+            return -1;
+        }
+        
+        // If both ended at the same time, they are identical
+        return 0;
+    }
+};
