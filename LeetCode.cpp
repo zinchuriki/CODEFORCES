@@ -19521,3 +19521,27 @@ class Solution {
         return 0;
     }
 };
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int r, b;
+    // Read the runs needed (R) and balls remaining (B)
+    if (cin >> r >> b) {
+        
+        // Check if the required runs are less than or equal to the max possible runs
+        if (r <= 6 * b) {
+            cout << "Yes\n";
+        } else {
+            cout << "No\n";
+        }
+    }
+
+    return 0;
+}
