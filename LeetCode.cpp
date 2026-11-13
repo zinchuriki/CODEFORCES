@@ -19491,32 +19491,40 @@ int main()
     return 0;
 }
 
-class Solution {
-  public:
-    int compare(Node *head1, Node *head2) {
+class Solution
+{
+public:
+    int compare(Node *head1, Node *head2)
+    {
         // Traverse both lists while neither is empty
-        while (head1 != nullptr && head2 != nullptr) {
-            if (head1->data > head2->data) {
+        while (head1 != nullptr && head2 != nullptr)
+        {
+            if (head1->data > head2->data)
+            {
                 return 1;
-            } else if (head1->data < head2->data) {
+            }
+            else if (head1->data < head2->data)
+            {
                 return -1;
             }
-            
+
             // Move to the next characters if they are equal
             head1 = head1->next;
             head2 = head2->next;
         }
-        
+
         // If list 1 is longer, it is lexicographically greater
-        if (head1 != nullptr) {
+        if (head1 != nullptr)
+        {
             return 1;
         }
-        
+
         // If list 2 is longer, it is lexicographically greater
-        if (head2 != nullptr) {
+        if (head2 != nullptr)
+        {
             return -1;
         }
-        
+
         // If both ended at the same time, they are identical
         return 0;
     }
@@ -19526,22 +19534,65 @@ class Solution {
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Make input and output fast
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int r, b;
     // Read the runs needed (R) and balls remaining (B)
-    if (cin >> r >> b) {
-        
+    if (cin >> r >> b)
+    {
+
         // Check if the required runs are less than or equal to the max possible runs
-        if (r <= 6 * b) {
+        if (r <= 6 * b)
+        {
             cout << "Yes\n";
-        } else {
+        }
+        else
+        {
             cout << "No\n";
         }
     }
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int sumofNodes(Node *head, int n)
+    {
+        int len = 0;
+        int total_sum = 0;
+        Node *curr = head;
+
+        // Step 1: Find the total length and the total sum of the list
+        while (curr != nullptr)
+        {
+            len++;
+            total_sum += curr->data;
+            curr = curr->next;
+        }
+
+        // Step 2: If n is greater than or equal to total nodes, return total sum
+        if (n >= len)
+        {
+            return total_sum;
+        }
+
+        // Step 3: Subtract the sum of the first (len - n) nodes
+        int nodes_to_remove = len - n;
+        int remove_sum = 0;
+        curr = head;
+
+        for (int i = 0; i < nodes_to_remove; i++)
+        {
+            remove_sum += curr->data;
+            curr = curr->next;
+        }
+
+        return total_sum - remove_sum;
+    }
+};
