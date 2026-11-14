@@ -19596,3 +19596,32 @@ public:
         return total_sum - remove_sum;
     }
 };
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int x, n, m;
+    // Read Om's money (X), laptop cost (N), and fund amount (M)
+    if (cin >> x >> n >> m)
+    {
+
+        // Check if total available money is enough for the laptop
+        if (x + m >= n)
+        {
+            cout << "YES\n";
+        }
+        else
+        {
+            cout << "NO\n";
+        }
+    }
+
+    return 0;
+}
