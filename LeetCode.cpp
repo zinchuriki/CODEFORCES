@@ -19625,3 +19625,31 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    Node *joinLists(Node *head1, Node *head2)
+    {
+        // If the first list is empty, the joined list is just the second list
+        if (head1 == nullptr)
+        {
+            return head2;
+        }
+
+        // Start traversing the first list
+        Node *curr = head1;
+
+        // Move to the very last node of the first list
+        while (curr->next != nullptr)
+        {
+            curr = curr->next;
+        }
+
+        // Connect the end of the first list to the start of the second
+        curr->next = head2;
+
+        // Return the head of the joined list
+        return head1;
+    }
+};
