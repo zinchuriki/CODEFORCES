@@ -19653,3 +19653,33 @@ public:
         return head1;
     }
 };
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    // Make input and output fast
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    // Read the number of test cases
+    if (cin >> tt) {
+        while (tt--) {
+            int x, y;
+            // Read fuel amount (X) and distance to home (Y)
+            cin >> x >> y;
+            
+            // Check if the max distance he can travel is enough to reach home
+            if (5 * x >= y) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        }
+    }
+
+    return 0;
+}
