@@ -19761,3 +19761,23 @@ int main() {
 
     return 0;
 }
+
+class Solution {
+  public:
+    string firstRepChar(string s) {
+        // Array to track the 26 lowercase letters
+        bool seen[26] = {false};
+        
+        for (char c : s) {
+            // If we have already seen this character, it's the first repeat
+            if (seen[c - 'a']) {
+                return string(1, c);
+            }
+            // Mark the character as seen
+            seen[c - 'a'] = true;
+        }
+        
+        // No repeated character found
+        return "-1";
+    }
+};
