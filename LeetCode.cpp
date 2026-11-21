@@ -19781,3 +19781,25 @@ class Solution {
         return "-1";
     }
 };
+
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    if (cin >> tt) {
+        while (tt--) {
+            int n, k;
+            cin >> n >> k;
+            cout << n - k << "\n";
+        }
+    }
+
+    return 0;
+}
