@@ -19803,3 +19803,31 @@ int main() {
 
     return 0;
 }
+
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    if (cin >> tt) {
+        while (tt--) {
+            int x, y;
+            cin >> x >> y;
+            
+            if (x < y) {
+                cout << "FIRST\n";
+            } else if (y < x) {
+                cout << "SECOND\n";
+            } else {
+                cout << "ANY\n";
+            }
+        }
+    }
+
+    return 0;
+}
