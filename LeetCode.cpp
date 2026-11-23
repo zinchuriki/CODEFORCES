@@ -19726,35 +19726,40 @@ int main()
     return 0;
 }
 
-class Solution {
+class Solution
+{
 public:
-    int minChanges(string s) {
-        int i=0,count=0;
-        while(i<s.size()){
-            if(s[i]!=s[i+1])
-            count++;
-            i+=2;
-
+    int minChanges(string s)
+    {
+        int i = 0, count = 0;
+        while (i < s.size())
+        {
+            if (s[i] != s[i + 1])
+                count++;
+            i += 2;
         }
         return count;
-        
     }
 };
-
 
 #include <iostream>
 
 using namespace std;
 
-int main() {
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int n;
-    if (cin >> n) {
-        if (n % 3 == 0) {
+    if (cin >> n)
+    {
+        if (n % 3 == 0)
+        {
             cout << "YES\n";
-        } else {
+        }
+        else
+        {
             cout << "NO\n";
         }
     }
@@ -19762,39 +19767,45 @@ int main() {
     return 0;
 }
 
-class Solution {
-  public:
-    string firstRepChar(string s) {
+class Solution
+{
+public:
+    string firstRepChar(string s)
+    {
         // Array to track the 26 lowercase letters
         bool seen[26] = {false};
-        
-        for (char c : s) {
+
+        for (char c : s)
+        {
             // If we have already seen this character, it's the first repeat
-            if (seen[c - 'a']) {
+            if (seen[c - 'a'])
+            {
                 return string(1, c);
             }
             // Mark the character as seen
             seen[c - 'a'] = true;
         }
-        
+
         // No repeated character found
         return "-1";
     }
 };
-
 
 #pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
 #include <bits/stdc++.h>
 
 using namespace std;
 
-int main() {
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int n, k;
             cin >> n >> k;
             cout << n - k << "\n";
@@ -19804,27 +19815,57 @@ int main() {
     return 0;
 }
 
-#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math,inline")
-#include <bits/stdc++.h>
-
-using namespace std;
-
-int main() {
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int tt;
-    if (cin >> tt) {
-        while (tt--) {
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
             int x, y;
             cin >> x >> y;
-            
-            if (x < y) {
+
+            if (x < y)
+            {
                 cout << "FIRST\n";
-            } else if (y < x) {
+            }
+            else if (y < x)
+            {
                 cout << "SECOND\n";
-            } else {
+            }
+            else
+            {
                 cout << "ANY\n";
+            }
+        }
+    }
+
+    return 0;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int tt;
+    if (cin >> tt)
+    {
+        while (tt--)
+        {
+            int x, y;
+            cin >> x >> y;
+
+            if (y >= x && y <= x + 200)
+            {
+                cout << "YES\n";
+            }
+            else
+            {
+                cout << "NO\n";
             }
         }
     }
