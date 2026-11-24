@@ -19872,3 +19872,29 @@ int main()
 
     return 0;
 }
+
+class Solution
+{
+public:
+    int maxDistance(vector<int> &arr)
+    {
+        unordered_map<int, int> firstIndex;
+        int maxDist = 0;
+
+        for (int i = 0; i < arr.size(); i++)
+        {
+            // If we have seen this element before, calculate distance from its first occurrence
+            if (firstIndex.find(arr[i]) != firstIndex.end())
+            {
+                maxDist = max(maxDist, i - firstIndex[arr[i]]);
+            }
+            // Otherwise, record its first occurrence
+            else
+            {
+                firstIndex[arr[i]] = i;
+            }
+        }
+
+        return maxDist;
+    }
+};
